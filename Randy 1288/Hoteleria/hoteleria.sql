@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tipo_Habitacion` (
   `numeroCamas` INT NULL,
   `numeroAmbientes` INT NULL,
   `numeroPersonas` VARCHAR(45) NULL,
-  `estado` INT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`tipoHabitacion`));
 
 -- -----------------------------------------------------
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tipo_Habitacion` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Categorias_Habitacion` (
   `categoria` VARCHAR(45) NOT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`categoria`));
 
 -- -----------------------------------------------------
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Habitaciones` (
   `tipoHabitacion` VARCHAR(45) NULL,
   `categoria` VARCHAR(45) NULL,
   `precio` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroHabitacion`),
   INDEX `tipo` (`tipoHabitacion` ASC),
   INDEX `categoria` (`categoria` ASC));
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Clientes` (
   `apellido2` VARCHAR(45) NULL,
   `direccion` TEXT NULL,
   `telefono` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idCliente`));
 
 -- -----------------------------------------------------
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Clientes` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Puestos` (
   `idPuesto` INT NOT NULL,
   `nombrePuesto` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idPuesto`));
 
 -- -----------------------------------------------------
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Empleados` (
   `telefono` VARCHAR(45) NULL,
   `fechaNacimiento` DATE NULL,
   `estadoCivil` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idEmpleado`));
 
 -- -----------------------------------------------------
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Reservaciones` (
   `idCliente` INT NULL,
   `fechaReservacion` DATE NULL,
   `idEmpleado` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idReservacion`));
 
 -- -----------------------------------------------------
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Reservacion` (
   `numeroHabitacion` INT NULL,
   `llegada` DATE NULL,
   `salida` DATE NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroDetalle`));
 
 -- -----------------------------------------------------
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Folios` (
   `idFolio` INT NOT NULL,
   `idCliente` INT NULL,
   `fechaApertura` DATE NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idFolio`));
 
 -- -----------------------------------------------------
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Folios` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Areas` (
   `idArea` INT NOT NULL,
   `nombreArea` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idArea`));
 
 -- -----------------------------------------------------
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Servicios` (
   `idServicio` INT NOT NULL,
   `nombreServicio` VARCHAR(45) NULL,
   `idArea` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idServicio`));
 
 -- -----------------------------------------------------
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Servicios` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Comandas` (
   `numeroComanda` INT NOT NULL,
   `idServicio` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroComanda`));
 
 -- -----------------------------------------------------
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Folio` (
   `idComanda` INT NULL,
   `fecha` DATE NULL,
   `monto` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroDetalle`));
 
 -- -----------------------------------------------------
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Eventos` (
   `idCliente` INT NULL,
   `fechaEvento` DATE NULL,
   `idEmpleado` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idEvento`));
 
 -- -----------------------------------------------------
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Salones` (
   `numeroSalon` INT NOT NULL,
   `capacidad` INT NULL,
   `precio` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroSalon`));
 
 -- -----------------------------------------------------
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Evento` (
   `salida` DATE NULL,
   `requisitos` VARCHAR(45) NULL,
   `tipo` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroDetalle`));
 
 -- -----------------------------------------------------
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Quejas` (
   `idCliente` INT NULL,
   `fecha` DATE NULL,
   `queja` TEXT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idqueja`));
 
 -- -----------------------------------------------------
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Objetos_Perdidos` (
   `numeroHabitacion` INT NULL,
   `fecha` DATE NULL,
   `descripcion` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idObjeto`));
 
 -- -----------------------------------------------------
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Check_In` (
   `idCliente` INT NULL,
   `fecha` DATE NULL,
   `idEmpleado` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idChech-In`));
 
 -- -----------------------------------------------------
@@ -235,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Check_Out` (
   `idCliente` INT NULL,
   `fecha` DATE NULL,
   `idEmpleado` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idChech-Out`));
 
 -- -----------------------------------------------------
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Mesas` (
   `idArea` INT NULL,
   `capacidad` INT NULL,
   `estadoMesa` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroMesa`));
 
 -- -----------------------------------------------------
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tiendas` (
   `idTienda` INT NOT NULL,
   `idArea` INT NULL,
   `descripcion` TEXT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idTienda`));
 
 -- -----------------------------------------------------
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tiendas` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Recetas` (
   `idRecetas` INT NULL,
   `Receta` VARCHAR(500) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idRecetas`));
 
 -- -----------------------------------------------------
@@ -274,9 +274,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Recetas` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Producto` (
   `idProducto` INT NOT NULL,
   `nombreProducto` VARCHAR(45) NULL,
-  `idTienda` INT NULL,
-  `estado` tinyInt(1),
+  `idTienda` INT NULL,  
   `Recetas_idRecetas` INT NOT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idProducto`, `Recetas_idRecetas`));
 
 -- -----------------------------------------------------
@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Producto` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Bodegas` (
   `idBodega` INT NOT NULL,
   `nombreBodega` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idBodega`));
 
 -- -----------------------------------------------------
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Existencias` (
   `idProducto` INT NULL,
   `existencia` INT NULL,
   `idBodega` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idExistencia`));
 
 -- -----------------------------------------------------
@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Control_Mesas` (
   `idControl` INT NOT NULL,
   `numeroMesa` INT NULL,
   `fecha` DATE NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idControl`));
 
 -- -----------------------------------------------------
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Control_Mesas` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Menus` (
   `idMenu` INT NOT NULL,
   `nombreMenu` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idMenu`));
 
 -- -----------------------------------------------------
@@ -326,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Platillos` (
   `idMenu` INT NULL,
   `nombrePlatillo` VARCHAR(45) NULL,
   `precio` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idPlatillo`));
 
 -- -----------------------------------------------------
@@ -336,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Control` (
   `numeroDetalle` INT NOT NULL,
   `idControl` INT NULL,
   `idPlatillo` INT NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`numeroDetalle`));
 
 -- -----------------------------------------------------
@@ -348,7 +348,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Devoluciones_Platillos` (
   `motivo` VARCHAR(45) NULL,
   `resolucion` VARCHAR(45) NULL,
   `costo` VARCHAR(45) NULL,
-  `estado` tinyInt(1),
+  `estado` TINYINT(1) NULL DEFAULT '1',
   PRIMARY KEY (`idDevoluciones`, `platillos_idPlatillo`));
 
 SET SQL_MODE=@OLD_SQL_MODE;
