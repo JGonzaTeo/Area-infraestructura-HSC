@@ -18,11 +18,11 @@ USE `finanzas` ;
 -- Table `finanzas`.`tbl_tipoCuenta`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_tipoCuenta` (
-  `K_idTipoCuenta` INT NOT NULL AUTO_INCREMENT,
+  `KidTipoCuenta` INT NOT NULL AUTO_INCREMENT,
   `nombre_tipoCuenta` VARCHAR(25) NULL,
   `descripcion_tipoCuenta` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idTipoCuenta`))
+  PRIMARY KEY (`KidTipoCuenta`))
 ENGINE = InnoDB;
 
 
@@ -30,15 +30,15 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_cuentas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_cuentas` (
-  `K_idCuenta` INT NOT NULL AUTO_INCREMENT,
-  `K_idTipoCuenta` INT NOT NULL,
+  `KidCuenta` INT NOT NULL AUTO_INCREMENT,
+  `KidTipoCuenta` INT NOT NULL,
   `nombre` VARCHAR(25) NULL,
   `descripcion` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idCuenta`, `K_idTipoCuenta`),
+  PRIMARY KEY (`KidCuenta`, `KidTipoCuenta`),
   CONSTRAINT `fk_tbl_cuentas_contables_tbl_tipoCuentaContable1`
-    FOREIGN KEY (`K_idTipoCuenta`)
-    REFERENCES `finanzas`.`tbl_tipoCuenta` (`K_idTipoCuenta`)
+    FOREIGN KEY (`KidTipoCuenta`)
+    REFERENCES `finanzas`.`tbl_tipoCuenta` (`KidTipoCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -48,12 +48,12 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_libroDiario_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_libroDiario_Encabezado` (
-  `K_idLibroDiarioEncabezado` INT NOT NULL AUTO_INCREMENT,
+  `KidLibroDiarioEncabezado` INT NOT NULL AUTO_INCREMENT,
   `fecha` DATE NULL,
   `total_debe` FLOAT NULL,
   `total_haber` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idLibroDiarioEncabezado`))
+  PRIMARY KEY (`KidLibroDiarioEncabezado`))
 ENGINE = InnoDB;
 
 
@@ -61,19 +61,19 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_libroDiario_Detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_libroDiario_Detalle` (
-  `K_idLibroDiarioEncabezado` INT NOT NULL,
-  `K_idCuentaContable` INT NOT NULL,
+  `KidLibroDiarioEncabezado` INT NOT NULL,
+  `KidCuentaContable` INT NOT NULL,
   `debe` FLOAT NULL,
   `haber` FLOAT NULL,
-  PRIMARY KEY (`K_idLibroDiarioEncabezado`, `K_idCuentaContable`),
+  PRIMARY KEY (`KidLibroDiarioEncabezado`, `KidCuentaContable`),
   CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_libroDiario_Encabezado`
-    FOREIGN KEY (`K_idLibroDiarioEncabezado`)
-    REFERENCES `finanzas`.`tbl_libroDiario_Encabezado` (`K_idLibroDiarioEncabezado`)
+    FOREIGN KEY (`KidLibroDiarioEncabezado`)
+    REFERENCES `finanzas`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`K_idCuentaContable`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuentaContable`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -83,15 +83,15 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_libroMayor_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_libroMayor_Encabezado` (
-  `K_idLibroMayor` INT NOT NULL AUTO_INCREMENT,
-  `K_idLibroDiarioEncabezado` INT NOT NULL,
+  `KidLibroMayor` INT NOT NULL AUTO_INCREMENT,
+  `KidLibroDiarioEncabezado` INT NOT NULL,
   `fecha` DATE NULL,
   `saldo_final` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idLibroMayor`, `K_idLibroDiarioEncabezado`),
+  PRIMARY KEY (`KidLibroMayor`, `KidLibroDiarioEncabezado`),
   CONSTRAINT `fk_tbl_libroMayor_tbl_libroDiario_Encabezado1`
-    FOREIGN KEY (`K_idLibroDiarioEncabezado`)
-    REFERENCES `finanzas`.`tbl_libroDiario_Encabezado` (`K_idLibroDiarioEncabezado`)
+    FOREIGN KEY (`KidLibroDiarioEncabezado`)
+    REFERENCES `finanzas`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -101,14 +101,14 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_libroMayor_Detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_libroMayor_Detalle` (
-  `K_idLibroMayor` INT NOT NULL,
+  `KidLibroMayor` INT NOT NULL,
   `debe` FLOAT NULL,
   `haber` FLOAT NULL,
   `saldo_parcial` FLOAT NULL,
-  PRIMARY KEY (`K_idLibroMayor`),
+  PRIMARY KEY (`KidLibroMayor`),
   CONSTRAINT `fk_tbl_libroMayor_Detalle_tbl_libroMayor1`
-    FOREIGN KEY (`K_idLibroMayor`)
-    REFERENCES `finanzas`.`tbl_libroMayor_Encabezado` (`K_idLibroMayor`)
+    FOREIGN KEY (`KidLibroMayor`)
+    REFERENCES `finanzas`.`tbl_libroMayor_Encabezado` (`KidLibroMayor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -118,10 +118,10 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_BalanceGeneral_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_BalanceGeneral_Encabezado` (
-  `K_idBalanceGeneral` INT NOT NULL AUTO_INCREMENT,
+  `KidBalanceGeneral` INT NOT NULL AUTO_INCREMENT,
   `capital` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idBalanceGeneral`))
+  PRIMARY KEY (`KidBalanceGeneral`))
 ENGINE = InnoDB;
 
 
@@ -129,10 +129,10 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_estado_perdidas_ganancias_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_estado_perdidas_ganancias_Encabezado` (
-  `K_idPerdidasGanancias` INT NOT NULL AUTO_INCREMENT,
+  `KidPerdidasGanancias` INT NOT NULL AUTO_INCREMENT,
   `gananciaEnOperacion` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idPerdidasGanancias`))
+  PRIMARY KEY (`KidPerdidasGanancias`))
 ENGINE = InnoDB;
 
 
@@ -140,18 +140,18 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_BalanceGeneral_Detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_BalanceGeneral_Detalle` (
-  `K_idBalanceGeneral` INT NOT NULL,
-  `K_idCuentaContable` INT NOT NULL,
+  `KidBalanceGeneral` INT NOT NULL,
+  `KidCuentaContable` INT NOT NULL,
   `valor` FLOAT NULL,
-  PRIMARY KEY (`K_idBalanceGeneral`, `K_idCuentaContable`),
+  PRIMARY KEY (`KidBalanceGeneral`, `KidCuentaContable`),
   CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_BalanceGeneral_Encabezado1`
-    FOREIGN KEY (`K_idBalanceGeneral`)
-    REFERENCES `finanzas`.`tbl_BalanceGeneral_Encabezado` (`K_idBalanceGeneral`)
+    FOREIGN KEY (`KidBalanceGeneral`)
+    REFERENCES `finanzas`.`tbl_BalanceGeneral_Encabezado` (`KidBalanceGeneral`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`K_idCuentaContable`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuentaContable`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -161,11 +161,11 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_presupuesto_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_presupuesto_Encabezado` (
-  `K_id_presupuesto` INT NOT NULL,
+  `Kidpresupuesto` INT NOT NULL,
   `fecha` DATE NULL,
   `descripcion` VARCHAR(300) NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_id_presupuesto`))
+  PRIMARY KEY (`Kidpresupuesto`))
 ENGINE = InnoDB;
 
 
@@ -173,19 +173,19 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_presupuesto_detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_presupuesto_detalle` (
-  `K_id_presupuesto` INT NOT NULL,
-  `K_idCuenta` INT NOT NULL,
+  `Kidpresupuesto` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
   `cantidad` INT NULL,
   `monto` DOUBLE NULL,
-  PRIMARY KEY (`K_id_presupuesto`),
+  PRIMARY KEY (`Kidpresupuesto`),
   CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_presupuesto_Encabezado1`
-    FOREIGN KEY (`K_id_presupuesto`)
-    REFERENCES `finanzas`.`tbl_presupuesto_Encabezado` (`K_id_presupuesto`)
+    FOREIGN KEY (`Kidpresupuesto`)
+    REFERENCES `finanzas`.`tbl_presupuesto_Encabezado` (`Kidpresupuesto`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`K_idCuenta`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -195,11 +195,11 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_bancos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_bancos` (
-  `K_idBanco` INT NOT NULL,
+  `KidBanco` INT NOT NULL,
   `nombre_banco` VARCHAR(45) NULL,
   `descipcion_banco` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idBanco`))
+  PRIMARY KEY (`KidBanco`))
 ENGINE = InnoDB;
 
 
@@ -207,17 +207,17 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_cuenta_bancaria_encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_cuenta_bancaria_encabezado` (
-  `K_id_cuenta_bancaria` INT NOT NULL,
-  `K_id_banco` INT NULL,
+  `Kidcuenta_bancaria` INT NOT NULL,
+  `Kidbanco` INT NULL,
   `numero_cuenta_bancaria` VARCHAR(45) NULL,
   `fecha` DATE NULL,
   `saldo` DOUBLE NULL,
   `saldo_anterior` DOUBLE NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_id_cuenta_bancaria`),
+  PRIMARY KEY (`Kidcuenta_bancaria`),
   CONSTRAINT `fk_tbl_cuenta_bancaria_encabezado_tbl_bancos1`
-    FOREIGN KEY (`K_id_banco`)
-    REFERENCES `finanzas`.`tbl_bancos` (`K_idBanco`)
+    FOREIGN KEY (`Kidbanco`)
+    REFERENCES `finanzas`.`tbl_bancos` (`KidBanco`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -239,18 +239,18 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_cuenta_bancaria_detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_cuenta_bancaria_detalle` (
-  `K_id_cuenta_bancaria` INT NOT NULL,
-  `K_idCuenta` INT NOT NULL,
+  `Kidcuentabancaria` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
   `importe_concepto` DOUBLE NULL,
-  PRIMARY KEY (`K_id_cuenta_bancaria`),
+  PRIMARY KEY (`Kidcuentabancaria`),
   CONSTRAINT `fk_tbl_cuenta_bancaria_detalle_tbl_cuenta_bancaria_encabezado1`
-    FOREIGN KEY (`K_id_cuenta_bancaria`)
-    REFERENCES `finanzas`.`tbl_cuenta_bancaria_encabezado` (`K_id_cuenta_bancaria`)
+    FOREIGN KEY (`Kidcuentabancaria`)
+    REFERENCES `finanzas`.`tbl_cuenta_bancaria_encabezado` (`Kidcuenta_bancaria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_cuenta_bancaria_detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`K_idCuenta`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -260,19 +260,19 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_estado_perdidas_ganacias_Detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_estado_perdidas_ganacias_Detalle` (
-  `K_idPerdidasGanancias` INT NOT NULL,
-  `K_idCuenta` INT NOT NULL,
+  `KidPerdidasGanancias` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
   `debe` FLOAT NULL,
   `haber` FLOAT NULL,
-  PRIMARY KEY (`K_idPerdidasGanancias`),
+  PRIMARY KEY (`KidPerdidasGanancias`),
   CONSTRAINT `fk_tbl_estado_perdidas_ganacias_Detalle_tbl_estado_perdidas_g1`
-    FOREIGN KEY (`K_idPerdidasGanancias`)
-    REFERENCES `finanzas`.`tbl_estado_perdidas_ganancias_Encabezado` (`K_idPerdidasGanancias`)
+    FOREIGN KEY (`KidPerdidasGanancias`)
+    REFERENCES `finanzas`.`tbl_estado_perdidas_ganancias_Encabezado` (`KidPerdidasGanancias`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_estado_perdidas_ganacias_Detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`K_idCuenta`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -282,10 +282,10 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_flujoEfectivo_Encabezado`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_flujoEfectivo_Encabezado` (
-  `K_idFlujoEfectivo` INT NOT NULL AUTO_INCREMENT,
+  `KidFlujoEfectivo` INT NOT NULL AUTO_INCREMENT,
   `total_efectivo` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`K_idFlujoEfectivo`))
+  PRIMARY KEY (`KidFlujoEfectivo`))
 ENGINE = InnoDB;
 
 
@@ -293,18 +293,18 @@ ENGINE = InnoDB;
 -- Table `finanzas`.`tbl_flujoEfectivo_Detalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finanzas`.`tbl_flujoEfectivo_Detalle` (
-  `K_idFlujoEfectivo` INT NOT NULL,
-  `K_idCuenta` INT NOT NULL,
+  `KidFlujoEfectivo` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
   `valor` FLOAT NULL,
-  PRIMARY KEY (`K_idFlujoEfectivo`, `K_idCuenta`),
+  PRIMARY KEY (`KidFlujoEfectivo`, `KidCuenta`),
   CONSTRAINT `fk_tbl_flujoEfectivo_Detalle_tbl_flujoEfectivo_Encabezado1`
-    FOREIGN KEY (`K_idFlujoEfectivo`)
-    REFERENCES `finanzas`.`tbl_flujoEfectivo_Encabezado` (`K_idFlujoEfectivo`)
+    FOREIGN KEY (`KidFlujoEfectivo`)
+    REFERENCES `finanzas`.`tbl_flujoEfectivo_Encabezado` (`KidFlujoEfectivo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbl_flujoEfectivo_Detalle_tbl_cuentas1`
-    FOREIGN KEY (`K_idCuenta`)
-    REFERENCES `finanzas`.`tbl_cuentas` (`K_idCuenta`)
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `finanzas`.`tbl_cuentas` (`KidCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
