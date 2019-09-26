@@ -1,355 +1,413 @@
--- MySQL Workbench Forward Engineering
+-- MySQL Workbench Forward ering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema hoteleriaBD
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema hoteleriaBD
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `hoteleriaBD` DEFAULT CHARACTER SET utf8 ;
+USE `hoteleriaBD` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Tipo_Habitacion`
+-- Table `hoteleriaBD`.`Tbl_Tipo_Habitacion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tipo_Habitacion` (
-  `Kid_tipo_habitacion` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Tipo_Habitacion` (
+  `KidTipoHabitacion` VARCHAR(45) NOT NULL,
   `numeroCamas` INT NULL,
   `numeroAmbientes` INT NULL,
   `numeroPersonas` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_tipo_habitacion`));
+  PRIMARY KEY (`KidTipoHabitacion`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Categorias_Habitacion`
+-- Table `hoteleriaBD`.`Tbl_Categorias_Habitacion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Categorias_Habitacion` (
-  `Kid_categoria` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Categorias_Habitacion` (
+  `KidCategoria` VARCHAR(45) NOT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_categoria`));
+  PRIMARY KEY (`KidCategoria`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Habitaciones`
+-- Table `hoteleriaBD`.`Tbl_Habitaciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Habitaciones` (
-  `Kid_numero_habitacion` INT NOT NULL,
-  `Kid_tipo_habitacion` VARCHAR(45) NULL,
-  `Kid_categoria` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Habitaciones` (
+  `KidNumeroHabitacion` INT NOT NULL,
+  `KidTipoHabitacion` VARCHAR(45) NULL,
+  `KidCategoria` VARCHAR(45) NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_habitacion`),
-  INDEX `tipo` (`Kid_tipo_habitacion` ASC),
-  INDEX `categoria` (`Kid_categoria` ASC));
+  PRIMARY KEY (`KidNumeroHabitacion`),
+  INDEX `tipo` (`KidTipoHabitacion` ASC),
+  INDEX `categoria` (`KidCategoria` ASC))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Clientes`
+-- Table `hoteleriaBD`.`Tbl_Clientes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Clientes` (
-  `Kid_cliente` INT NOT NULL,
-  `nombre1` VARCHAR(45) NULL,
-  `nombre2` VARCHAR(45) NULL,
-  `apellido1` VARCHAR(45) NULL,
-  `apellido2` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Clientes` (
+  `KidCliente` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `apellido` VARCHAR(45) NULL,
   `direccion` TEXT NULL,
   `telefono` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_cliente`));
+  PRIMARY KEY (`KidCliente`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Puestos`
+-- Table `hoteleriaBD`.`Tbl_Puestos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Puestos` (
-  `Kid_puesto` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Puestos` (
+  `KidPuesto` INT NOT NULL,
   `nombrePuesto` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_puesto`));
+  PRIMARY KEY (`KidPuesto`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Empleados`
+-- Table `hoteleriaBD`.`Tbl_Empleados`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Empleados` (
-  `Kid_empleado` INT NOT NULL,
-  `Kid_puesto` INT NULL,
-  `nombre1` VARCHAR(45) NULL,
-  `nombre2` VARCHAR(45) NULL,
-  `apellido1` VARCHAR(45) NULL,
-  `apellido2` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Empleados` (
+  `KidEmpleado` INT NOT NULL,
+  `KidPuesto` INT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `apellido` VARCHAR(45) NULL,
   `direccion` TEXT NULL,
   `telefono` VARCHAR(45) NULL,
   `fechaNacimiento` DATE NULL,
   `estadoCivil` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_empleado`));
+  PRIMARY KEY (`KidEmpleado`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Reservaciones`
+-- Table `hoteleriaBD`.`Tbl_Reservaciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Reservaciones` (
-  `Kid_reservacion` INT NOT NULL,
-  `Kid_cliente` INT NULL,
-  `Kid_empleado` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Reservaciones` (
+  `KidReservacion` INT NOT NULL,
+  `KidCliente` INT NULL,
+  `KidEmpleado` INT NULL,
   `fechaReservacion` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_reservacion`));
+  PRIMARY KEY (`KidReservacion`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Detalle_Reservacion`
+-- Table `hoteleriaBD`.`Tbl_Detalle_Reservacion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Reservacion` (
-  `Kid_numero_detalle` INT NOT NULL,
-  `Kid_reservacion` INT NULL,
-  `Kid_numero_habitacion` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Detalle_Reservacion` (
+  `KidNumeroDetalle` INT NOT NULL,
+  `KidReservacion` INT NULL,
+  `KidNumeroHabitacion` INT NULL,
   `llegada` DATE NULL,
   `salida` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_detalle`));
+  PRIMARY KEY (`KidNumeroDetalle`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Folios`
+-- Table `hoteleriaBD`.`Tbl_Folios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Folios` (
-  `Kid_folio` INT NOT NULL,
-  `Kid_cliente` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Folios` (
+  `KidFolio` INT NOT NULL,
+  `KidCliente` INT NULL,
   `fechaApertura` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_folio`));
+  PRIMARY KEY (`KidFolio`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Areas`
+-- Table `hoteleriaBD`.`Tbl_Areas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Areas` (
-  `Kid_area` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Areas` (
+  `KidArea` INT NOT NULL,
   `nombreArea` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_area`));
+  PRIMARY KEY (`KidArea`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Servicios`
+-- Table `hoteleriaBD`.`Tbl_Servicios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Servicios` (
-  `Kid_servicio` INT NOT NULL,
-  `Kid_area` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Servicios` (
+  `KidServicio` INT NOT NULL,
+  `KidArea` INT NULL,
   `nombreServicio` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_servicio`));
+  PRIMARY KEY (`KidServicio`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Comandas`
+-- Table `hoteleriaBD`.`Tbl_Comandas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Comandas` (
-  `Kid_numero_comanda` INT NOT NULL,
-  `Kid_servicio` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Comandas` (
+  `KidNumeroComanda` INT NOT NULL,
+  `KidServicio` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_comanda`));
+  PRIMARY KEY (`KidNumeroComanda`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Detalle_Folio`
+-- Table `hoteleriaBD`.`Tbl_Detalle_Folio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Folio` (
-  `Kid_numero_detalle` INT NOT NULL,
-  `Kid_folio` INT NULL,
-  `Kid_comanda` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Detalle_Folio` (
+  `KidNumeroDetalle` INT NOT NULL,
+  `KidFolio` INT NULL,
+  `KidComanda` INT NULL,
   `fecha` DATE NULL,
   `monto` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_detalle`));
+  PRIMARY KEY (`KidNumeroDetalle`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Eventos`
+-- Table `hoteleriaBD`.`Tbl_Eventos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Eventos` (
-  `Kid_evento` INT NOT NULL,
-  `Kid_cliente` INT NULL,
-  `Kid_empleado` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Eventos` (
+  `KidEvento` INT NOT NULL,
+  `KidCliente` INT NULL,
+  `KidEmpleado` INT NULL,
   `fechaEvento` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_evento`));
+  PRIMARY KEY (`KidEvento`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Salones`
+-- Table `hoteleriaBD`.`Tbl_Salones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Salones` (
-  `Kid_numero_salon` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Salones` (
+  `KidNumeroSalon` INT NOT NULL,
   `capacidad` INT NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_salon`));
+  PRIMARY KEY (`KidNumeroSalon`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Detalle_Evento`
+-- Table `hoteleriaBD`.`Tbl_Detalle_Evento`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Evento` (
-  `Kid_numero_detalle` INT NOT NULL,
-  `Kid_evento` INT NULL,
-  `Kid_numero_salon` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Detalle_Evento` (
+  `KidNumeroDetalle` INT NOT NULL,
+  `KidNumeroSalon` INT NULL,
+  `KidEvento` INT NULL,
   `llegada` DATE NULL,
   `salida` DATE NULL,
   `requisitos` VARCHAR(45) NULL,
   `tipo` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_detalle`));
+  PRIMARY KEY (`KidNumeroDetalle`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Quejas`
+-- Table `hoteleriaBD`.`Tbl_Quejas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Quejas` (
-  `Kid_queja` INT NOT NULL,
-  `Kid_cliente` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Quejas` (
+  `KidQueja` INT NOT NULL,
+  `KidCliente` INT NULL,
   `fecha` DATE NULL,
   `queja` TEXT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_queja`));
+  PRIMARY KEY (`KidQueja`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Objetos_Perdidos`
+-- Table `hoteleriaBD`.`Tbl_Objetos_Perdidos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Objetos_Perdidos` (
-  `Kid_objeto` INT NOT NULL,
-  `numeroHabitacion` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Objetos_Perdidos` (
+  `KidObjeto` INT NOT NULL,
+  `KidNumeroHabitacion` INT NULL,
   `fecha` DATE NULL,
   `descripcion` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_objeto`));
+  PRIMARY KEY (`KidObjeto`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Check_In`
+-- Table `hoteleriaBD`.`Tbl_Check_In`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Check_In` (
-  `Kid_check_in` INT NOT NULL,
-  `Kid_cliente` INT NULL,
-  `Kid_empleado` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Check_In` (
+  `KidCheckIn` INT NOT NULL,
+  `KidCliente` INT NULL,
+  `KidEmpleado` INT NULL,
   `fecha` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_check_in`));
+  PRIMARY KEY (`KidCheckIn`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Check_Out`
+-- Table `hoteleriaBD`.`Tbl_Check_Out`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Check_Out` (
-  `Kid_check_out` INT NOT NULL,
-  `Kid_cliente` INT NULL,
-  `Kid_empleado` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Check_Out` (
+  `KidCheckOut` INT NOT NULL,
+  `KidCliente` INT NULL,
+  `KidEmpleado` INT NULL,
   `fecha` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_check_out`));
+  PRIMARY KEY (`KidCheckOut`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Mesas`
+-- Table `hoteleriaBD`.`Tbl_Mesas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Mesas` (
-  `Kid_numero_mesa` INT NOT NULL,
-  `Kid_area` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Mesas` (
+  `KidNumeroMesa` INT NOT NULL,
+  `KidArea` INT NULL,
   `capacidad` INT NULL,
   `estadoMesa` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_numero_mesa`));
+  PRIMARY KEY (`KidNumeroMesa`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Tiendas`
+-- Table `hoteleriaBD`.`Tbl_Tiendas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Tiendas` (
-  `Kid_tienda` INT NOT NULL,
-  `Kid_area` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Tiendas` (
+  `KidTienda` INT NOT NULL,
+  `KidArea` INT NULL,
   `descripcion` TEXT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_tienda`));
+  PRIMARY KEY (`KidTienda`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Recetas`
+-- Table `hoteleriaBD`.`Tbl_Recetas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Recetas` (
-  `Kid_recetas` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Recetas` (
+  `KidRecetas` INT NULL,
   `receta` VARCHAR(500) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_recetas`));
+  PRIMARY KEY (`KidRecetas`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Producto`
+-- Table `hoteleriaBD`.`Tbl_Producto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Producto` (
-  `Kid_producto` INT NOT NULL,
-  `Kid_recetas` INT NOT NULL,
-  `Kid_tienda` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Producto` (
+  `KidProducto` INT NOT NULL,
+  `KidRecetas` INT NOT NULL,
+  `KidTienda` INT NULL,
   `nombreProducto` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_producto`, `Kid_recetas`));
+  PRIMARY KEY (`KidProducto`, `KidRecetas`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Bodegas`
+-- Table `hoteleriaBD`.`Tbl_Bodegas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Bodegas` (
-  `Kid_bodega` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Bodegas` (
+  `KidBodega` INT NOT NULL,
   `nombreBodega` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_bodega`));
+  PRIMARY KEY (`KidBodega`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Existencias`
+-- Table `hoteleriaBD`.`Tbl_Existencias`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Existencias` (
-  `Kid_existencia` INT NOT NULL,
-  `Kid_producto` INT NULL,
-  `Kid_bodega` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Existencias` (
+  `KidExistencia` INT NOT NULL,
+  `KidProducto` INT NULL,
+  `KidBodega` INT NULL,
   `existencia` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_existencia`));
+  PRIMARY KEY (`KidExistencia`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Control_Mesas`
+-- Table `hoteleriaBD`.`Tbl_Control_Mesas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Control_Mesas` (
-  `Kid_control` INT NOT NULL,
-  `numeroMesa` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Control_Mesas` (
+  `KidControl` INT NOT NULL,
+  `KidNumeroMesa` INT NULL,
   `fecha` DATE NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_control`));
+  PRIMARY KEY (`KidControl`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Menus`
+-- Table `hoteleriaBD`.`Tbl_Menus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Menus` (
-  `Kid_menu` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Menus` (
+  `KidMenu` INT NOT NULL,
   `nombreMenu` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_menu`));
+  PRIMARY KEY (`KidMenu`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Platillos`
+-- Table `hoteleriaBD`.`Tbl_Platillos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Platillos` (
-  `Kid_platillo` INT NOT NULL,
-  `Kid_menu` INT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Platillos` (
+  `KidPlatillo` INT NOT NULL,
+  `KidMenu` INT NULL,
   `nombrePlatillo` VARCHAR(45) NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_platillo`));
+  PRIMARY KEY (`KidPlatillo`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Detalle_Control`
+-- Table `hoteleriaBD`.`Tbl_Detalle_Control`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Detalle_Control` (
-  `Kid_numero_detalle` INT NOT NULL,
-  `Kid_control` INT NULL,
-  `Kid_platillo` INT NULL,
-  `estado` TINYINT(1) NULL,
-  PRIMARY KEY (`Kid_numero_detalle`));
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Detalle_Control` (
+  `KidNumeroDetalle` INT NOT NULL,
+  `KidControl` INT NULL,
+  `KidPlatillo` INT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidNumeroDetalle`))
+ ;
+
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tbl_Devoluciones_Platillos`
+-- Table `hoteleriaBD`.`Tbl_Devoluciones_Platillos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tbl_Devoluciones_Platillos` (
-  `Kid_dev_platillo` INT NOT NULL,
-  `Kid_platillo` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoteleriaBD`.`Tbl_Devoluciones_Platillos` (
+  `KidDevPlatillo` INT NOT NULL,
+  `KidPlatillo` INT NOT NULL,
   `motivo` VARCHAR(45) NULL,
   `resolucion` VARCHAR(45) NULL,
   `costo` VARCHAR(45) NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_dev_platillo`,`Kid_platillo`));
+  PRIMARY KEY (`KidDevPlatillo`, `KidPlatillo`))
+ ;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
