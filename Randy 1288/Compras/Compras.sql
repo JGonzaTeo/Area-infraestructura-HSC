@@ -1,100 +1,111 @@
--- CREATE DATABASE HotelSanCarlosCompras CHARACTER SET UTF8;
-create schema HotelSanCarlosCompra;
-USE HotelSanCarlosCompra;
+-- MySQL Workbench Forward Engineering
 
--- TABLAS
-CREATE TABLE Tbl_orden_compra_encabezado(
-	Kid_orden_compra_encabezado int(16) not null, 
-	estadoOrdenCompraEncabezado		tinyint(1) NOT NULL, 
-    fechaEmisionOrdenCompraEncabezado 	date NOT NULL,
-    fechaRevisionOrdenCompraEncabezado  date NOT NULL,
-    nombreOrdenCompraEncabezado	varchar(30),
-    descripcionOrdenCompraEncabezado 	varchar(100),
-    fechaEstimadaEntregaOrdenCompraEncabezado  datetime,
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE TABLE Tbl_orden_compra_detalle(
-	Kid_orden_compra_encabezado int(16) not null, 
-	Kid_orden_compra_detalle int(16) not null, 
-	Kid_producto_encabezado int(16) not null, 
-	Kid_proveedor int(16) not null, 
-    precioUnitario	FLOAT(4,2),
-    cantidadProducto INT(3), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Schema comprasBD
+-- -----------------------------------------------------
 
-CREATE TABLE Tbl_bodega (
-	Kid_bodega	INT(16),
-    Kid_sucursal INT(16),
-    direccion VARCHAR(20),
-    maxStock INT(3),
-    minStock INT(3),
-    nombre VARCHAR(30),
-    descripcion VARCHAR(100),
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `TblSucursal`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_sucursal` (
+  `KidSucursal` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidSucursal`));
 
-CREATE TABLE Tbl_producto_encabezado(
-    Kid_producto_encabezado INT(16),
-    nombre 	VARCHAR(30),
-    descripcion VARCHAR(100), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `TblBodega`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_bodega` (
+  `KidBodega` INT(16) NOT NULL,
+  `KidSucursal` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(100) NULL DEFAULT NULL,
+  `direccion` VARCHAR(20) NULL DEFAULT NULL,
+  `maxStock` INT(3) NULL DEFAULT NULL,
+  `minStock` INT(3) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidBodega`));
 
-CREATE TABLE Tbl_producto_detalle(
-    Kid_producto_encabezado INT(16),
-    Kid_producto_detalle INT(16),
-	Kid_proveedor	INT (16),
-    kid_bodega INT(16),
-    stock	INT(3),
-    maxStock INT(3),
-    minStock INT(3), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `TblProveedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_proveedor` (
+  `KidProveedor` INT(16) NULL DEFAULT NULL,
+  `KidContacto` INT(16) NULL DEFAULT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `telefono` VARCHAR(15) NULL DEFAULT NULL,
+  `direccion` VARCHAR(20) NULL DEFAULT NULL,
+  `pagina` VARCHAR(20) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1', 
+  PRIMARY KEY (`KidProveedor`));
 
-CREATE TABLE Tbl_sucursal(
-	Kid_sucursal INT(16),
-    nombre VARCHAR(30), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `TblContacto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_contacto` (
+  `KidContacto` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `telefono` VARCHAR(15) NULL DEFAULT NULL,
+  `email` VARCHAR(20) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidContacto`));
 
-CREATE TABLE Tbl_proveedor(
-	Kid_proveedor	INT (16),
-    nombre VARCHAR(30),
-    telefono VARCHAR(15),
-    direccion VARCHAR(20),
-    Kid_contacto INT(16),
-    pagina VARCHAR(20), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `TblOrdenCompraEncabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_orden_compra_encabezado` (
+  `KidOrdenCompraEncabezado` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `fechaEmisionOrdenCompraEncabezado` DATE NOT NULL,
+  `fechaRevisionOrdenCompraEncabezado` DATE NOT NULL,
+  `nombreOrdenCompraEncabezado` VARCHAR(30) NULL DEFAULT NULL,
+  `descripcionOrdenCompraEncabezado` VARCHAR(100) NULL DEFAULT NULL,
+  `fechaEstimadaEntregaOrdenCompraEncabezado` DATETIME NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidOrdenCompraEncabezado`));
 
-CREATE TABLE Tbl_contacto(
-	Kid_contacto INT(16),
-    nombre VARCHAR(30),
-    telefono VARCHAR(15),
-    email VARCHAR(20), 
-    estado TINYINT(1) NULL DEFAULT '1'
-);
+-- -----------------------------------------------------
+-- Table `Tbl_Producto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_Producto` (
+  `KidProducto` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(100) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidProducto`));
 
--- LLAVES PRIMARIAS
-ALTER TABLE TBL_ORDEN_COMPRA_ENCABEZADO ADD CONSTRAINT ORDEN_COMPRA_ENCABEZADO_PK PRIMARY KEY (kid_orden_compra_encabezado);
-ALTER TABLE TBL_ORDEN_COMPRA_DETALLE ADD CONSTRAINT ORDEN_COMPRA_DETALLE_PK PRIMARY KEY (Kid_orden_compra_encabezado, Kid_orden_compra_detalle, Kid_producto_encabezado, Kid_proveedor);
-ALTER TABLE TBL_BODEGA ADD CONSTRAINT BODEGA_PK PRIMARY KEY (kid_bodega);
-ALTER TABLE TBL_PRODUCTO_ENCABEZADO ADD CONSTRAINT PRODUCTO_ENCABEZADO_PK PRIMARY KEY (Kid_producto_encabezado);
-ALTER TABLE TBL_PRODUCTO_DETALLE ADD CONSTRAINT PRODUCTO_DETALLE_ID PRIMARY KEY (Kid_producto_encabezado, Kid_producto_detalle);
-ALTER TABLE TBL_SUCURSAL ADD CONSTRAINT SUCURSAL_PK PRIMARY KEY (kid_sucursal);
-ALTER TABLE TBL_PROVEEDOR ADD CONSTRAINT PROVEEDOR_PK PRIMARY KEY (Kid_proveedor);
-ALTER TABLE TBL_CONTACTO ADD CONSTRAINT CONTACTO_PK PRIMARY KEY (kid_contacto);
+-- -----------------------------------------------------
+-- Table `TblOrdenCompraDetalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_orden_dompra_detalle` (
+  `KidOrdenCompraDetalle` INT(16) NOT NULL,
+  `KidOrdenCompraEncabezado` INT(16) NOT NULL,
+  `KidProducto` INT(16) NOT NULL,
+  `precioUnitario` FLOAT(4,2) NULL DEFAULT NULL,
+  `cantidadProducto` INT(3) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidOrdenCompraDetalle`, `KidOrdenCompraEncabezado`, `KidProducto`));
 
--- LLAVES FORANEAS
-ALTER TABLE TBL_ORDEN_COMPRA_DETALLE ADD CONSTRAINT ORDEN_COMPRA_DETALLE_ORDEN_COMPRA_ENCABEZADO FOREIGN KEY (kid_orden_compra_encabezado) REFERENCES TBL_ORDEN_COMPRA_ENCABEZADO(kid_orden_compra_encabezado);
-ALTER TABLE TBL_ORDEN_COMPRA_DETALLE ADD CONSTRAINT ORDEN_COMPRA_DETALLE_PRODUCTO_ENCABEZADO FOREIGN KEY (Kid_producto_encabezado) REFERENCES TBL_PRODUCTO_ENCABEZADO(Kid_producto_encabezado);
-ALTER TABLE TBL_ORDEN_COMPRA_DETALLE ADD CONSTRAINT ORDEN_COMPRA_DETALLE_PROVEEDOR FOREIGN KEY (Kid_proveedor) REFERENCES TBL_PROVEEDOR(Kid_proveedor);
+-- -----------------------------------------------------
+-- Table `TblProveedorBodega`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TblProveedorBodega` (
+  `KidProveedorBodega` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `KidBodega` INT(16) NOT NULL,
+  `KidProducto` INT(16) NOT NULL,
+  `stock` INT(3) NULL DEFAULT NULL,
+  `maxStock` INT(3) NULL DEFAULT NULL,
+  `minStock` INT(3) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidProveedorBodega`));
 
-ALTER TABLE TBL_BODEGA ADD CONSTRAINT BODEGA_SUCURSAL FOREIGN KEY (kid_sucursal) REFERENCES TBL_SUCURSAL(kid_sucursal);
-
-ALTER TABLE TBL_PRODUCTO_DETALLE ADD CONSTRAINT PRODUCTO_DETALLE_PROVEEDOR FOREIGN KEY (Kid_proveedor) REFERENCES TBL_PROVEEDOR(Kid_proveedor);
-ALTER TABLE TBL_PRODUCTO_DETALLE ADD CONSTRAINT PRODUCTO_DETALLE_BODEGUA FOREIGN KEY (kid_bodega) REFERENCES TBL_BODEGA(kid_bodega);
-
-ALTER TABLE TBL_PROVEEDOR ADD CONSTRAINT PROVEEDOR_CONTACTO FOREIGN KEY (kid_contacto) REFERENCES TBL_CONTACTO(kid_contacto);
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

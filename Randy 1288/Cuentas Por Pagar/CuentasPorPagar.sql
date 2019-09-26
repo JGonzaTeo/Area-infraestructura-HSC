@@ -5,173 +5,168 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema mdl_cuentasporpagar
+-- Schema cuentasporpagarBD
 -- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Schema mdl_cuentasporpagar
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mdl_cuentasporpagar` DEFAULT CHARACTER SET utf8 ;
-USE `mdl_cuentasporpagar` ;
+CREATE SCHEMA IF NOT EXISTS `cuentasporpagarBD` DEFAULT CHARACTER SET utf8;
+USE `cuentasporpagarBD`;
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Acreedor`
+-- Table `cuentasporpagarBD`.`Tbl_Acreedor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Acreedor` (
-  `Kid_acreedor` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Acreedor` (
+  `KidAcreedor` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_acreedor`));
+  PRIMARY KEY (`KidAcreedor`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Banco`
+-- Table `cuentasporpagarBD`.`Tbl_Banco`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Banco` (
-  `Kid_banco` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Banco` (
+  `KidBanco` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_banco`));
+  PRIMARY KEY (`KidBanco`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Impuesto`
+-- Table `cuentasporpagarBD`.`Tbl_Impuesto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Impuesto` (
-  `Kid_impuesto` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Impuesto` (
+  `KidImpuesto` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `porcentaje` VARCHAR(5) NULL DEFAULT 'S',
   `valor` DOUBLE(6,2) NULL DEFAULT '0.00',
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_impuesto`));
+  PRIMARY KEY (`KidImpuesto`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_OrdenCompra`
+-- Table `cuentasporpagarBD`.`Tbl_OrdenCompra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_OrdenCompra` (
-  `Kid_orden_compra` INT(12) NOT NULL,
-  `impuesto` INT(12) NULL DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_OrdenCompra` (
+  `KidOrdenCompra` INT(12) NOT NULL,
+  `KidImpuesto` INT(12) NULL DEFAULT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_orden_compra`));
+  PRIMARY KEY (`KidOrdenCompra`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Proveedor`
+-- Table `cuentasporpagarBD`.`Tbl_Proveedor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Proveedor` (
-  `Kid_proveedor` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Proveedor` (
+  `KidProveedor` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_proveedor`));
+  PRIMARY KEY (`KidProveedor`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Pedido`
+-- Table `cuentasporpagarBD`.`Tbl_Pedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Pedido` (
-  `Kid_pedido` INT(12) NOT NULL,
-  `proveedor` INT(12) NOT NULL,
-  `ordenCompra` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Pedido` (
+  `KidPedido` INT(12) NOT NULL,
+  `KidProveedor` INT(12) NOT NULL,
+  `KidOrdenCompra` INT(12) NOT NULL,
   `total` DOUBLE(12,2) NOT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_pedido`));
+  PRIMARY KEY (`KidPedido`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_CreditoPedido`
+-- Table `cuentasporpagarBD`.`Tbl_CreditoPedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_CreditoPedido` (
-  `Kid_Credito_Pedido` INT(12) NOT NULL,
-  `pedido` INT(12) NOT NULL,
-  `banco` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_CreditoPedido` (
+  `KidCreditoPedido` INT(12) NOT NULL,
+  `KidPedido` INT(12) NOT NULL,
+  `KidBanco` INT(12) NOT NULL,
   `total` DOUBLE(12,2) NOT NULL,
   `cuotas` INT(2) NOT NULL,
   `fechaIni` TIMESTAMP NULL DEFAULT NULL,
   `fechaFin` TIMESTAMP NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_Credito_Pedido`));
+  PRIMARY KEY (`KidCreditoPedido`));
+
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_CredPedDet`
+-- Table `cuentasporpagarBD`.`Tbl_CredPedDet`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_CredPedDet` (
-  `K_Credito` INT(12) NOT NULL,
-  `Kcodigo_Cres_Det` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_CredPedDet` (
+  `KidCodigoCresDet` INT(12) NOT NULL,
+  `KidCreditoPedido` INT(12) NOT NULL,
   `valor` DOUBLE(12,2) NOT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kcodigo_Cres_Det`, `K_Credito`));
+  PRIMARY KEY (`KidCodigoCresDet`, `KidCreditoPedido`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Servicio`
+-- Table `cuentasporpagarBD`.`Tbl_Servicio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Servicio` (
-  `Kid_servicio` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Servicio` (
+  `KidServicio` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_servicio`));
+  PRIMARY KEY (`KidServicio`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_PagoServicio`
+-- Table `cuentasporpagarBD`.`Tbl_PagoServicio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_PagoServicio` (
-  `Kid_pago_servicio` INT(12) NOT NULL,
-  `acreedor` INT(12) NOT NULL,
-  `servicio` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_PagoServicio` (
+  `KidPagoServicio` INT(12) NOT NULL,
+  `KidAcreedor` INT(12) NOT NULL,
+  `KidServicio` INT(12) NOT NULL,
   `fecha` DATETIME NOT NULL,
   `monto` DECIMAL(10,2) NOT NULL,
   `impuesto` INT(12) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_pago_servicio`));
+  PRIMARY KEY (`KidPagoServicio`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_CreditoServicio`
+-- Table `cuentasporpagarBD`.`Tbl_CreditoServicio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_CreditoServicio` (
-  `Kid_credito_servicio` INT(12) NOT NULL,
-  `pagoServicio` INT(12) NOT NULL,
-  `banco` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_CreditoServicio` (
+  `KidCreditoServicio` INT(12) NOT NULL,
+  `KidPagoServicio` INT(12) NOT NULL,
+  `KidBanco` INT(12) NOT NULL,
   `total` DOUBLE(12,2) NOT NULL,
   `cuotas` INT(2) NOT NULL,
   `fechaIni` TIMESTAMP NULL DEFAULT NULL,
   `fechaFin` TIMESTAMP NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_credito_servicio`));
+  PRIMARY KEY (`KidCreditoServicio`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_CredServDet`
+-- Table `cuentasporpagarBD`.`Tbl_CredServDet`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_CredServDet` (
-  `Kid_credito` INT(12) NOT NULL,
-  `Kid_cred_det` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_CredServDet` (
+  `KidCredServDet` INT(12) NOT NULL,
+  `KidCreditoServicio` INT(12) NOT NULL,
   `valor` DOUBLE(12,2) NOT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_cred_det`, `Kid_credito`));
+  PRIMARY KEY (`KidCredServDet`, `KidCreditoServicio`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_Producto`
+-- Table `cuentasporpagarBD`.`Tbl_Producto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_Producto` (
-  `Kid_producto` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_Producto` (
+  `KidProducto` INT(12) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `tipoProducto` INT(3) NOT NULL,
   `estado` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`Kid_producto`));
+  PRIMARY KEY (`KidProducto`));
 
 -- -----------------------------------------------------
--- Table `mdl_cuentasporpagar`.`Tbl_PedidoDet`
+-- Table `cuentasporpagarBD`.`Tbl_PedidoDet`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mdl_cuentasporpagar`.`Tbl_PedidoDet` (
-  `Kid_pedido` INT(12) NOT NULL,
-  `Kid_producto` INT(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cuentasporpagarBD`.`Tbl_PedidoDet` (
+  `KidPedido` INT(12) NOT NULL,
+  `KidProducto` INT(12) NOT NULL,
   `cantidad` INT(3) NOT NULL,
   `valor` DOUBLE(12,2) NOT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
-  PRIMARY KEY (`Kid_pedido`, `Kid_producto`));
+  PRIMARY KEY (`KidPedido`, `KidProducto`));
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
