@@ -12,7 +12,6 @@ USE `proyectogeneral`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
 -- --------------------------------------------------------------------------SCRIPT DE HOTELERIA -----------------------------------------------------------------
 
 -- -----------------------------------------------------
@@ -601,9 +600,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto` (
   `KidProducto` INT NOT NULL,
+  `KidTipoProducto` INT NOT NULL,
   `nombre_producto` VARCHAR(45) NULL,
   `descripcion_producto` VARCHAR(45) NULL,
-  `KidTipoProducto` INT NOT NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidProducto`),
   CONSTRAINT `fk_Producto_TipoProducto1`
@@ -615,14 +614,29 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `proyectogeneral`.`Tbl_Bodegas`
+-- Table `TblSucursal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Bodegas` (
-  `KidBodega` INT NOT NULL,
-  `nombreBodega` VARCHAR(45) NULL,
-  `estado` TINYINT(1) NULL,
-  PRIMARY KEY (`KidBodega`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `Tbl_sucursal` (
+  `KidSucursal` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `direccion` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidSucursal`));
+
+-- -----------------------------------------------------
+-- Table `TblBodega`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_bodega` (
+  `KidBodega` INT(16) NOT NULL,
+  `KidSucursal` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(100) NULL DEFAULT NULL,
+  `direccion` VARCHAR(20) NULL DEFAULT NULL,
+  `maxStock` INT(3) NULL DEFAULT NULL,
+  `minStock` INT(3) NULL DEFAULT NULL,
+  `status` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidBodega`));
 
 
 -- -----------------------------------------------------
@@ -642,7 +656,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Existencias` (
     ON UPDATE NO ACTION,
   CONSTRAINT `bode`
     FOREIGN KEY (`KidBodega`)
-    REFERENCES `proyectogeneral`.`Tbl_Bodegas` (`KidBodega`)
+    REFERENCES `proyectogeneral`.`Tbl_bodega` (`KidBodega`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -794,8 +808,6 @@ ENGINE = InnoDB;
 
 
 
-
-
 -- --------------------------------------------------------------------------SCRIPT DE VENTAS Y CUENTAS POR COBRAR -----------------------------------------------------------------
 
 -- -----------------------------------------------------
@@ -824,6 +836,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Impuesto` (
   `KidImpuesto` INT NOT NULL,
   `nombre_impuesto` VARCHAR(45) NULL,
+  `descripcion_impuesto` VARCHAR(150) NULL,
   `porcentaje_impuesto` DOUBLE NULL,
   `estado` TINYINT(1) NULL,
   PRIMARY KEY (`KidImpuesto`))
@@ -942,18 +955,54 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Stock`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Stock` (
+  `Kidstock` INT NOT NULL,
+  `cantidadMaxima` INT NULL,
+  `cantidadMinima` INT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidstock`));
+  
+    -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Existencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Existencia` (
+  `Kidexistencia` INT NOT NULL,
+  `kidproducto` INT NOT NULL,
+  `cantidad` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidexistencia`, `kidproducto`),
+  CONSTRAINT `fk_Producto_Existencia`
+  FOREIGN KEY (`Kidproducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`)
+  );
+
+-- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Inventario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Inventario` (
   `KidInventario` INT NOT NULL,
+  `KidProducto` INT NOT NULL,
+  `Kidbodega` INT NOT NULL,
+  `Kidstock` INT NOT NULL,
+  `Kidexistencia` INT NOT NULL,  
   `fecha_inventario` DATE NULL,
   `cantidad_inventario` INT NULL,
-  `KidProducto` INT NOT NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidInventario`),
   CONSTRAINT `fk_Inventario_Producto1`
     FOREIGN KEY (`KidProducto`)
-    REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`),
+      CONSTRAINT `fk_Inventario_Bodegas`
+    FOREIGN KEY (`Kidbodega`)
+    REFERENCES `proyectogeneral`.`Tbl_bodega` (`Kidbodega`),
+      CONSTRAINT `Fk_Inventario_Stock`
+    FOREIGN KEY (`Kidstock`)
+    REFERENCES `proyectogeneral`.`Tbl_Stock` (`Kidstock`),
+      CONSTRAINT `fk_Inventario_Existencia`
+    FOREIGN KEY (`Kidexistencia`)
+    REFERENCES `proyectogeneral`.`Tbl_Existencia` (`Kidexistencia`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -1065,6 +1114,624 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Precios` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- --------------------------------------------------------------------------SCRIPT DE COMPRAS Y CUENTAS POR PAGAR -----------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `Tbl_proveedor` (
+  `KidProveedor` INT(16) NULL DEFAULT NULL,
+  `KidContacto` INT(16) NULL DEFAULT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `telefono` VARCHAR(15) NULL DEFAULT NULL,
+  `direccion` VARCHAR(20) NULL DEFAULT NULL,
+  `pagina` VARCHAR(20) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1', 
+  PRIMARY KEY (`KidProveedor`));
+  
+  -- -----------------------------------------------------
+-- Table `TblContacto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_contacto` (
+  `KidContacto` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `nombre` VARCHAR(30) NULL DEFAULT NULL,
+  `telefono` VARCHAR(15) NULL DEFAULT NULL,
+  `email` VARCHAR(20) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidContacto`),
+  CONSTRAINT `fk_proveedor_contacto`
+    FOREIGN KEY (`KidProveedor`)
+    REFERENCES `proyectogeneral`.`Tbl_proveedor` (`KidProveedor`)
+  );
+  
+  -- -----------------------------------------------------
+-- Table `TblOrdenCompraEncabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Tbl_orden_compra_encabezado` (
+  `KidOrdenCompraEncabezado` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `KidImpuesto` INT(12) NULL DEFAULT NULL,
+  `fechaEmisionOrdenCompraEncabezado` DATE NOT NULL,
+  `fechaRevisionOrdenCompraEncabezado` DATE NOT NULL,
+  `nombreOrdenCompraEncabezado` VARCHAR(30) NULL DEFAULT NULL,
+  `descripcionOrdenCompraEncabezado` VARCHAR(100) NULL DEFAULT NULL,
+  `fechaEstimadaEntregaOrdenCompraEncabezado` DATETIME NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidOrdenCompraEncabezado`),
+  CONSTRAINT `fk_OrdenEncabezado_proveedor`
+    FOREIGN KEY (`KidProveedor`)
+    REFERENCES `proyectogeneral`.`Tbl_proveedor` (`KidProveedor`),
+    CONSTRAINT `Fk_ordenencabezado_impuesto`
+    FOREIGN KEY (`KidImpuesto`)
+    REFERENCES `proyectogeneral`.`Tbl_impuesto` (`KidImpuesto`)
+  );
+
+-- -----------------------------------------------------
+-- Table `TblOrdenCompraDetalle`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `Tbl_orden_dompra_detalle` (
+  `KidOrdenCompraDetalle` INT(16) NOT NULL,
+  `KidOrdenCompraEncabezado` INT(16) NOT NULL,
+  `KidProducto` INT(16) NOT NULL,
+  `precioUnitario` FLOAT(4,2) NULL DEFAULT NULL,
+  `cantidadProducto` INT(3) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidOrdenCompraDetalle`, `KidOrdenCompraEncabezado`, `KidProducto`),
+   CONSTRAINT `fk_OrdenEncabezado_detalle`
+    FOREIGN KEY (`KidOrdenCompraEncabezado`)
+    REFERENCES `proyectogeneral`.`Tbl_orden_compra_encabezado` (`KidOrdenCompraEncabezado`),
+    CONSTRAINT `fk_ordendetalle_producto`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`)
+  );
+
+-- -----------------------------------------------------
+-- Table `TblProveedorBodega`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `TblProveedorBodega` (
+  `KidProveedorBodega` INT(16) NOT NULL,
+  `KidProveedor` INT(16) NOT NULL,
+  `KidBodega` INT(16) NOT NULL,
+  `KidProducto` INT(16) NOT NULL,
+  `stock` INT(3) NULL DEFAULT NULL,
+  `maxStock` INT(3) NULL DEFAULT NULL,
+  `minStock` INT(3) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidProveedorBodega`),
+  CONSTRAINT `FK_proveedor_bodega`
+    FOREIGN KEY (`KidProveedor`)
+    REFERENCES `proyectogeneral`.`Tbl_proveedor` (`KidProveedor`),
+    CONSTRAINT `FK_bodega_proveedor`
+    FOREIGN KEY (`KidBodega`)
+    REFERENCES `proyectogeneral`.`Tbl_bodega` (`KidBodega`),
+   CONSTRAINT `Fk_proveedor_bodega_producto`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`)
+  );
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Acreedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Acreedor` (
+  `KidAcreedor` INT(12) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
+  `descripcion` VARCHAR(150) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidAcreedor`)); 
+  
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Banco`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Bancos` (
+  `KidBanco` INT(12) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
+  `descripcion` VARCHAR(150) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidBanco`));
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Pedido`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Pedido` (
+  `KidPedido` INT(12) NOT NULL,
+  `KidProveedor` INT(12) NOT NULL,
+  `KidOrdenCompra` INT(12) NOT NULL,
+  `total` DOUBLE(12,2) NOT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidPedido`),
+   CONSTRAINT `FK_proveedor_pedido`
+    FOREIGN KEY (`KidProveedor`)
+    REFERENCES `proyectogeneral`.`Tbl_proveedor` (`KidProveedor`),
+     CONSTRAINT `fk_OrdenEncabezado_pedido`
+    FOREIGN KEY (`KidOrdenCompra`)
+    REFERENCES `proyectogeneral`.`Tbl_orden_compra_encabezado` (`KidOrdenCompraEncabezado`)
+  ); 
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_CreditoPedido`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_CreditoPedido` (
+  `KidCreditoPedido` INT(12) NOT NULL,
+  `KidPedido` INT(12) NOT NULL,
+  `KidBanco` INT(12) NOT NULL,
+  `total` DOUBLE(12,2) NOT NULL,
+  `cuotas` INT(2) NOT NULL,
+  `fechaIni` TIMESTAMP NULL DEFAULT NULL,
+  `fechaFin` TIMESTAMP NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidCreditoPedido`),
+  CONSTRAINT `FK_credito_pedido`
+    FOREIGN KEY (`KidPedido`)
+    REFERENCES `proyectogeneral`.`Tbl_Pedido` (`KidPedido`),
+     CONSTRAINT `fk_credito_banco`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`Tbl_Bancos` (`KidBanco`)
+  );
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_CredPedDet`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_CredPedDet` (
+  `KidCodigoCresDet` INT(12) NOT NULL,
+  `KidCreditoPedido` INT(12) NOT NULL,
+  `valor` DOUBLE(12,2) NOT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidCodigoCresDet`, `KidCreditoPedido`),
+	CONSTRAINT `FK_creditoPedDet_CreditoPedido`
+    FOREIGN KEY (`KidCreditoPedido`)
+    REFERENCES `proyectogeneral`.`Tbl_CreditoPedido` (`KidCreditoPedido`)
+  );
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Servicio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Servicio` (
+  `KidServicio` INT(12) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
+  `descripcion` VARCHAR(150) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidServicio`)); 
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_PagoServicio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_PagoServicio` (
+  `KidPagoServicio` INT(12) NOT NULL,
+  `KidAcreedor` INT(12) NOT NULL,
+  `KidServicio` INT(12) NOT NULL,
+  `fecha` DATETIME NOT NULL,
+  `monto` DECIMAL(10,2) NOT NULL,
+  `impuesto` INT(12) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidPagoServicio`),
+  CONSTRAINT `FK_pago_acreedor`
+    FOREIGN KEY (`KidAcreedor`)
+    REFERENCES `proyectogeneral`.`Tbl_Acreedor` (`KidAcreedor`),
+    CONSTRAINT `FK_pago_servicio`
+    FOREIGN KEY (`KidServicio`)
+    REFERENCES `proyectogeneral`.`Tbl_Servicio` (`KidServicio`)
+  );
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_CreditoServicio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_CreditoServicio` (
+  `KidCreditoServicio` INT(12) NOT NULL,
+  `KidPagoServicio` INT(12) NOT NULL,
+  `KidBanco` INT(12) NOT NULL,
+  `total` DOUBLE(12,2) NOT NULL,
+  `cuotas` INT(2) NOT NULL,
+  `fechaIni` TIMESTAMP NULL DEFAULT NULL,
+  `fechaFin` TIMESTAMP NULL DEFAULT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidCreditoServicio`),
+   CONSTRAINT `FK_credigo_pagoServicio`
+    FOREIGN KEY (`KidPagoServicio`)
+    REFERENCES `proyectogeneral`.`Tbl_PagoServicio` (`KidPagoServicio`),
+     CONSTRAINT `fk_creditoServicio_banco`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`Tbl_Bancos` (`KidBanco`)
+  ); 
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_CredServDet`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_CredServDet` (
+  `KidCredServDet` INT(12) NOT NULL,
+  `KidCreditoServicio` INT(12) NOT NULL,
+  `valor` DOUBLE(12,2) NOT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidCredServDet`, `KidCreditoServicio`),
+  CONSTRAINT `fk_credServDet_CreditoServicio`
+    FOREIGN KEY (`KidCreditoServicio`)
+    REFERENCES `proyectogeneral`.`Tbl_CreditoServicio` (`KidCreditoServicio`)
+  );
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_PedidoDet`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_PedidoDet` (
+  `KidPedido` INT(12) NOT NULL,
+  `KidProducto` INT(12) NOT NULL,
+  `cantidad` INT(3) NOT NULL,
+  `valor` DOUBLE(12,2) NOT NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`KidPedido`, `KidProducto`),
+  CONSTRAINT `fk_PedidoDet_producto`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`)
+  );
+
+
+-- --------------------------------------------------------------------------SCRIPT DE INVENTARIOS -----------------------------------------------------------------
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Marca`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Marca` (
+  `Kidmarca` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `paisOrigen` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidmarca`));
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Detalle_Producto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Producto` (
+  `Kiddetalleproducto` INT NOT NULL,
+  `Kidproducto` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `presentacion` VARCHAR(45) NULL,
+  `descripcion` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kiddetalleproducto`),
+   CONSTRAINT `fk_DetalleProducto_Producto`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`)
+  );
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Ubicacion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Ubicacion` (
+  `Kidubicacion` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `direccion` VARCHAR(45) NULL,
+  `capacidad` INT(10) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidubicacion`));
+  
+  -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Producto_Marca`
+-- -----------------------------------------------------
+  
+  CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto_Marca` (
+  `Kidproducto` INT NOT NULL,
+  `Kidmarca` INT NOT NULL,
+  PRIMARY KEY (`Kidproducto`, `Kidmarca`),
+  CONSTRAINT `fk_Producto_Marca`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`),
+    CONSTRAINT `fk_Marca_Producto`
+    FOREIGN KEY (`Kidmarca`)
+    REFERENCES `proyectogeneral`.`Tbl_Marca` (`Kidmarca`)
+  );
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_UbicacionProdcuto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_UbicacionProdcuto` (
+  `Kidubicacion` INT NOT NULL,
+  `Kidproducto` INT NOT NULL,
+  PRIMARY KEY (`Kidubicacion`, `Kidproducto`),
+  CONSTRAINT `fk_Producto_Ubicacion`
+    FOREIGN KEY (`Kidproducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`),
+    CONSTRAINT `fk_Ubicacion_Producto`
+    FOREIGN KEY (`Kidubicacion`)
+    REFERENCES `proyectogeneral`.`Tbl_Ubicacion` (`Kidubicacion`)
+  ); 
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Moviemiento_Inventario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Moviemiento_Inventario` (
+  `Kidmoviemientoinventario` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `naturaleza` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidmoviemientoinventario`)
+  ); 
+  
+  
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Historia_Inventario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Historia_Inventario` (
+  `Kidproducto` INT NOT NULL,
+  `Kidmovimientoinventario` INT NOT NULL,
+  `Kidbodega` INT NOT NULL,
+  `Kidsucursal` INT NOT NULL,
+  `fecha` DATETIME NULL,
+  `cantidad` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL DEFAULT '1',
+  PRIMARY KEY (`Kidproducto`, `Kidmovimientoinventario`),
+  CONSTRAINT `fk_Producto_HistoriaInventario`
+  FOREIGN KEY (`Kidproducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`),
+    CONSTRAINT `fk_MovimientoInventario_HistoriaInventario`
+    FOREIGN KEY (`Kidmovimientoinventario`)
+    REFERENCES `proyectogeneral`.`Tbl_Moviemiento_Inventario` (`Kidmoviemientoinventario`),
+    CONSTRAINT `FK_Bodega_HistoriaInventario`
+    FOREIGN KEY (`Kidbodega`)
+    REFERENCES `proyectogeneral`.`Tbl_Bodega` (`Kidbodega`),
+    CONSTRAINT `fk_Sucursal_HistoriaInventario`
+    FOREIGN KEY (`Kidsucursal`)
+    REFERENCES `proyectogeneral`.`Tbl_sucursal` (`Kidsucursal`)
+  );
+
+  
+-- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
+
+  
+ -- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_tipoCuenta`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_tipoCuenta` (
+  `KidTipoCuenta` INT NOT NULL AUTO_INCREMENT,
+  `nombre_tipoCuenta` VARCHAR(25) NULL,
+  `descripcion_tipoCuenta` VARCHAR(45) NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidTipoCuenta`))
+ENGINE = InnoDB;
+ 
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_cuentas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentas` (
+  `KidCuenta` INT NOT NULL AUTO_INCREMENT,
+  `KidTipoCuenta` INT NOT NULL,
+  `nombre` VARCHAR(25) NULL,
+  `descripcion` VARCHAR(45) NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidCuenta`, `KidTipoCuenta`),
+  CONSTRAINT `fk_tbl_cuentas_contables_tbl_tipoCuentaContable1`
+    FOREIGN KEY (`KidTipoCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_tipoCuenta` (`KidTipoCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+  
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_libroDiario_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario_Encabezado` (
+  `KidLibroDiarioEncabezado` INT NOT NULL AUTO_INCREMENT,
+  `fecha` DATE NULL,
+  `total_debe` FLOAT NULL,
+  `total_haber` FLOAT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidLibroDiarioEncabezado`))
+ENGINE = InnoDB; 
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_libroDiario_Detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario_Detalle` (
+  `KidLibroDiarioEncabezado` INT NOT NULL,
+  `KidCuentaContable` INT NOT NULL,
+  `KidPoliza` INT NOT NULL,
+  `debe` FLOAT NULL,
+  `haber` FLOAT NULL,
+  PRIMARY KEY (`KidLibroDiarioEncabezado`, `KidCuentaContable`,`KidPoliza`),
+  CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_libroDiario_Encabezado`
+    FOREIGN KEY (`KidLibroDiarioEncabezado`)
+    REFERENCES `proyectogeneral`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_cuentas_contables1`
+    FOREIGN KEY (`KidCuentaContable`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`),
+     CONSTRAINT `fk_tbl_libroDiario_Detalle_Poliza`
+    FOREIGN KEY (`KidPoliza`)
+    REFERENCES `proyectogeneral`.`Tbl_Poliza` (`KidPoliza`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_libroMayor_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroMayor_Encabezado` (
+  `KidLibroMayor` INT NOT NULL AUTO_INCREMENT,
+  `KidLibroDiarioEncabezado` INT NOT NULL,
+  `fecha` DATE NULL,
+  `saldo_final` FLOAT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidLibroMayor`, `KidLibroDiarioEncabezado`),
+  CONSTRAINT `fk_tbl_libroMayor_tbl_libroDiario_Encabezado1`
+    FOREIGN KEY (`KidLibroDiarioEncabezado`)
+    REFERENCES `proyectogeneral`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_libroMayor_Detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroMayor_Detalle` (
+  `KidLibroMayor` INT NOT NULL,
+  `debe` FLOAT NULL,
+  `haber` FLOAT NULL,
+  `saldo_parcial` FLOAT NULL,
+  PRIMARY KEY (`KidLibroMayor`),
+  CONSTRAINT `fk_tbl_libroMayor_Detalle_tbl_libroMayor1`
+    FOREIGN KEY (`KidLibroMayor`)
+    REFERENCES `proyectogeneral`.`tbl_libroMayor_Encabezado` (`KidLibroMayor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_BalanceGeneral_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Encabezado` (
+  `KidBalanceGeneral` INT NOT NULL AUTO_INCREMENT,
+  `capital` FLOAT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidBalanceGeneral`))
+ENGINE = InnoDB; 
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_estado_perdidas_ganancias_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_estado_perdidas_ganancias_Encabezado` (
+  `KidPerdidasGanancias` INT NOT NULL AUTO_INCREMENT,
+  `gananciaEnOperacion` FLOAT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidPerdidasGanancias`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_BalanceGeneral_Detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Detalle` (
+  `KidBalanceGeneral` INT NOT NULL,
+  `KidCuentaContable` INT NOT NULL,
+  `valor` FLOAT NULL,
+  PRIMARY KEY (`KidBalanceGeneral`, `KidCuentaContable`),
+  CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_BalanceGeneral_Encabezado1`
+    FOREIGN KEY (`KidBalanceGeneral`)
+    REFERENCES `proyectogeneral`.`tbl_BalanceGeneral_Encabezado` (`KidBalanceGeneral`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_cuentas_contables1`
+    FOREIGN KEY (`KidCuentaContable`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_presupuesto_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto_Encabezado` (
+  `Kidpresupuesto` INT NOT NULL,
+  `fecha` DATE NULL,
+  `descripcion` VARCHAR(300) NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`Kidpresupuesto`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_presupuesto_detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto_detalle` (
+  `Kidpresupuesto` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
+  `cantidad` INT NULL,
+  `monto` DOUBLE NULL,
+  PRIMARY KEY (`Kidpresupuesto`),
+  CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_presupuesto_Encabezado1`
+    FOREIGN KEY (`Kidpresupuesto`)
+    REFERENCES `proyectogeneral`.`tbl_presupuesto_Encabezado` (`Kidpresupuesto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_cuentas_contables1`
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_estado_perdidas_ganacias_Detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_estado_perdidas_ganacias_Detalle` (
+  `KidPerdidasGanancias` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
+  `debe` FLOAT NULL,
+  `haber` FLOAT NULL,
+  PRIMARY KEY (`KidPerdidasGanancias`),
+  CONSTRAINT `fk_tbl_estado_perdidas_ganacias_Detalle_tbl_estado_perdidas_g1`
+    FOREIGN KEY (`KidPerdidasGanancias`)
+    REFERENCES `proyectogeneral`.`tbl_estado_perdidas_ganancias_Encabezado` (`KidPerdidasGanancias`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_estado_perdidas_ganacias_Detalle_tbl_cuentas_contables1`
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table ``.`tbl_flujoEfectivo_Encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_flujoEfectivo_Encabezado` (
+  `KidFlujoEfectivo` INT NOT NULL AUTO_INCREMENT,
+  `total_efectivo` FLOAT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidFlujoEfectivo`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_flujoEfectivo_Detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_flujoEfectivo_Detalle` (
+  `KidFlujoEfectivo` INT NOT NULL,
+  `KidCuenta` INT NOT NULL,
+  `valor` FLOAT NULL,
+  PRIMARY KEY (`KidFlujoEfectivo`, `KidCuenta`),
+  CONSTRAINT `fk_tbl_flujoEfectivo_Detalle_tbl_flujoEfectivo_Encabezado1`
+    FOREIGN KEY (`KidFlujoEfectivo`)
+    REFERENCES `proyectogeneral`.`tbl_flujoEfectivo_Encabezado` (`KidFlujoEfectivo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_flujoEfectivo_Detalle_tbl_cuentas1`
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_libro_bancos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libro_bancos` (
+  `KidMovimiento` INT NOT NULL AUTO_INCREMENT,
+  `KidBanco` INT NOT NULL,
+  `fecha_movimiento` DATE NULL,
+  `monto` FLOAT NULL,
+  PRIMARY KEY (`KidMovimiento`, `KidBanco`),
+  CONSTRAINT `fk_tbl_libro_bancos_tbl_bancos1`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_conciliacion_bancaria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_conciliacion_bancaria` (
+  `KidBanco` INT NOT NULL,
+  `Kperiodo` DATE NOT NULL,
+  `diferencia` FLOAT NULL,
+  PRIMARY KEY (`KidBanco`, `Kperiodo`),
+  CONSTRAINT `fk_tbl_conciliacion_bancaria_tbl_bancos1`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+ 
 -- --------------------------------------------------------------------------SCRIPT DE RECURSOS HUMANOS -----------------------------------------------------------------
 -- Funciona
 
@@ -1215,13 +1882,6 @@ LOCK TABLES `tbl_roles_de_pago` WRITE;
 /*!40000 ALTER TABLE `tbl_roles_de_pago` ENABLE KEYS */;
 UNLOCK TABLES;
 
--- --------------------------------------------------------------------------SCRIPT DE COMPRAS Y CUENTAS POR PAGAR -----------------------------------------------------------------
-
--- --------------------------------------------------------------------------SCRIPT DE INVENTARIOS -----------------------------------------------------------------
-
--- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
-
-
 --
 -- Dumping events for database 'proyectogeneral'
 --
@@ -1238,4 +1898,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
