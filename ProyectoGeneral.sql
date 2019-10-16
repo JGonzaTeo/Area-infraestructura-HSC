@@ -95,31 +95,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Clientes` (
 ENGINE = InnoDB;
 
 --
--- Table structure for table `tbl_puestos`
---
-
-DROP TABLE IF EXISTS `tbl_puestos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_puestos` (
-  `KidPuesto` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `sueldofijo` varchar(45) DEFAULT NULL,
-  `estado` tinyint(2) DEFAULT NULL,
-  PRIMARY KEY (`KidPuesto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_puestos`
---
-
-LOCK TABLES `tbl_puestos` WRITE;
-/*!40000 ALTER TABLE `tbl_puestos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_puestos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_areas`
 --
 
@@ -143,6 +118,38 @@ LOCK TABLES `tbl_areas` WRITE;
 /*!40000 ALTER TABLE `tbl_areas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tbl_areas` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_puestos`
+--
+
+DROP TABLE IF EXISTS `tbl_puestos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_puestos` (
+  `KidPuesto` int(11) NOT NULL,
+  `KidArea` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `descripcion` varchar(45) DEFAULT NULL,
+  `sueldofijo` varchar(45) DEFAULT NULL,
+  `estado` tinyint(2) DEFAULT NULL,
+  PRIMARY KEY (`KidPuesto`),
+  CONSTRAINT `fk_Area_Puestos`
+    FOREIGN KEY (`KidArea`)
+    REFERENCES `proyectogeneral`.`Tbl_TipoCliente` (`KidTipoCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_puestos`
+--
+
+LOCK TABLES `tbl_puestos` WRITE;
+/*!40000 ALTER TABLE `tbl_puestos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_puestos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 
 --
 -- Table structure for table `tbl_conceptos`
@@ -1734,6 +1741,79 @@ ENGINE = InnoDB;
  
 -- --------------------------------------------------------------------------SCRIPT DE RECURSOS HUMANOS -----------------------------------------------------------------
 -- Funciona
+
+
+--
+-- Table structure for table `tbl_encabezadoReporte`
+--
+
+CREATE TABLE IF NOT EXISTS Tbl_EncabezadoReporteVacante(
+	KidReporteVacante INT,
+    KidEmpleado INT,
+    KidPuesto INT,
+    fechaCreacion DATE,
+    tipoDeContratacion VARCHAR(45),
+    estado TINYINT(1),
+    PRIMARY KEY(`KidReporteVacante`),
+    CONSTRAINT `FK_Empleado_ReporteVacante`
+    FOREIGN KEY (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_empleados` (`KidEmpleado`),
+	CONSTRAINT `FK_Puesto_ReporteVacante`
+    FOREIGN KEY (`KidPuesto`)
+    REFERENCES `proyectogeneral`.`tbl_puestos` (`KidPuesto`)
+);
+
+CREATE TABLE IF NOT EXISTS Tbl_DetalleReporteVacante(
+	KidReporteVacante INT,
+    razon VARCHAR(200),
+    DescripcionCualidades VARCHAR(200),
+    estado TINYINT(1),
+    PRIMARY KEY(`KidReporteVacante`),
+    CONSTRAINT `FK_Encabezado_DetalleReporteVacante`
+    FOREIGN KEY(`KidReporteVacante`)
+    REFERENCES `proyectogeneral`.`Tbl_EncabezadoReporteVacante`(`KidReporteVacante`)
+);
+
+CREATE TABLE IF NOT EXISTS Tbl_BancoTalento(
+	KidBancoTalento INT,
+    nombre_candidato VARCHAR(45),
+    apellido_candidato VARCHAR(45),
+    numero INT,
+    direccion VARCHAR(45),
+    correoelectronico VARCHAR(45),
+    KidReporteVacante INT,
+    estado TINYINT(1),
+    PRIMARY KEY(`KidBancoTalento`),
+    CONSTRAINT `FK_encabezadoReporteVacante_BancoTalento`
+    FOREIGN KEY(`KidReporteVacante`)
+    REFERENCES `proyectogeneral`.`Tbl_EncabezadoReporteVacante`(`KidReporteVacante`)
+);
+
+CREATE TABLE IF NOT EXISTS Tbl_Pruebas(
+	KidPruebas INT,
+    nombre VARCHAR(45),
+    descripcion VARCHAR(45),
+    TiempoDuracion VARCHAR(45),
+    PreRequisitos VARCHAR(45),
+    estado TINYINT(1),
+    PRIMARY KEY(`KidPruebas`)
+);
+
+CREATE TABLE IF NOT EXISTS Tbl_Resultados(
+	KidResultados INT,
+    KidBancoTalento INT,
+    KidPruebas INT,
+    Resultado VARCHAR(45),
+    estado TINYINT(1),
+    PRIMARY KEY(`KidResultados`),
+    CONSTRAINT `FK_BancoTalento_Resultados`
+    FOREIGN KEY(`KidBancoTalento`)
+    REFERENCES `proyectogeneral`.`Tbl_BancoTalento`(`KidBancoTalento`),
+    CONSTRAINT `FK_Pruebas_Resultados`
+    FOREIGN KEY(`KidPruebas`)
+    REFERENCES `proyectogeneral`.`Tbl_Pruebas`(`KidPruebas`)
+);
+
 
 --
 -- Table structure for table `tbl_nominasdetalle`
