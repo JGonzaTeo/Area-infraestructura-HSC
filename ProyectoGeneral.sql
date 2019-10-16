@@ -1893,6 +1893,11 @@ CREATE TABLE `ayuda` (
   `indice` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`) VALUES
+(1, 'Página web ayuda/ayuda.chm', 'menu.html'),
+(2, 'Página web ayuda/ayuda.chm', 'Menúboletos.html');
+
+
 
 -- -------------------------------------------- SEGURIDAD --------------------------------------
 
