@@ -701,7 +701,7 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`Tbl_Recetas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Recetas` (
-  `KidRecetas` INT NULL,
+  `KidRecetas` INT NOT NULL,
   `receta` VARCHAR(500) NULL,
   `estado` TINYINT(1) NULL,
   PRIMARY KEY (`KidRecetas`))
@@ -1125,7 +1125,7 @@ ENGINE = InnoDB;
 -- --------------------------------------------------------------------------SCRIPT DE COMPRAS Y CUENTAS POR PAGAR -----------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `Tbl_proveedor` (
-  `KidProveedor` INT(16) NULL DEFAULT NULL,
+  `KidProveedor` INT(16) NOT NULL,
   `KidContacto` INT(16) NULL DEFAULT NULL,
   `nombre` VARCHAR(30) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NULL DEFAULT NULL,
