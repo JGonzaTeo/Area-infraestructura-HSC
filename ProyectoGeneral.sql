@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Clientes` (
   PRIMARY KEY (`KidCliente`),
   CONSTRAINT `fk_Cliente_TipoCliente`
     FOREIGN KEY (`KidTipoCliente`)
-    REFERENCES `mydb`.`Tbl_TipoCliente` (`KidTipoCliente`)
+    REFERENCES `proyectogeneral`.`Tbl_TipoCliente` (`KidTipoCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
