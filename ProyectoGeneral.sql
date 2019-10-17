@@ -1757,7 +1757,7 @@ CREATE TABLE IF NOT EXISTS Tbl_EncabezadoReporteVacante(
     PRIMARY KEY(`KidReporteVacante`),
     CONSTRAINT `FK_Empleado_ReporteVacante`
     FOREIGN KEY (`KidEmpleado`)
-    REFERENCES `proyectogeneral`.`tbl_empleados` (`KidEmpleado`),
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`),
 	CONSTRAINT `FK_Puesto_ReporteVacante`
     FOREIGN KEY (`KidPuesto`)
     REFERENCES `proyectogeneral`.`tbl_puestos` (`KidPuesto`)
