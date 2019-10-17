@@ -103,8 +103,7 @@ DROP TABLE IF EXISTS `tbl_areas`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_areas` (
   `KidArea` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `numarea` int(11) DEFAULT NULL,
+  `nombreArea` varchar(45) DEFAULT NULL,
   `estado` tinyint(2) DEFAULT NULL,
   PRIMARY KEY (`KidArea`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -343,17 +342,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Folios` (
     REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `proyectogeneral`.`Tbl_Areas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Areas` (
-  `KidArea` INT NOT NULL,
-  `nombreArea` VARCHAR(45) NULL,
-  `estado` TINYINT(1) NULL,
-  PRIMARY KEY (`KidArea`))
 ENGINE = InnoDB;
 
 
@@ -717,18 +705,13 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Platillos` (
   `nombrePlatillo` VARCHAR(45) NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL,
-  `Tbl_Recetas_KidRecetas` INT NOT NULL,
-  PRIMARY KEY (`KidPlatillo`, `Tbl_Recetas_KidRecetas`),
+  PRIMARY KEY (`KidPlatillo`, `KidMenu`),
   CONSTRAINT `menu`
     FOREIGN KEY (`KidMenu`)
     REFERENCES `proyectogeneral`.`Tbl_Menus` (`KidMenu`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Tbl_Platillos_Tbl_Recetas1`
-    FOREIGN KEY (`Tbl_Recetas_KidRecetas`)
-    REFERENCES `proyectogeneral`.`Tbl_Recetas` (`KidRecetas`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 
