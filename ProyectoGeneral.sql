@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_TipoCliente` (
   `KidTipoCliente` INT NOT NULL,
   `tipo_tipocliente` VARCHAR(45) NULL,
   `descripcion_tipocliente` VARCHAR(45) NULL,
+  `estado` TINYINT(1),
   PRIMARY KEY (`KidTipoCliente`))
 ENGINE = InnoDB;
 
@@ -79,11 +80,12 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Clientes` (
   `KidCliente` INT NOT NULL,
   `nombres_cliente` VARCHAR(45) NULL,
   `apellidos_cliente` VARCHAR(45) NULL,
-  `genero_cliente` TINYINT NULL,
   `telefono_cliente` VARCHAR(10) NULL,
   `direccion_cliente` TEXT NULL,
   `dpi_cliente` INT NULL,
   `nit_cliente` VARCHAR(10) NULL,
+  `contacto_cliente` VARCHAR(45) NULL,
+  `telefono_contacto` VARCHAR(10) NULL,
   `KidTipoCliente` INT NOT NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidCliente`),
@@ -590,21 +592,38 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_TipoProducto` (
   PRIMARY KEY (`KidTipoProducto`))
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_descuentos`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_descuentos`(
+  KidDescuentos INT NOT NULL,
+  nombre_descuentos VARCHAR(45),
+  porcentaje_descuentos DOUBLE,
+  fecha_inicio_descuentos DATE,
+  fecha_final_descuentos DATE,
+  PRIMARY KEY(KidDescuentos)
+)ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Producto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto` (
   `KidProducto` INT NOT NULL,
   `KidTipoProducto` INT NOT NULL,
+  `KidDescuentos` INT NOT NULL,
   `nombre_producto` VARCHAR(45) NULL,
   `descripcion_producto` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidProducto`),
   CONSTRAINT `fk_Producto_TipoProducto1`
     FOREIGN KEY (`KidTipoProducto`)
-    REFERENCES `proyectogeneral`.`Tbl_TipoProducto` (`KidTipoProducto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `proyectogeneral`.`Tbl_TipoProducto` (`KidTipoProducto`),
+    CONSTRAINT `fk_Descuento_Producto`
+    FOREIGN KEY (`KidDescuentos`)
+    REFERENCES `proyectogeneral`.`tbl_descuentos` (`KidDescuentos`)
+)
 ENGINE = InnoDB;
 
 
@@ -801,12 +820,49 @@ ENGINE = InnoDB;
 -- --------------------------------------------------------------------------SCRIPT DE VENTAS Y CUENTAS POR COBRAR -----------------------------------------------------------------
 
 -- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_lista_precios`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tbl_lista_precios(
+  KidLista_precios INT NOT NULL,
+  nombre_lista_precios VARCHAR(45),
+  cantidad_producto_lista_precios INT,
+  precio_producto_lista_precios DOUBLE,
+  tasa_lista_precios TINYINT(1),
+  porcentaje_lista_precios DOUBLE,
+  KidDescuentos INT NOT NULL,
+  PRIMARY KEY(KidLista_precios),
+  CONSTRAINT `FK_Descuento_listaPrecio`
+  FOREIGN KEY (`KidDescuentos`)
+  REFERENCES `proyectogeneral`.`tbl_descuentos`(`KidDescuentos`)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_lista_precios_productos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS tbl_lista_precios_productos(
+  KidLista_precios INT NOT NULL,
+  KidProducto INT NOT NULL,
+  PRIMARY KEY(KidLista_precios, KidProducto),
+  CONSTRAINT `fk_lista_precios_productos`
+  FOREIGN KEY (`KidLista_precios`)
+  REFERENCES `proyectogeneral`.`tbl_lista_precios`(`KidLista_precios`),
+  CONSTRAINT `FK_productos_lista_precios`
+  FOREIGN KEY (`KidProducto`)
+  REFERENCES `proyectogeneral`.`Tbl_producto`(`KidProducto`)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Serie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
   `KidSerie` INT NOT NULL,
   `serie_serie` VARCHAR(45) NULL,
-  `descripcion_serie` VARCHAR(45) NULL,
+  `certificado_serie` VARCHAR(45) NULL,
+  `regimen_fiscal_serie` VARCHAR(45) NULL,
+  `formato_serie` VARCHAR(45) NULL,
   PRIMARY KEY (`KidSerie`))
 ENGINE = InnoDB;
 
@@ -816,7 +872,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_TipoFactura` (
   `KidTipoFactura` INT NOT NULL,
   `tipo_tipofactura` VARCHAR(45) NULL,
-  `descripcion_tipofactura` VARCHAR(45) NULL,
+  `estado` TINYINT(1),
   PRIMARY KEY (`KidTipoFactura`))
 ENGINE = InnoDB;
 
@@ -855,6 +911,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaEncabezado` (
   `KidCliente` INT NOT NULL,
   `KidImpuesto` INT NOT NULL,
   `KidMoneda` INT NOT NULL,
+  `KidDescuentos` INT NOT NULL,
   `impuesto_facturaencabezado` DOUBLE NULL,
   `monto_facturaencabezado` DOUBLE NULL,
   `estado` TINYINT NULL,
@@ -882,6 +939,11 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaEncabezado` (
   CONSTRAINT `fk_Tbl_FacturaEncabezado_Tbl_Moneda1`
     FOREIGN KEY (`KidMoneda`)
     REFERENCES `proyectogeneral`.`Tbl_Moneda` (`KidMoneda`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_Descuentos_facturaEncabezado`
+    FOREIGN KEY (`KidDescuentos`)
+    REFERENCES `proyectogeneral`.`tbl_descuentos` (`KidDescuentos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
