@@ -330,17 +330,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Reservacion` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`Tbl_Serie`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
-  `KidSerie` INT NOT NULL,
-  `serie_serie` VARCHAR(45) NULL,
-  `certificado_serie` VARCHAR(45) NULL,
-  `regimen_fiscal_serie` VARCHAR(45) NULL,
-  `formato_serie` VARCHAR(45) NULL,
-  PRIMARY KEY (`KidSerie`))
-ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Folios`
@@ -348,18 +338,15 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Folios` (
   `KidFolio` INT NOT NULL,
   `KidCliente` INT NULL,
-  `KidSerie` INT NOT NULL,
   `fechaApertura` DATE NULL,
   `estado` TINYINT(1) NULL,
   PRIMARY KEY (`KidFolio`),
   CONSTRAINT `folio`
     FOREIGN KEY (`KidCliente`)
-    REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`),
-  CONSTRAINT `FK_Serie_Folio`
-    FOREIGN KEY (`KidSerie`)
-    REFERENCES `proyectogeneral`.`Tbl_Serie` (`KidSerie`)
+    REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
     )
 ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -833,6 +820,23 @@ ENGINE = InnoDB;
 
 
 -- --------------------------------------------------------------------------SCRIPT DE VENTAS Y CUENTAS POR COBRAR -----------------------------------------------------------------
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Serie`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
+  `KidSerie` INT NOT NULL,
+  `KidFolio` INT NOT NULL,
+  `serie_serie` VARCHAR(45) NULL,
+  `certificado_serie` VARCHAR(45) NULL,
+  `regimen_fiscal_serie` VARCHAR(45) NULL,
+  `formato_serie` VARCHAR(45) NULL,
+  PRIMARY KEY (`KidSerie`),
+  CONSTRAINT `FK_Folio_Serie`
+  FOREIGN KEY (`KidFolio`)
+  REFERENCES `proyectogeneral`.`Tbl_Folios` (`KidFolio`)
+  )
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_lista_precios`
