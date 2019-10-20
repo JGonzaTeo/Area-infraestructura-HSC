@@ -831,6 +831,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
   `certificado_serie` VARCHAR(45) NULL,
   `regimen_fiscal_serie` VARCHAR(45) NULL,
   `formato_serie` VARCHAR(45) NULL,
+  `estado` TINYINT(1),
   PRIMARY KEY (`KidSerie`),
   CONSTRAINT `FK_Folio_Serie`
   FOREIGN KEY (`KidFolio`)
