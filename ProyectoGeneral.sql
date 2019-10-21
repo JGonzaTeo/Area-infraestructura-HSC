@@ -1943,7 +1943,7 @@ ENGINE = InnoDB;
 --
 
 CREATE TABLE `tbl_divisa` (
-  `KidDivisa` int(11) NOT NULL,
+  `KidDivisa` varchar(11) NOT NULL,
   `Nombre` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1952,10 +1952,10 @@ CREATE TABLE `tbl_divisa` (
 --
 
 CREATE TABLE `tbl_tipocambio` (
-  `KidMonedaBase` int(11) NOT NULL,
-  `KidMonedaConversion` int(11) NOT NULL,
+  `KidMonedaBase` varchar(11) NOT NULL,
+  `KidMonedaConversion` varchar(11) NOT NULL,
   `tipo_cambio` float DEFAULT NULL,
-  `fecha_tipo_cambio` date DEFAULT NULL
+  `fecha_tipo_cambio` date DEFAULT NULL	
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
