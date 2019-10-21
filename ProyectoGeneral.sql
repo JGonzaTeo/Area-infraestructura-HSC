@@ -1686,6 +1686,7 @@ CREATE TABLE IF NOT EXISTS tbl_poliza_encabezado(
 	KidPoliza INT NOT NULL AUTO_INCREMENT,
     KidTipoDePoliza VARCHAR(5) NOT NULL,
     KidDocumentoAsociado INT NOT NULL,
+    descripcion VARCHAR(150),
     fecha_poliza DATE,
     total_poliza DOUBLE,
     estado TINYINT,
