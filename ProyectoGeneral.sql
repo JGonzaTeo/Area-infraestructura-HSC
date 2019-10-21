@@ -605,6 +605,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_descuentos`(
   porcentaje_descuentos DOUBLE,
   fecha_inicio_descuentos DATE,
   fecha_final_descuentos DATE,
+  estado TINYINT(1),
   PRIMARY KEY(KidDescuentos)
 )ENGINE = InnoDB;
 
@@ -922,11 +923,28 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_tipo_lista_precios`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tbl_tipo_lista_precios(
+  Kidtipo_lista_precios INT NOT NULL,
+  nombre_lista_precios_detalle VARCHAR(45),
+  KidComisiones INT,
+  estado TINYINT(1),
+  PRIMARY KEY(Kidtipo_lista_precios),
+  CONSTRAINT `FK_comisiones_precios_Detalle`
+  FOREIGN KEY(`KidComisiones`)
+  REFERENCES `proyectogeneral`.`Tbl_Comisiones`(`KidComisiones`)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_lista_precios`
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS tbl_lista_precios(
   KidLista_precios INT NOT NULL,
+  Kidtipo_lista_precios INT NOT NULL,
   cantidad_producto_lista_precios INT,
   tasa_lista_precios TINYINT(1),
   subtotal_lista_precios DOUBLE,
@@ -936,25 +954,10 @@ CREATE TABLE IF NOT EXISTS tbl_lista_precios(
   PRIMARY KEY(KidLista_precios),
   CONSTRAINT `FK_Descuento_listaPrecio`
   FOREIGN KEY (`KidDescuentos`)
-  REFERENCES `proyectogeneral`.`tbl_descuentos`(`KidDescuentos`)
-)ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_lista_precios_detalle`
--- -----------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS tbl_lista_precios_detalle(
-  Kidlista_precios_detalle INT NOT NULL,
-  nombre_lista_precios_detalle VARCHAR(45),
-  KidComisiones INT,
-  estado TINYINT(1),
-  PRIMARY KEY(Kidlista_precios_detalle),
-  CONSTRAINT `FK_comisiones_precios_Detalle`
-  FOREIGN KEY(`KidComisiones`)
-  REFERENCES `proyectogeneral`.`Tbl_Comisiones`(`KidComisiones`),
-  CONSTRAINT  `FK_precios_encabezado_Detalle`
-  FOREIGN KEY(`Kidlista_precios_detalle`)
-  REFERENCES  `proyectogeneral`.`tbl_lista_precios`(`KidLista_precios`)
+  REFERENCES `proyectogeneral`.`tbl_descuentos`(`KidDescuentos`),
+  CONSTRAINT `FK_tipolistaprecios_listaprecios`
+  FOREIGN KEY (`Kidtipo_lista_precios`)
+  REFERENCES `proyectogeneral`.`tbl_tipo_lista_precios`(`Kidtipo_lista_precios`)
 )ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -1635,7 +1638,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Historia_Inventario` (
   
 -- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
 
-  
  -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_tipoCuenta`
 -- -----------------------------------------------------
@@ -1663,7 +1665,55 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentas` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-  
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_tipo_poliza`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tbl_tipo_poliza(
+	KidTipoDePoliza VARCHAR(5) NOT NULL,
+    descripcion VARCHAR(200),
+    estado TINYINT,
+    PRIMARY KEY(KidTipoDePoliza)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_poliza_encabezado`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tbl_poliza_encabezado(
+	KidPoliza INT NOT NULL AUTO_INCREMENT,
+    KidTipoDePoliza VARCHAR(5) NOT NULL,
+    KidDocumentoAsociado INT NOT NULL,
+    fecha_poliza DATE,
+    total_poliza DOUBLE,
+    estado TINYINT,
+    PRIMARY KEY(KidPoliza, KidTipoDePoliza, KidDocumentoAsociado),
+    CONSTRAINT `fk_tipoDePoliza_PolizaEncabezado`
+    FOREIGN KEY (`KidTipoDePoliza`)
+    REFERENCES `proyectogeneral`.`tbl_tipo_poliza` (`KidTipoDePoliza`)
+)ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`tbl_poliza_detalle`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tbl_poliza_detalle(
+	KidPoliza INT NOT NULL,
+    KidCuenta INT NOT NULL,
+    debe DOUBLE,
+    haber DOUBLE,
+    PRIMARY KEY (KidPoliza, KidCuenta),
+    CONSTRAINT `fk_PolizaEncabezado_PolizaDetalle`
+    FOREIGN KEY (`KidPoliza`)
+    REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`),
+    CONSTRAINT `fk_Cuentas_PolizaDetalle`
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
+)ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_libroDiario_Encabezado`
 -- -----------------------------------------------------
@@ -1681,25 +1731,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario_Detalle` (
   `KidLibroDiarioEncabezado` INT NOT NULL,
-  `KidCuentaContable` INT NOT NULL,
   `KidPoliza` INT NOT NULL,
   `debe` FLOAT NULL,
   `haber` FLOAT NULL,
-  PRIMARY KEY (`KidLibroDiarioEncabezado`, `KidCuentaContable`,`KidPoliza`),
+  PRIMARY KEY (`KidLibroDiarioEncabezado`, `KidPoliza`),
   CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_libroDiario_Encabezado`
     FOREIGN KEY (`KidLibroDiarioEncabezado`)
     REFERENCES `proyectogeneral`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`KidCuentaContable`)
-    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`),
-     CONSTRAINT `fk_tbl_libroDiario_Detalle_Poliza`
+    CONSTRAINT `fk_polizaEncabezado_libroDiarioDetalle`
     FOREIGN KEY (`KidPoliza`)
-    REFERENCES `proyectogeneral`.`Tbl_Poliza` (`KidPoliza`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`)
+)ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_libroMayor_Encabezado`
