@@ -1820,36 +1820,79 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Detalle` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_presupuesto_Encabezado`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto_Encabezado` (
-  `Kidpresupuesto` INT NOT NULL,
-  `fecha` DATE NULL,
-  `descripcion` VARCHAR(300) NULL,
-  `estado` TINYINT NULL,
-  PRIMARY KEY (`Kidpresupuesto`))
-ENGINE = InnoDB;
+ -- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_divisa`
+--
+
+CREATE TABLE `tbl_divisa` (
+  `KidDivisa` varchar(11) NOT NULL,
+  `Nombre` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Estructura de tabla para la tabla `tbl_tipocambio`
+--
+
+CREATE TABLE `tbl_tipocambio` (
+  `KidMonedaBase` varchar(11) NOT NULL,
+  `KidMonedaConversion` varchar(11) NOT NULL,
+  `tipo_cambio` float DEFAULT NULL,
+  `fecha_tipo_cambio` date DEFAULT NULL	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indices de la tabla `tbl_divisa`
+--
+ALTER TABLE `tbl_divisa`
+  ADD PRIMARY KEY (`KidDivisa`);
+
+--
+-- Indices de la tabla `tbl_tipocambio`
+--
+ALTER TABLE `tbl_tipocambio`
+  ADD PRIMARY KEY (`KidMonedaBase`,`KidMonedaConversion`),
+  ADD KEY `fk_tbl_tipoCambio_tbl_Divisa_idx` (`KidMonedaConversion`);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `tbl_tipocambio`
+--
+ALTER TABLE `tbl_tipocambio`
+  ADD CONSTRAINT `fk_tbl_tipoCambio_tbl_Divisa` FOREIGN KEY (`KidMonedaConversion`) REFERENCES `tbl_divisa` (`KidDivisa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_tbl_tipoCambio_tbl_Divisa1` FOREIGN KEY (`KidMonedaBase`) REFERENCES `tbl_divisa` (`KidDivisa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
+
 
 -- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_presupuesto_detalle`
+-- Table `proyectogeneral`.`tbl_presupuesto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto_detalle` (
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto` (
   `Kidpresupuesto` INT NOT NULL,
+  `KidDivisa` VARCHAR(11) NOT NULL,
+  `KidArea` INT NOT NULL,
   `KidCuenta` INT NOT NULL,
-  `cantidad` INT NULL,
-  `monto` DOUBLE NULL,
+  `nombre` VARCHAR(45),
+  `fecha` DATE NULL,
+  `descripcion` VARCHAR(300) NULL,
+  `monto` DOUBLE,
+  `anotacion` VARCHAR(45),
+  `estado` TINYINT NULL,
   PRIMARY KEY (`Kidpresupuesto`),
-  CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_presupuesto_Encabezado1`
-    FOREIGN KEY (`Kidpresupuesto`)
-    REFERENCES `proyectogeneral`.`tbl_presupuesto_Encabezado` (`Kidpresupuesto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tbl_presupuesto_detalle_tbl_cuentas_contables1`
+   CONSTRAINT `FK_divisa_presupuesto`
+    FOREIGN KEY (`KidDivisa`)
+    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`),
+     CONSTRAINT `FK_area_presupuesto`
+    FOREIGN KEY (`KidArea`)
+    REFERENCES `proyectogeneral`.`tbl_areas` (`KidArea`),
+   CONSTRAINT `FK_cuentas_presupuesto`
     FOREIGN KEY (`KidCuenta`)
     REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  )
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -1936,52 +1979,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_conciliacion_bancaria` (
 ENGINE = InnoDB;
 
  
- -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `tbl_divisa`
---
-
-CREATE TABLE `tbl_divisa` (
-  `KidDivisa` varchar(11) NOT NULL,
-  `Nombre` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Estructura de tabla para la tabla `tbl_tipocambio`
---
-
-CREATE TABLE `tbl_tipocambio` (
-  `KidMonedaBase` varchar(11) NOT NULL,
-  `KidMonedaConversion` varchar(11) NOT NULL,
-  `tipo_cambio` float DEFAULT NULL,
-  `fecha_tipo_cambio` date DEFAULT NULL	
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Indices de la tabla `tbl_divisa`
---
-ALTER TABLE `tbl_divisa`
-  ADD PRIMARY KEY (`KidDivisa`);
-
---
--- Indices de la tabla `tbl_tipocambio`
---
-ALTER TABLE `tbl_tipocambio`
-  ADD PRIMARY KEY (`KidMonedaBase`,`KidMonedaConversion`),
-  ADD KEY `fk_tbl_tipoCambio_tbl_Divisa_idx` (`KidMonedaConversion`);
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `tbl_tipocambio`
---
-ALTER TABLE `tbl_tipocambio`
-  ADD CONSTRAINT `fk_tbl_tipoCambio_tbl_Divisa` FOREIGN KEY (`KidMonedaConversion`) REFERENCES `tbl_divisa` (`KidDivisa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_tbl_tipoCambio_tbl_Divisa1` FOREIGN KEY (`KidMonedaBase`) REFERENCES `tbl_divisa` (`KidDivisa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
  
 -- --------------------------------------------------------------------------SCRIPT DE RECURSOS HUMANOS -----------------------------------------------------------------
 -- Funciona
