@@ -723,7 +723,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Platillos` (
   `KidPlatillo` INT NOT NULL,
-  `KidMenu` INT NULL,
+  `KidMenu` INT NOT NULL,
   `nombrePlatillo` VARCHAR(45) NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL,
