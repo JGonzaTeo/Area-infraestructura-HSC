@@ -1978,6 +1978,34 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_conciliacion_bancaria` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `tbl_CuentaBancaria`(
+`PK_IDCuentaBancaria` INT NOT NULL AUTO_INCREMENT,
+`NumeroCuenta` VARCHAR(20) NOT NULL,
+`Descripcion` VARCHAR(45),
+`FK_Banco` INT NOT NULL,
+`FK_Moneda` varchar(11) NOT NULL,
+`Firmas_Individuales` VARCHAR(45),
+`Firmas Conjuntas` VARCHAR(45),
+`Saldo_inicial` VARCHAR(20),
+`Saldo_actual` VARCHAR(20),
+`Cuenta_Primaria` TINYINT NOT NULL,
+PRIMARY KEY(PK_IDCuentaBancaria)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `tbl_chequera`(
+`PK_IDChequera` INT NOT NULL AUTO_INCREMENT,
+`FK_ctabancaria` INT NOT NULL,
+`No_cheques` INT NOT NULL,
+`Estado_Chequera` TINYINT NOT NULL,
+PRIMARY KEY(PK_IDChequera)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `tbl_CuentaBancaria` ADD CONSTRAINT PFBanco FOREIGN KEY(`FK_Banco`) REFERENCES `tbl_bancos`(`KidBanco`);
+ALTER TABLE `tbl_CuentaBancaria` ADD CONSTRAINT PFMoneda FOREIGN KEY(`FK_Moneda`) REFERENCES `tbl_divisa`(`KidDivisa`);
+
+ALTER TABLE `tbl_chequera` ADD CONSTRAINT FKctabancaria FOREIGN KEY(`FK_ctabancaria`) REFERENCES `tbl_CuentaBancaria`(`PK_IDCuentaBancaria`);
+
  
 
  
