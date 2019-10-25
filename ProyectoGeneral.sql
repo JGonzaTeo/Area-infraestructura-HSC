@@ -1978,37 +1978,68 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_conciliacion_bancaria` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `tbl_CuentaBancaria`(
-`PK_IDCuentaBancaria` INT NOT NULL AUTO_INCREMENT,
-`NumeroCuenta` VARCHAR(20) NOT NULL,
-`Descripcion` VARCHAR(45),
-`FK_Banco` INT NOT NULL,
-`FK_Moneda` varchar(11) NOT NULL,
-`Firmas_Individuales` VARCHAR(45),
-`Firmas Conjuntas` VARCHAR(45),
-`Saldo_inicial` VARCHAR(20),
-`Saldo_actual` VARCHAR(20),
-`Cuenta_Primaria` TINYINT NOT NULL,
-PRIMARY KEY(PK_IDCuentaBancaria)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_cuentabancaria`
+--
+
+CREATE TABLE `tbl_cuentabancaria` (
+  `KidCuentaBancaria` int(11) NOT NULL,
+  `NumeroCuenta` varchar(20) NOT NULL,
+  `Descripcion` varchar(45) DEFAULT NULL,
+  `KidBanco` int(11) NOT NULL,
+  `KidMoneda` varchar(11) NOT NULL,
+  `Firmas_Individuales` varchar(45) DEFAULT NULL,
+  `Firmas Conjuntas` varchar(45) DEFAULT NULL,
+  `Saldo_inicial` varchar(20) DEFAULT NULL,
+  `Saldo_actual` varchar(20) DEFAULT NULL,
+  `Cuenta_Primaria` tinyint(4) NOT NULL,
+  `Estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `tbl_chequera`(
-`PK_IDChequera` INT NOT NULL AUTO_INCREMENT,
-`FK_ctabancaria` INT NOT NULL,
-`No_cheques` INT NOT NULL,
-`Estado_Chequera` TINYINT NOT NULL,
-PRIMARY KEY(PK_IDChequera)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- Indices de la tabla `tbl_cuentabancaria`
+--
+ALTER TABLE `tbl_cuentabancaria`
+  ADD PRIMARY KEY (`KidCuentaBancaria`),
+  ADD KEY `PFBanco` (`KidBanco`),
+  ADD KEY `PFMoneda` (`KidMoneda`);
+COMMIT;
 
-ALTER TABLE `tbl_CuentaBancaria` ADD CONSTRAINT PFBanco FOREIGN KEY(`FK_Banco`) REFERENCES `tbl_bancos`(`KidBanco`);
-ALTER TABLE `tbl_CuentaBancaria` ADD CONSTRAINT PFMoneda FOREIGN KEY(`FK_Moneda`) REFERENCES `tbl_divisa`(`KidDivisa`);
 
-ALTER TABLE `tbl_chequera` ADD CONSTRAINT FKctabancaria FOREIGN KEY(`FK_ctabancaria`) REFERENCES `tbl_CuentaBancaria`(`PK_IDCuentaBancaria`);
+-- --------------------------------------------------------
 
- 
+--
+-- Estructura de tabla para la tabla `tbl_chequera`
+--
 
- 
+CREATE TABLE `tbl_chequera` (
+  `KidChequera` int(4) NOT NULL,
+  `Kctabancaria` int(11) NOT NULL,
+  `No_cheques` int(11) NOT NULL,
+  `Estado` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Indices de la tabla `tbl_chequera`
+--
+ALTER TABLE `tbl_chequera`
+  ADD PRIMARY KEY (`KidChequera`),
+  ADD KEY `FKctabancaria` (`Kctabancaria`);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `tbl_chequera`
+--
+ALTER TABLE `tbl_chequera`
+  ADD CONSTRAINT `FKctabancaria` FOREIGN KEY (`Kctabancaria`) REFERENCES `tbl_cuentabancaria` (`KidCuentaBancaria`);
+COMMIT;
+
 -- --------------------------------------------------------------------------SCRIPT DE RECURSOS HUMANOS -----------------------------------------------------------------
 -- Funciona
 
