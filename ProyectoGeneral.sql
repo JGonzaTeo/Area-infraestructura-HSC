@@ -2514,7 +2514,7 @@ CREATE TABLE IF NOT EXISTS tbl_consulta(
   `cadena_consulta` varchar(255) DEFAULT NULL,
   `nombreconsulta_consulta` varchar(45) DEFAULT NULL,
   `descripcion_consulta` VARCHAR(255) DEFAULT NULL,
-  `KidUsuario` varchar(45) DEFAULT NULL,
+  `KidUsuario` varchar(45),
   `disponible` tinyint(1) NOT NULL,
   PRIMARY KEY(KidConsulta, KidUsuario),
   CONSTRAINT `FK_usuario_consulta`
