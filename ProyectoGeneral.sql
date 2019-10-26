@@ -26,6 +26,15 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Tipo_Habitacion` (
   PRIMARY KEY (`KidTipoHabitacion`))
 ENGINE = InnoDB;
 
+--
+-- Disparadores `tbl_tipo_habitacion`
+--
+DELIMITER $$
+CREATE TRIGGER `EstadoHabitaciones` AFTER UPDATE ON `tbl_tipo_habitacion` FOR EACH ROW BEGIN
+UPDATE tbl_habitaciones set estado = new.estado WHERE tbl_habitaciones.KidTipoHabitacion=new.KidTipoHabitacion;
+END
+$$
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Categorias_Habitacion`
@@ -35,6 +44,17 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Categorias_Habitacion` (
   `estado` TINYINT(1) NULL,
   PRIMARY KEY (`KidCategoria`))
 ENGINE = InnoDB;
+
+
+--
+-- Disparadores `tbl_categorias_habitacion`
+--
+DELIMITER $$
+CREATE TRIGGER `EstadoHabitaciones2` AFTER UPDATE ON `tbl_categorias_habitacion` FOR EACH ROW BEGIN
+UPDATE tbl_habitaciones set estado = new.estado WHERE tbl_habitaciones.KidCategoria=new.KidCategoria;
+END
+$$
+DELIMITER ;
 
 
 -- -----------------------------------------------------
@@ -1387,7 +1407,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Acreedor` (
 -- Table `proyectogeneral`.`Tbl_Banco`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Bancos` (
-  `KidBanco` INT(12) NOT NULL,
+  `KidBanco` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` VARCHAR(150) NULL DEFAULT NULL,
   `estado` TINYINT(1) NULL DEFAULT '1',
@@ -1984,29 +2004,25 @@ ENGINE = InnoDB;
 -- Estructura de tabla para la tabla `tbl_cuentabancaria`
 --
 
-CREATE TABLE `tbl_cuentabancaria` (
-  `KidCuentaBancaria` int(11) NOT NULL,
-  `NumeroCuenta` varchar(20) NOT NULL,
-  `Descripcion` varchar(45) DEFAULT NULL,
-  `KidBanco` int(11) NOT NULL,
-  `KidMoneda` varchar(11) NOT NULL,
-  `Firmas_Individuales` varchar(45) DEFAULT NULL,
-  `Firmas Conjuntas` varchar(45) DEFAULT NULL,
-  `Saldo_inicial` varchar(20) DEFAULT NULL,
-  `Saldo_actual` varchar(20) DEFAULT NULL,
-  `Cuenta_Primaria` tinyint(4) NOT NULL,
-  `Estado` tinyint(1) NOT NULL
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentabancaria` (
+`KidCuentaBancaria` int(11) NOT NULL AUTO_INCREMENT,
+`NumeroCuenta` varchar(20) NOT NULL,
+`Descripcion` varchar(45) DEFAULT NULL,
+`KidBanco` int(11) NOT NULL,
+`KidMoneda` varchar(11) NOT NULL,
+`Firmas_Individuales` varchar(45) DEFAULT NULL,
+`Firmas_Conjuntas` varchar(45) DEFAULT NULL,
+`Saldo` varchar(20) DEFAULT NULL,
+`Cuenta_Primaria` tinyint(4) NOT NULL,
+`estado` tinyint(1) NOT NULL,
+PRIMARY KEY(KidCuentaBancaria),
+ CONSTRAINT `FK_Bancos_CuentaBancaria`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`),
+     CONSTRAINT `FK_Moneda_CuentaBancaria`
+    FOREIGN KEY (`KidMoneda`)
+    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- Indices de la tabla `tbl_cuentabancaria`
---
-ALTER TABLE `tbl_cuentabancaria`
-  ADD PRIMARY KEY (`KidCuentaBancaria`),
-  ADD KEY `PFBanco` (`KidBanco`),
-  ADD KEY `PFMoneda` (`KidMoneda`);
-COMMIT;
-
 
 -- --------------------------------------------------------
 
@@ -2014,31 +2030,18 @@ COMMIT;
 -- Estructura de tabla para la tabla `tbl_chequera`
 --
 
-CREATE TABLE `tbl_chequera` (
-  `KidChequera` int(4) NOT NULL,
-  `Kctabancaria` int(11) NOT NULL,
-  `No_cheques` int(11) NOT NULL,
-  `Estado` tinyint(4) NOT NULL
+CREATE TABLE `proyectogeneral`.`tbl_chequera` (
+`KidChequera` int(4) NOT NULL AUTO_INCREMENT,
+`KidCuentaBancaria` int(11) NOT NULL,
+`No_cheques` int(4) NOT NULL,
+`estado` tinyint(1) NOT NULL,
+PRIMARY KEY(KidChequera),
+CONSTRAINT `FK_CuentaBancaria_Chequera`
+    FOREIGN KEY (`KidCuentaBancaria`)
+    REFERENCES `proyectogeneral`.`tbl_cuentabancaria` (`KidCuentaBancaria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
---
--- Indices de la tabla `tbl_chequera`
---
-ALTER TABLE `tbl_chequera`
-  ADD PRIMARY KEY (`KidChequera`),
-  ADD KEY `FKctabancaria` (`Kctabancaria`);
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `tbl_chequera`
---
-ALTER TABLE `tbl_chequera`
-  ADD CONSTRAINT `FKctabancaria` FOREIGN KEY (`Kctabancaria`) REFERENCES `tbl_cuentabancaria` (`KidCuentaBancaria`);
-COMMIT;
 
 -- --------------------------------------------------------------------------SCRIPT DE RECURSOS HUMANOS -----------------------------------------------------------------
 -- Funciona
