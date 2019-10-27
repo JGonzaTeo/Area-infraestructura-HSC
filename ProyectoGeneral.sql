@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Reservaciones` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tbl_Reservaciones_Tbl_Empleados1`
     FOREIGN KEY (`KidEmpleado`)
-    REFERENCES `proyectogeneral`.`Tbl_Empleados` (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Eventos` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tbl_Eventos_Tbl_Empleados1`
     FOREIGN KEY (`_KidEmpleado`)
-    REFERENCES `proyectogeneral`.`Tbl_Empleados` (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -535,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Check_In` (
   PRIMARY KEY (`KidCheckIn`),
   CONSTRAINT `fk_Tbl_Check_In_Tbl_Empleados1`
     FOREIGN KEY (`KidEmpleado`)
-    REFERENCES `proyectogeneral`.`Tbl_Empleados` (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tbl_Check_In_Tbl_Clientes1`
@@ -563,7 +563,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Check_Out` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tbl_Check_Out_Tbl_Empleados1`
     FOREIGN KEY (`KidEmpleado`)
-    REFERENCES `proyectogeneral`.`Tbl_Empleados` (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_Empleado` (`KidEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -879,7 +879,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
   REFERENCES `proyectogeneral`.`Tbl_Clientes`(`KidCliente`),
   CONSTRAINT `FK_empleado_encabezadoComprobante`
   FOREIGN KEY(`KidEmpleado`)
-  REFERENCES `proyectogeneral`.`Tbl_Empleados`(`KidEmpleado`),
+  REFERENCES `proyectogeneral`.`tbl_empleado`(`KidEmpleado`),
   CONSTRAINT `FK_tipoComprobante_encabezadoComprobante`
   FOREIGN KEY(`KidtiposComprobantes`)
   REFERENCES `proyectogeneral`.`tbl_tiposcomprobantes`(`KidtiposComprobantes`)
@@ -1274,7 +1274,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Asignacion_Empleado` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Asignacion_Empleado_Empleados1`
     FOREIGN KEY (`KidEmpleados`)
-    REFERENCES `proyectogeneral`.`Tbl_Empleados` (`KidEmpleados`)
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
