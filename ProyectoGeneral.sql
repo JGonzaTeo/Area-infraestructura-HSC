@@ -1301,7 +1301,6 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `Tbl_proveedor` (
   `KidProveedor` INT(16) NOT NULL,
-  `KidContacto` INT(16) NULL DEFAULT NULL,
   `nombre` VARCHAR(30) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NULL DEFAULT NULL,
   `direccion` VARCHAR(20) NULL DEFAULT NULL,
