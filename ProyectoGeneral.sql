@@ -1892,7 +1892,7 @@ COMMIT;
 -- Table `proyectogeneral`.`tbl_presupuesto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto` (
-  `Kidpresupuesto` INT NOT NULL,
+  `Kidpresupuesto` INT NOT NULL AUTO_INCREMENT,
   `KidDivisa` VARCHAR(11) NOT NULL,
   `KidArea` INT NOT NULL,
   `KidCuenta` INT NOT NULL,
