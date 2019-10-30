@@ -1984,7 +1984,7 @@ COMMIT;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto` (
   `Kidpresupuesto` INT NOT NULL AUTO_INCREMENT,
-  `KidDivisa` VARCHAR(11) NOT NULL,
+  `KidMoneda` INT,
   `KidArea` INT NOT NULL,
   `KidCuenta` INT NOT NULL,
   `nombre` VARCHAR(45),
@@ -1994,9 +1994,9 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto` (
   `anotacion` VARCHAR(45),
   `estado` TINYINT NULL,
   PRIMARY KEY (`Kidpresupuesto`),
-   CONSTRAINT `FK_divisa_presupuesto`
-    FOREIGN KEY (`KidDivisa`)
-    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`),
+  CONSTRAINT `FK_Moneda_Presupuesto`
+    FOREIGN KEY (`KidMoneda`)
+    REFERENCES `proyectogeneral`.`tbl_moneda` (`KidMoneda`),
      CONSTRAINT `FK_area_presupuesto`
     FOREIGN KEY (`KidArea`)
     REFERENCES `proyectogeneral`.`tbl_areas` (`KidArea`),
