@@ -1938,7 +1938,8 @@ ENGINE = InnoDB;
 
 CREATE TABLE `tbl_divisa` (
   `KidDivisa` varchar(11) NOT NULL,
-  `Nombre` varchar(45) DEFAULT NULL
+  `Nombre` varchar(45) DEFAULT NULL,
+  `estado` TINYINT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
