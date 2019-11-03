@@ -157,7 +157,7 @@ CREATE TABLE `tbl_puestos` (
   PRIMARY KEY (`KidPuesto`),
   CONSTRAINT `fk_Area_Puestos`
     FOREIGN KEY (`KidArea`)
-    REFERENCES `proyectogeneral`.`Tbl_TipoCliente` (`KidTipoCliente`)
+    REFERENCES `proyectogeneral`.`Tbl_Areas` (`KidArea`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2650,86 +2650,110 @@ CREATE TABLE IF NOT EXISTS tbl_consulta(
 
 -- ---------------------------------------------- REPORTEADOR -----------------------------------------
 
-CREATE TABLE TBL_CONFIGURACION_RPT(
- ID_CONFIGURACION INT(12) NOT NULL,
- NOMBRE VARCHAR(50) NOT NULL,
- USER VARCHAR(50) DEFAULT NULL,
- PASSWORD VARCHAR(100) DEFAULT NULL,
- PUERTO VARCHAR(3) DEFAULT NULL,
- RUTA VARCHAR(100) NOT NULL,
- ESTADO INT(2) DEFAULT 1
+CREATE TABLE `Tbl_configuracion_rpt`(
+	`PK_id_configuracion` int(12) NOT NULL,
+    `nombre` varchar(50) NOT NULL,
+    `ruta` varchar(100) NOT NULL,
+    `estado` tinyint default 1 NOT NULL
+); 
+ALTER TABLE `Tbl_configuracion_rpt` ADD CONSTRAINT PRIMARY KEY (`PK_id_configuracion`);
+
+CREATE TABLE `tbl_reporte`(
+	`PK_id_reporte` int(12) NOT NULL,
+    `PK_id_configuracion` int(12) NOT NULL,
+    `nombre` varchar(95) NOT NULL,
+    `nombre_archivo` varchar(100) NOT NULL, 
+    `estado` tinyint default NULL 
 );
-ALTER TABLE TBL_CONFIGURACION_RPT ADD CONSTRAINT PRIMARY KEY (ID_CONFIGURACION);
+ALTER TABLE `tbl_reporte` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`);
+ALTER TABLE `tbl_reporte` ADD CONSTRAINT `FK_Tbl_reporte_Tbl_Configuacion` FOREIGN KEY (`PK_id_configuracion`)
+	REFERENCES `Tbl_configuracion_rpt` (`PK_id_configuracion`);
 
-CREATE TABLE TBL_REPORTE(
- ID_REPORTE INT(12) NOT NULL,
- ID_CONFIGURACION INT(12) NOT NULL,
- NOMBRE VARCHAR(50) NOT NULL, 
- FILENAME VARCHAR(100) NOT NULL,
- ESTADO INT(2) DEFAULT 1
+CREATE TABLE `Tbl_rpt_app`(
+	`PK_id_reporte` int(12) NOT NULL,
+	`PK_id_aplicacion` int(11) NOT NULL,
+	`PK_id_Modulo` int(11) NOT NULL,
+    `estado` tinyint default NULL 
 );
-ALTER TABLE TBL_REPORTE ADD CONSTRAINT PK_REPORTE PRIMARY KEY (ID_REPORTE);
-ALTER TABLE TBL_REPORTE ADD CONSTRAINT FK_RPT_CONFIGURACION FOREIGN KEY (ID_CONFIGURACION)
-REFERENCES TBL_CONFIGURACION_RPT (ID_CONFIGURACION);
+ALTER TABLE `Tbl_rpt_app` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte` , `PK_id_aplicacion`, `PK_id_Modulo`);
+ALTER TABLE `Tbl_rpt_app` ADD CONSTRAINT `FK_Tbl_Reporte_Tbl_rpt_app` FOREIGN KEY (`PK_id_reporte`)
+REFERENCES `tbl_reporte` (`PK_id_reporte`);
+ALTER TABLE `Tbl_rpt_app` ADD CONSTRAINT `FK_Tbl_Aplicacion_Tbl_rpt_app` FOREIGN KEY (`PK_id_aplicacion`)
+REFERENCES `tbl_aplicacion` (`PK_id_aplicacion`);
+ALTER TABLE `Tbl_rpt_app` ADD CONSTRAINT `FK_Tbl_Modulo_Tbl_rpt_app` FOREIGN KEY (`PK_id_Modulo`)
+REFERENCES `tbl_modulo` (`PK_id_Modulo`);
 
-CREATE TABLE TBL_RPT_APP(
- ID_REPORTE INT(12) NOT NULL,
- ID_APLICACION INT(11) NOT NULL,
- ID_MODULO INT(11) NOT NULL,
- ESTADO INT(2) DEFAULT 1
+CREATE TABLE `Tbl_rpt_mdl` (
+	`PK_id_reporte` int(12) NOT NULL,
+	`PK_id_Modulo` int(11) NOT NULL,
+    `estado` tinyint default NULL 
 );
-ALTER TABLE TBL_RPT_APP ADD CONSTRAINT PK_RPT_APP PRIMARY KEY (ID_REPORTE, ID_APLICACION, ID_MODULO);
-ALTER TABLE TBL_RPT_APP ADD CONSTRAINT FK_RPT_APP_REPORTE FOREIGN KEY (ID_REPORTE)
-REFERENCES TBL_REPORTE (ID_REPORTE);
-ALTER TABLE TBL_RPT_APP ADD CONSTRAINT FK_RPT_APP_APLICACION FOREIGN KEY (ID_APLICACION)
-REFERENCES TBL_APLICACION (PK_ID_APLICACION);
-ALTER TABLE TBL_RPT_APP ADD CONSTRAINT FK_RPT_APP_MODULO FOREIGN KEY (ID_MODULO)
-REFERENCES TBL_MODULO (PK_ID_MODULO);
+ALTER TABLE `Tbl_rpt_mdl` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`, `PK_id_Modulo`);
+ALTER TABLE `Tbl_rpt_mdl` ADD CONSTRAINT `FK_Tbl_reporte_Tbl_rpt_mdl` FOREIGN KEY (`PK_id_reporte`)
+REFERENCES `tbl_reporte` (`PK_id_reporte`);
+ALTER TABLE `Tbl_rpt_mdl` ADD CONSTRAINT `FK_Tbl_modulo_Tbl_rpt_mdl` FOREIGN KEY (`PK_id_Modulo`)
+REFERENCES `tbl_modulo` (`PK_id_Modulo`);
 
-CREATE TABLE TBL_RPT_MDL(
- ID_REPORTE INT(12) NOT NULL,
- ID_MODULO INT(11) NOT NULL,
- ESTADO INT(2) DEFAULT 1
-);
-ALTER TABLE TBL_RPT_MDL ADD CONSTRAINT PK_RPT_MDL PRIMARY KEY (ID_REPORTE, ID_MODULO);
-ALTER TABLE TBL_RPT_MDL ADD CONSTRAINT FK_RPT_MDL_REPORTE FOREIGN KEY (ID_REPORTE)
-REFERENCES TBL_REPORTE (ID_REPORTE);
-ALTER TABLE TBL_RPT_MDL ADD CONSTRAINT FK_RPT_MDL_MODULO FOREIGN KEY (ID_MODULO)
-REFERENCES TBL_MODULO (PK_ID_MODULO);
+CREATE TABLE `Tbl_propiedad_Rpt` (
+	`PK_id_reporte` int (12) NOT NULL,
+	`PK_id_usuario` varchar(25) NOT NULL,
+	`PK_id_aplicacion` int(11) NOT NULL,
+	`PK_id_Modulo` int(11) NOT NULL,
+    `imprimir` tinyint default NULL,
+    `estado` tinyint default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Reportes que se guardan en el sistema*/
-CREATE TABLE TBL_RPT_ALMACEN(
- ID_RPT_ALMACEN INT(12) NOT NULL,
- ID_USUARIO INT(12) NOT NULL,
- ID_MODULO INT(12) NOT NULL,
- NOMBRE VARCHAR(50) NOT NULL,
- FECHA TIMESTAMP NOT NULL,
- ESTADO INT(12) DEFAULT 1
-);
-ALTER TABLE TBL_RPT_ALMACEN ADD CONSTRAINT PK_RPT_ALMACEN PRIMARY KEY (ID_RPT_ALMACEN);
-ALTER TABLE TBL_RPT_ALMACEN ADD CONSTRAINT FK_RPT_ALM_USUARIO FOREIGN KEY (ID_MODULO)
-REFERENCES TBL_MODULO (PK_ID_MODULO);
-ALTER TABLE TBL_RPT_ALMACEN ADD CONSTRAINT FK_RPT_ALM_MODULO FOREIGN KEY (ID_MODULO)
-REFERENCES TBL_MODULO (PK_ID_MODULO);
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`, `PK_id_Modulo`, `PK_id_usuario`, `PK_id_aplicacion`);
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_reporte_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_reporte`)
+	REFERENCES `tbl_reporte` (`PK_id_reporte`);
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_usuario_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_usuario`)
+	REFERENCES `tbl_usuario` (`PK_id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_Aplicacio_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_aplicacion`)
+	REFERENCES `tbl_aplicacion` (`PK_id_aplicacion`);
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_Modulo_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_Modulo`)
+	REFERENCES `tbl_modulo` (`PK_id_Modulo`);
 
-/*CARPETA ASOCIADA A MODULO PARA GUARDAR REPORTES*/
-CREATE TABLE TBL_CARPETA_MDL(
- ID_CONFIGURACION INT(12) NOT NULL,
- ID_MODULO INT(12) NOT NULL,
- ESTADO INT(2) DEFAULT 1
-);
-ALTER TABLE TBL_CARPETA_MDL ADD CONSTRAINT PK_CARPETA_MDL PRIMARY KEY (ID_CONFIGURACION, ID_MODULO);
-ALTER TABLE TBL_CARPETA_MDL ADD CONSTRAINT FK_CRPT_MDL_USUARIO FOREIGN KEY (ID_MODULO)
-REFERENCES TBL_MODULO (PK_ID_MODULO);
 
-INSERT INTO TBL_CONFIGURACION_RPT VALUES (1, 'plantillas', 'na', 'na', 'na', 'C:\\\\Reportes\\\\recursos\\\\', 1);
-INSERT INTO TBL_CONFIGURACION_RPT VALUES (2, 'MDI', 'na', 'na', 'na', 'C:\\\\Reportes\\\\MDI\\\\', 1);
-INSERT INTO TBL_CONFIGURACION_RPT VALUES (3, 'mdlSeguridad', 'na', 'na', 'na', 'C:\\\\Reportes\\\\Seguridad\\\\', 1);
+-- --------------------------- CAMBIOS ---------------------------------------------------------
 
-INSERT INTO TBL_CARPETA_MDL VALUES (2, 1, 1);
-INSERT INTO TBL_CARPETA_MDL VALUES (3, 2, 1);
+-- -----------------------------------------------------
+-- Table `tbl_libro_bancos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
+  `KidMovimientoBancario` INT NOT NULL AUTO_INCREMENT,
+  `cuenta_debito` INT NOT NULL,
+  `cuenta_credito` INT NOT NULL,
+  `monto` DOUBLE NOT NULL,
+  `tipo_movimiento` VARCHAR(45) NULL,
+  `fecha_movimiento` DATE NULL,
+  `beneficiario` VARCHAR(45) NULL,
+  `descripcion` VARCHAR(400) NULL,
+  `movimiento_conciliado` TINYINT NULL,
+  `movimiento_trasladado_contabilidad` TINYINT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidMovimientoBancario`))
+ENGINE = InnoDB;
 
-commit;
+
+-- -----------------------------------------------------
+-- Table `tbl_conciliacion_bancaria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tbl_conciliacion_bancaria` (
+  `KidBanco` INT NOT NULL,
+  `moneda` VARCHAR(45) NOT NULL,
+  `mes_conciliacion` VARCHAR(45) NOT NULL,
+  `diferencia_total` DOUBLE NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidBanco`, `moneda`, `mes_conciliacion`),
+  CONSTRAINT `FK_Bancos_ConciliacionBancaria`
+    FOREIGN KEY (`KidBanco`)
+    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`),
+     CONSTRAINT `FK_Moneda_ConciliacionBancaria`
+    FOREIGN KEY (`moneda`)
+    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`)
+  )
+ENGINE = InnoDB;
+
 
 --
 -- Dumping routines for database 'proyectogeneral'
