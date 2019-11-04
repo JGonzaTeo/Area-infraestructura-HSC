@@ -2044,22 +2044,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_flujoEfectivo_Detalle` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_libro_bancos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libro_bancos` (
-  `KidMovimiento` INT NOT NULL AUTO_INCREMENT,
-  `KidBanco` INT NOT NULL,
-  `fecha_movimiento` DATE NULL,
-  `monto` FLOAT NULL,
-  PRIMARY KEY (`KidMovimiento`, `KidBanco`),
-  CONSTRAINT `fk_tbl_libro_bancos_tbl_bancos1`
-    FOREIGN KEY (`KidBanco`)
-    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_conciliacion_bancaria`
