@@ -1815,33 +1815,19 @@ CREATE TABLE IF NOT EXISTS tbl_poliza_detalle(
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_libroDiario_Encabezado`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario_Encabezado` (
-  `KidLibroDiarioEncabezado` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario` (
+  `KidLibroDiario` INT NOT NULL AUTO_INCREMENT,
+  `KidPoliza` INT NOT NULL,
   `fecha` DATE NULL,
   `total_debe` FLOAT NULL,
   `total_haber` FLOAT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`KidLibroDiarioEncabezado`))
+  PRIMARY KEY (`KidLibroDiario`, `KidPoliza`),
+  CONSTRAINT `fk_polizaEncabezado_libroDiario`
+    FOREIGN KEY (`KidPoliza`)
+    REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`))
 ENGINE = InnoDB; 
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_libroDiario_Detalle`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroDiario_Detalle` (
-  `KidLibroDiarioEncabezado` INT NOT NULL,
-  `KidPoliza` INT NOT NULL,
-  `debe` FLOAT NULL,
-  `haber` FLOAT NULL,
-  PRIMARY KEY (`KidLibroDiarioEncabezado`, `KidPoliza`),
-  CONSTRAINT `fk_tbl_libroDiario_Detalle_tbl_libroDiario_Encabezado`
-    FOREIGN KEY (`KidLibroDiarioEncabezado`)
-    REFERENCES `proyectogeneral`.`tbl_libroDiario_Encabezado` (`KidLibroDiarioEncabezado`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_polizaEncabezado_libroDiarioDetalle`
-    FOREIGN KEY (`KidPoliza`)
-    REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`)
-)ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_libroMayor_Encabezado`
