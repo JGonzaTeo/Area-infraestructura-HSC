@@ -2655,11 +2655,16 @@ CREATE TABLE `Tbl_propiedad_Rpt` (
 	`PK_id_usuario` varchar(25) NOT NULL,
 	`PK_id_aplicacion` int(11) NOT NULL,
 	`PK_id_Modulo` int(11) NOT NULL,
-    `imprimir` tinyint default NULL,
     `estado` tinyint default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`, `PK_id_Modulo`, `PK_id_usuario`, `PK_id_aplicacion`);
+
+-- ----- CAMBIO AL SCRIPT---------------------------------------
+ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT PRIMARY KEY
+(`PK_id_Modulo`, `PK_id_usuario`, `PK_id_aplicacion`);
+
+-- ---------------------------------------------------------------
+
 ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_reporte_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_reporte`)
 	REFERENCES `tbl_reporte` (`PK_id_reporte`);
 ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_usuario_Tbl_propiedad_Rpt` FOREIGN KEY (`PK_id_usuario`)
