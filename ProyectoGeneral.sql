@@ -616,38 +616,38 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `proyectogeneral`.`Tbl_descuentos`
--- -----------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_descuentos`(
-  KidDescuentos INT NOT NULL,
-  nombre_descuentos VARCHAR(45),
-  porcentaje_descuentos DOUBLE,
-  fecha_inicio_descuentos DATE,
-  fecha_final_descuentos DATE,
-  estado TINYINT(1),
-  PRIMARY KEY(KidDescuentos)
-)ENGINE = InnoDB;
-
--- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Producto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto` (
   `KidProducto` INT NOT NULL,
   `KidTipoProducto` INT NOT NULL,
-  `KidDescuentos` INT NOT NULL,
   `nombre_producto` VARCHAR(45) NULL,
   `descripcion_producto` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidProducto`),
   CONSTRAINT `fk_Producto_TipoProducto1`
     FOREIGN KEY (`KidTipoProducto`)
-    REFERENCES `proyectogeneral`.`Tbl_TipoProducto` (`KidTipoProducto`),
-    CONSTRAINT `fk_Descuento_Producto`
-    FOREIGN KEY (`KidDescuentos`)
-    REFERENCES `proyectogeneral`.`tbl_descuentos` (`KidDescuentos`)
+    REFERENCES `proyectogeneral`.`Tbl_TipoProducto` (`KidTipoProducto`)
 )
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_descuentos`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_descuentos`(
+  KidDescuentos INT NOT NULL,
+  KidProducto INT,
+  nombre_descuentos VARCHAR(45),
+  porcentaje_descuentos DOUBLE,
+  fecha_inicio_descuentos DATE,
+  fecha_final_descuentos DATE,
+  estado TINYINT(1),
+  PRIMARY KEY(KidDescuentos),
+  CONSTRAINT `fk_Producto_Descuentos`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`)
+)ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -923,14 +923,15 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Encabezado_Lista_Precios`(
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Lista_Precios`(
-	KidDetalleListaPrecios INT,
+	KidEncabezadoListaPrecios INT,
+    KidDetalleListaPrecios INT,
     KidProducto INT,
     Kidtipo_lista_precios INT,
     nombre_listaprecios VARCHAR(50),
     precio_listaprecios DOUBLE,
-    PRIMARY KEY(KidDetalleListaPrecios),
+    PRIMARY KEY(KidEncabezadoListaPrecios, KidDetalleListaPrecios),
     CONSTRAINT `FK_EncabezadoLista_Precios_Detalle_Lista_Precios`
-    FOREIGN KEY (`KidDetalleListaPrecios`)
+    FOREIGN KEY (`KidEncabezadoListaPrecios`)
     REFERENCES `proyectogeneral`.`Tbl_Encabezado_Lista_Precios` (`KidEncabezadoListaPrecios`),
     CONSTRAINT `FK_Productos_DetallePedido`
     FOREIGN KEY (`KidProducto`)
@@ -939,20 +940,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Lista_Precios`(
     FOREIGN KEY (`Kidtipo_lista_precios`)
     REFERENCES `proyectogeneral`.`tbl_tipo_lista_precios` (`Kidtipo_lista_precios`)
 )ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_lista_precios_productos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS tbl_lista_precios_productos(
-  KidLista_precios INT NOT NULL,
-  KidProducto INT NOT NULL,
-  PRIMARY KEY(KidLista_precios, KidProducto),
-  CONSTRAINT `FK_productos_lista_precios`
-  FOREIGN KEY (`KidProducto`)
-  REFERENCES `proyectogeneral`.`Tbl_producto`(`KidProducto`)
-)ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_TipoFactura`
