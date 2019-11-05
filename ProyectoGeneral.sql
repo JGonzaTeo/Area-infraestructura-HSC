@@ -676,6 +676,7 @@ CREATE TABLE IF NOT EXISTS `Tbl_bodega` (
   PRIMARY KEY (`KidBodega`));
 
 
+
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Existencias`
 -- -----------------------------------------------------
@@ -2701,6 +2702,10 @@ CREATE TABLE IF NOT EXISTS `tbl_conciliacion_bancaria` (
   )
 ENGINE = InnoDB;
 
+-- ---------------- ALTER TABLE --------------------------
+ALTER TABLE tbl_producto_marca ADD estado TINYINT;
+ALTER TABLE tbl_tipoproducto ADD estado TINYINT;
+ALTER TABLE tbl_bodega ADD CONSTRAINT	 FK_Sucursal_Bodega	FOREIGN KEY(KidSucursal) REFERENCES tbl_sucursal(KidSucursal);
 
 --
 -- Dumping routines for database 'proyectogeneral'
