@@ -1739,7 +1739,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Historia_Inventario` (
 -- Table `proyectogeneral`.`tbl_tipoCuenta`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_tipoCuenta` (
-  `KidTipoCuenta` INT NOT NULL AUTO_INCREMENT,
+  `KidTipoCuenta` VARCHAR(10) NOT NULL,
   `nombre_tipoCuenta` VARCHAR(25) NULL,
   `descripcion_tipoCuenta` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
@@ -1750,8 +1750,8 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`tbl_cuentas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentas` (
-  `KidCuenta` INT NOT NULL AUTO_INCREMENT,
-  `KidTipoCuenta` INT NOT NULL,
+  `KidCuenta` VARCHAR(10) NOT NULL,
+  `KidTipoCuenta` VARCHAR(10) NOT NULL,
   `nombre` VARCHAR(25) NULL,
   `descripcion` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
@@ -1800,7 +1800,7 @@ CREATE TABLE IF NOT EXISTS tbl_poliza_encabezado(
 
 CREATE TABLE IF NOT EXISTS tbl_poliza_detalle(
 	KidPoliza INT NOT NULL,
-    KidCuenta INT NOT NULL,
+    KidCuenta VARCHAR(10) NOT NULL,
     debe DOUBLE,
     haber DOUBLE,
     PRIMARY KEY (KidPoliza, KidCuenta),
@@ -1887,7 +1887,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Detalle` (
   `KidBalanceGeneral` INT NOT NULL,
-  `KidCuentaContable` INT NOT NULL,
+  `KidCuentaContable` VARCHAR(10) NOT NULL,
   `valor` FLOAT NULL,
   PRIMARY KEY (`KidBalanceGeneral`, `KidCuentaContable`),
   CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_BalanceGeneral_Encabezado1`
@@ -1959,7 +1959,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_presupuesto` (
   `Kidpresupuesto` INT NOT NULL AUTO_INCREMENT,
   `KidMoneda` INT,
   `KidArea` INT NOT NULL,
-  `KidCuenta` INT NOT NULL,
+  `KidCuenta` VARCHAR(10) NOT NULL,
   `nombre` VARCHAR(45),
   `fecha` DATE NULL,
   `descripcion` VARCHAR(300) NULL,
@@ -1984,7 +1984,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_estado_perdidas_ganacias_Detalle` (
   `KidPerdidasGanancias` INT NOT NULL,
-  `KidCuenta` INT NOT NULL,
+  `KidCuenta`VARCHAR(10) NOT NULL,
   `debe` FLOAT NULL,
   `haber` FLOAT NULL,
   PRIMARY KEY (`KidPerdidasGanancias`),
@@ -2015,7 +2015,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_flujoEfectivo_Detalle` (
   `KidFlujoEfectivo` INT NOT NULL,
-  `KidCuenta` INT NOT NULL,
+  `KidCuenta` VARCHAR(10) NOT NULL,
   `valor` FLOAT NULL,
   PRIMARY KEY (`KidFlujoEfectivo`, `KidCuenta`),
   CONSTRAINT `fk_tbl_flujoEfectivo_Detalle_tbl_flujoEfectivo_Encabezado1`
