@@ -1724,6 +1724,37 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Historia_Inventario` (
     REFERENCES `proyectogeneral`.`Tbl_sucursal` (`Kidsucursal`)
   );
 
+
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto_Tbl_Bodega` ( 
+`KidProducto` INT NOT NULL, 
+`KidBodega` INT NOT NULL, 
+`stockmin_producto_bodega` VARCHAR(45) NULL, 
+`stockmax_producto_bodega` VARCHAR(45) NULL, 
+`stock_producto_bodega` VARCHAR(45) NULL, 
+`KidSucursal` INT NOT NULL, `KidTransporte` INT NOT NULL, 
+`estado` TINYINT NULL, PRIMARY KEY (`KidProducto`, `KidBodega`), 
+CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Producto` 
+FOREIGN KEY (`KidProducto`) 
+REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Bodega1`
+FOREIGN KEY (`KidBodega`) 
+REFERENCES `proyectogeneral`.`Tbl_Bodega` (`KidBodega`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Sucursal1` 
+FOREIGN KEY (`KidSucursal`) 
+REFERENCES `proyectogeneral`.`Tbl_Sucursal` (`KidSucursal`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Transporte1` 
+FOREIGN KEY (`KidTransporte`) 
+REFERENCES `proyectogeneral`.`Tbl_Transporte` (`KidTransporte`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION) 
+ENGINE = InnoDB; 
+
   
 -- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
 
@@ -1744,10 +1775,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentas` (
   `KidCuenta` VARCHAR(10) NOT NULL,
   `KidTipoCuenta` VARCHAR(10) NOT NULL,
+  `Kidentificador` INT,	
   `nombre` VARCHAR(25) NULL,
   `descripcion` VARCHAR(45) NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`KidCuenta`, `KidTipoCuenta`),
+  PRIMARY KEY (`KidCuenta`, `KidTipoCuenta`,`Kidentificador`),
   CONSTRAINT `fk_tbl_cuentas_contables_tbl_tipoCuentaContable1`
     FOREIGN KEY (`KidTipoCuenta`)
     REFERENCES `proyectogeneral`.`tbl_tipoCuenta` (`KidTipoCuenta`)
@@ -2731,6 +2763,9 @@ ALTER TABLE tbl_tipoproducto ADD estado TINYINT;
 ALTER TABLE tbl_bodega ADD CONSTRAINT	 FK_Sucursal_Bodega	FOREIGN KEY(KidSucursal) REFERENCES tbl_sucursal(KidSucursal);
 ALTER TABLE `proyectogeneral`.`tbl_resultados` 
 CHANGE COLUMN `Resultado` `Resultado` INT NULL DEFAULT NULL;
+
+ALTER TABLE tbl_cuentas ADD debe DOUBLE;
+ALTER TABLE tbl_cuentas ADD haber DOUBLE;
 
 
 --
