@@ -350,24 +350,15 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Reservacion` (
 ENGINE = InnoDB;
 
 
-
-
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Folios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Folios` (
   `KidFolio` INT NOT NULL,
-  `KidCliente` INT NULL,
   `fechaApertura` DATE NULL,
   `estado` TINYINT(1) NULL,
-  PRIMARY KEY (`KidFolio`),
-  CONSTRAINT `folio`
-    FOREIGN KEY (`KidCliente`)
-    REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
-    )
+  PRIMARY KEY (`KidFolio`))
 ENGINE = InnoDB;
-
-
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Servicios`
@@ -1322,15 +1313,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Comisiones` (
   `KidComisiones` INT NOT NULL,
-  `KidTipoProducto` INT NOT NULL,
+  `KidProducto` INT NOT NULL,
   `fecha_comisiones` DATE NULL,
   `descripcion_comisiones` VARCHAR(45) NULL,
   `monto_comisiones` DOUBLE NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidComisiones`),
-   CONSTRAINT `fk_TipoProducto_Comisiones`
-    FOREIGN KEY (`KidTipoProducto`)
-    REFERENCES `proyectogeneral`.`Tbl_TipoProducto` (`KidTipoProducto`))
+   CONSTRAINT `fk_Producto_Comisiones`
+    FOREIGN KEY (`KidProducto`)
+    REFERENCES `proyectogeneral`.`Tbl_producto` (`KidProducto`))
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
