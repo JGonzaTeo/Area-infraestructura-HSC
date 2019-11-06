@@ -2295,6 +2295,38 @@ UNLOCK TABLES;
 -- Dumping events for database 'proyectogeneral'
 --
 
+CREATE TABLE `proyectogeneral`.`tbl_desempeñoempleado` (
+  `KidDesempeño` INT NOT NULL,
+  `KidEmpleado` INT NOT NULL,
+  `KidPruebas` INT NOT NULL,
+  `Resultado` INT NULL,
+  `estado` TINYINT(1) NULL,
+  PRIMARY KEY (`KidDesempeño`, `KidEmpleado`, `KidPruebas`),
+  CONSTRAINT `FK_Empleado_DesempeñoEmpleado`
+    FOREIGN KEY (`KidEmpleado`)
+    REFERENCES `proyectogeneral`.`tbl_empleado` (`KidEmpleado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_Pruebas_DesempeñoEmpleado`
+    FOREIGN KEY (`KidPruebas`)
+    REFERENCES `proyectogeneral`.`tbl_pruebas` (`KidPruebas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+CREATE TABLE `proyectogeneral`.`tbl_plandecarrera` (
+  `KidPlanCarrera` INT NOT NULL,
+  `KidDesempeño` INT NOT NULL,
+  `Fecha` DATE NULL,
+  `Descripcion` VARCHAR(100) NULL,
+  PRIMARY KEY (`KidPlanCarrera`, `KidDesempeño`),
+ CONSTRAINT `FK_DesempeñoEmpleado_PlanDeCarrera`
+    FOREIGN KEY (`KidDesempeño`)
+    REFERENCES `proyectogeneral`.`tbl_desempeñoempleado` (`KidDesempeño`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
 -- ------------------------------------------ OBJETO COMUNES (COMPONENTES) ------------------------------------
 
 
@@ -2697,6 +2729,9 @@ ENGINE = InnoDB;
 ALTER TABLE tbl_producto_marca ADD estado TINYINT;
 ALTER TABLE tbl_tipoproducto ADD estado TINYINT;
 ALTER TABLE tbl_bodega ADD CONSTRAINT	 FK_Sucursal_Bodega	FOREIGN KEY(KidSucursal) REFERENCES tbl_sucursal(KidSucursal);
+ALTER TABLE `proyectogeneral`.`tbl_resultados` 
+CHANGE COLUMN `Resultado` `Resultado` INT NULL DEFAULT NULL;
+
 
 --
 -- Dumping routines for database 'proyectogeneral'
