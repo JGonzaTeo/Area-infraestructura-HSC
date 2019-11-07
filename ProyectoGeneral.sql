@@ -99,10 +99,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Clientes` (
   `KidCliente` INT NOT NULL,
   `nombres_cliente` VARCHAR(45) NULL,
-  `apellidos_cliente` VARCHAR(45) NULL,
+  `apellidos_cliente` VARCHAR(45) DEFAULT NULL,
   `telefono_cliente` VARCHAR(10) NULL,
   `direccion_cliente` TEXT NULL,
-  `dpi_cliente` INT NULL,
+  `dpi_cliente` INT DEFAULT NULL,
   `nit_cliente` VARCHAR(10) NULL,
   `contacto_cliente` VARCHAR(45) NULL,
   `telefono_contacto` VARCHAR(10) NULL,
@@ -182,9 +182,9 @@ DROP TABLE IF EXISTS `tbl_conceptos`;
 CREATE TABLE `tbl_conceptos` (
   `KidConcepto` int(11) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
-  `naturalezaconcepto` varchar(45) DEFAULT NULL,
+  `Debe-Haber` TINYINT(1) DEFAULT NULL,
   `valor` float DEFAULT NULL,
-  `estado` tinyint(2) DEFAULT NULL,
+  `estado` tinyint DEFAULT NULL,
   PRIMARY KEY (`KidConcepto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -628,7 +628,7 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_descuentos`(
   KidDescuentos INT NOT NULL,
-  KidProducto INT,
+  KidProducto INT NULL,
   nombre_descuentos VARCHAR(45),
   porcentaje_descuentos DOUBLE,
   fecha_inicio_descuentos DATE,
@@ -2176,6 +2176,28 @@ CREATE TABLE IF NOT EXISTS Tbl_Resultados(
 );
 
 
+CREATE TABLE IF NOT EXISTS tbl_empcontable(
+	Linea INT AUTO_INCREMENT,
+    KidEmpleado_Contable INT,
+    KidEmpleado INT,
+    Nombre_Concepto VARCHAR(45),
+    PRIMARY KEY(Linea, KidEmpleado_Contable)
+)ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `tbl_nominasencabezado` (
+  `KidNomina` int(11) NOT NULL,
+  `KidEmpleado_Contable` int NOT NULL,
+  `dias_laburado` int(11) DEFAULT NULL,
+  `fecha_de_emision` date DEFAULT NULL,
+  `sueldo_liquido` double DEFAULT NULL,
+  `sueldo_bruto` DOUBLE DEFAULT NULL,
+  `sueldo_extra` DOUBLE DEFAULT NULL,
+  `sueldo_base` DOUBLE DEFAULT NULL,
+  `periodo_nomina` VARCHAR(45) DEFAULT NULL,
+  PRIMARY KEY (`KidNomina`,`KidEmpleado_Contable`)
+) ENGINE=InnoDB;
+
 --
 -- Table structure for table `tbl_nominasdetalle`
 --
@@ -2187,52 +2209,21 @@ CREATE TABLE `tbl_nominasdetalle` (
   `KidLinea` int(11) NOT NULL,
   `KidNomina` int(11) NOT NULL,
   `KidConcepto` int(11) DEFAULT NULL,
+  `Subtotal` DOUBLE,
   PRIMARY KEY (`KidLinea`,`KidNomina`),
-  KEY `fk_Tbl_nominasDetalle_Tbl_nominasEncabezado1_idx` (`KidNomina`),
-  KEY `fk_Tbl_nominasDetalle_Tbl_conceptos1_idx` (`KidConcepto`),
   CONSTRAINT `fk_Tbl_nominasDetalle_Tbl_conceptos1` FOREIGN KEY (`KidConcepto`) REFERENCES `tbl_conceptos` (`KidConcepto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tbl_nominasDetalle_Tbl_nominasEncabezado1` FOREIGN KEY (`KidNomina`) REFERENCES `tbl_nominasencabezado` (`KidNomina`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Dumping data for table `tbl_nominasdetalle`
 --
-
 LOCK TABLES `tbl_nominasdetalle` WRITE;
 /*!40000 ALTER TABLE `tbl_nominasdetalle` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tbl_nominasdetalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `tbl_nominasencabezado`
---
 
-DROP TABLE IF EXISTS `tbl_nominasencabezado`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_nominasencabezado` (
-  `KidNomina` int(11) NOT NULL,
-  `KidEmpleado` int(11) NOT NULL,
-  `dias` int(11) DEFAULT NULL,
-  `fecha` date DEFAULT NULL,
-  `sueldoliquido` float DEFAULT NULL,
-  `perdidaoganancia` tinyint(1) DEFAULT NULL,
-  `estado` tinyint(2) DEFAULT NULL,
-  PRIMARY KEY (`KidNomina`,`KidEmpleado`),
-  KEY `fk_Tbl_nominasEncabezado_Tbl_empleado1_idx` (`KidEmpleado`),
-  CONSTRAINT `fk_Tbl_nominasEncabezado_Tbl_empleado1` FOREIGN KEY (`KidEmpleado`) REFERENCES `tbl_empleado` (`KidEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_nominasencabezado`
---
-
-LOCK TABLES `tbl_nominasencabezado` WRITE;
-/*!40000 ALTER TABLE `tbl_nominasencabezado` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_nominasencabezado` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_planillasdetalle`
@@ -2648,24 +2639,13 @@ CREATE TABLE IF NOT EXISTS tbl_consulta(
 
 -- ---------------------------------------------- REPORTEADOR -----------------------------------------
 
-CREATE TABLE `Tbl_configuracion_rpt`(
-	`PK_id_configuracion` int(12) NOT NULL,
-    `nombre` varchar(50) NOT NULL,
-    `ruta` varchar(100) NOT NULL,
-    `estado` tinyint default 1 NOT NULL
-); 
-ALTER TABLE `Tbl_configuracion_rpt` ADD CONSTRAINT PRIMARY KEY (`PK_id_configuracion`);
-
 CREATE TABLE `tbl_reporte`(
 	`PK_id_reporte` int(12) NOT NULL,
-    `PK_id_configuracion` int(12) NOT NULL,
     `nombre` varchar(95) NOT NULL,
     `nombre_archivo` varchar(100) NOT NULL, 
     `estado` tinyint default NULL 
 );
-ALTER TABLE `tbl_reporte` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`);
-ALTER TABLE `tbl_reporte` ADD CONSTRAINT `FK_Tbl_reporte_Tbl_Configuacion` FOREIGN KEY (`PK_id_configuracion`)
-	REFERENCES `Tbl_configuracion_rpt` (`PK_id_configuracion`);
+ALTER TABLE `tbl_reporte` ADD CONSTRAINT PRIMARY KEY (`PK_id_reporte`);	
 
 CREATE TABLE `Tbl_rpt_app`(
 	`PK_id_reporte` int(12) NOT NULL,
