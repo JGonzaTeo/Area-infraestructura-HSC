@@ -2700,12 +2700,24 @@ ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_Modulo_Tbl_propiedad_Rpt`
 -- --------------------------- CAMBIOS ---------------------------------------------------------
 
 -- -----------------------------------------------------
+-- Table `tbl_tipo_movimiento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tbl_tipo_movimiento` (
+  `KidTipoMovimiento` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  `descripcion` VARCHAR(200) NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidTipoMovimiento`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `tbl_libro_bancos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
   `KidMovimientoBancario` INT NOT NULL AUTO_INCREMENT,
-  `cuenta_debito` INT NOT NULL,
-  `cuenta_credito` INT NOT NULL,
+  `cuenta_debito` VARCHAR(10) NOT NULL,
+  `cuenta_credito` VARCHAR(10) NOT NULL,
   `monto` DOUBLE NOT NULL,
   `tipo_movimiento` VARCHAR(45) NULL,
   `fecha_movimiento` DATE NULL,
@@ -2713,29 +2725,105 @@ CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
   `descripcion` VARCHAR(400) NULL,
   `movimiento_conciliado` TINYINT NULL,
   `movimiento_trasladado_contabilidad` TINYINT NULL,
+  `KidCuenta_Contable_debito` INT NULL,
+  `KidCuenta_Contable_Credito` INT NULL,
+  `KiDTipo_movimiento` INT NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`KidMovimientoBancario`))
+  PRIMARY KEY (`KidMovimientoBancario`),
+  CONSTRAINT `fk_tbl_libro_bancos_tbl_tipo_movimiento`
+    FOREIGN KEY (`KiDTipo_movimiento`)
+    REFERENCES `tbl_tipo_movimiento` (`KidTipoMovimiento`),
+    CONSTRAINT `FK_cuentaContable_cuentaDebito`
+    FOREIGN KEY (`cuenta_debito`)
+    REFERENCES `tbl_cuentas` (`KidCuenta`),
+    CONSTRAINT `FK_cuentaContable_cuentaCredito`
+    FOREIGN KEY (`cuenta_credito`)
+    REFERENCES `tbl_cuentas` (`KidCuenta`)
+    )
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `tbl_conciliacion_bancaria`
+-- Table `tbl_conciliacion_bancaria_encabezado`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tbl_conciliacion_bancaria` (
+CREATE TABLE IF NOT EXISTS `tbl_conciliacion_bancaria_encabezado` (
+  `KidConciliacion_Bancaria` INT NOT NULL AUTO_INCREMENT,
   `KidBanco` INT NOT NULL,
   `moneda` VARCHAR(45) NOT NULL,
   `mes_conciliacion` VARCHAR(45) NOT NULL,
   `diferencia_total` DOUBLE NULL,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`KidBanco`, `moneda`, `mes_conciliacion`),
-  CONSTRAINT `FK_Bancos_ConciliacionBancaria`
-    FOREIGN KEY (`KidBanco`)
-    REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`),
-     CONSTRAINT `FK_Moneda_ConciliacionBancaria`
-    FOREIGN KEY (`moneda`)
-    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`)
+  PRIMARY KEY (`KidConciliacion_Bancaria`),
+  CONSTRAINT `FK_Bancos_ConciliacionEncabezado`
+  FOREIGN KEY(`KidBanco`)
+  REFERENCES `tbl_bancos`(`KidBanco`),
+  CONSTRAINT `FK_Moneda_ConciliacionEncabezado`
+  FOREIGN KEY(`moneda`)
+  REFERENCES `tbl_divisa`(`KidDivisa`)
   )
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tbl_conciliacion_bancaria_detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tbl_conciliacion_bancaria_detalle` (
+  `KidConciliacion_Bancaria` INT NOT NULL,
+  `KidMovimientoBancario` INT NOT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidConciliacion_Bancaria`, `KidMovimientoBancario`),
+  CONSTRAINT `fk_tbl_conciliacion_bancaria_detalle_tbl_conciliacion_bancari1`
+    FOREIGN KEY (`KidConciliacion_Bancaria`)
+    REFERENCES `tbl_conciliacion_bancaria_encabezado` (`KidConciliacion_Bancaria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_conciliacion_bancaria_detalle_tbl_libro_bancos1`
+    FOREIGN KEY (`KidMovimientoBancario`)
+    REFERENCES `tbl_libro_bancos` (`KidMovimientoBancario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE TABLE `proyectogeneral`.`tbl_perfil_profesional` (
+  `KidPerfil` INT NOT NULL,
+  `Nombre_Puesto` VARCHAR(45) NULL,
+  `Ubicacion_Organigrama` VARCHAR(45) NULL,
+  `Descripcion_Tareas` VARCHAR(45) NULL,
+  `Objetivo_Principal` VARCHAR(100) NULL,
+  `Conocimientos_Necesarios` VARCHAR(100) NULL,
+  `estado` TINYINT(1) NULL,
+  PRIMARY KEY (`KidPerfil`));
+
+CREATE TABLE `proyectogeneral`.`tbl_medios_comunicacion` (
+  `KidMediosComunicacion` INT NOT NULL,
+  `Nombre_medio` VARCHAR(45) NULL,
+  `Tipo_medio` VARCHAR(45) NULL,
+  `Contacto_medio` VARCHAR(45) NULL,
+  `estado` TINYINT(1) NULL,
+  PRIMARY KEY (`KidMediosComunicacion`));
+
+CREATE TABLE `proyectogeneral`.`tbl_curriculums` (
+  `KidCurriculum` INT NOT NULL,
+  `Nombre` VARCHAR(45) NULL,
+  `Apellido` VARCHAR(45) NULL,
+  `Numero` VARCHAR(45) NULL,
+  `Direccion` VARCHAR(45) NULL,
+  `Correo_Electronico` VARCHAR(45) NULL,
+  `Conocimientos` VARCHAR(45) NULL,
+  `Experiencia_Previa` VARCHAR(45) NULL,
+  `KidReporteVacante` INT NULL,
+  `estado` TINYINT(1) NULL,
+  PRIMARY KEY (`KidCurriculum`),
+  CONSTRAINT `FK_encabezadoReporteVacante_Curriculums`
+    FOREIGN KEY (`KidReporteVacante`)
+    REFERENCES `proyectogeneral`.`tbl_encabezadoreportevacante` (`KidReporteVacante`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+
+
 
 -- ---------------- ALTER TABLE --------------------------
 ALTER TABLE tbl_producto_marca ADD estado TINYINT;
@@ -2747,6 +2835,16 @@ CHANGE COLUMN `Resultado` `Resultado` INT NULL DEFAULT NULL;
 ALTER TABLE tbl_cuentas ADD debe DOUBLE;
 ALTER TABLE tbl_cuentas ADD haber DOUBLE;
 
+
+ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
+DROP FOREIGN KEY `FK_Puesto_ReporteVacante`;
+ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
+DROP COLUMN `KidPuesto`,
+ADD COLUMN `KidPerfil` INT NOT NULL AFTER `KidEmpleado`,
+ADD COLUMN `KidMedioComunicacion` INT NOT NULL AFTER `tipoDeContratacion`,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`KidReporteVacante`, `KidPerfil`, `KidMedioComunicacion`),
+DROP INDEX `FK_Puesto_ReporteVacante` ;
 
 --
 -- Dumping routines for database 'proyectogeneral'
