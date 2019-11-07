@@ -2716,8 +2716,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
   `KidMovimientoBancario` INT NOT NULL AUTO_INCREMENT,
-  `cuenta_debito` VARCHAR(10) NOT NULL,
-  `cuenta_credito` VARCHAR(10) NOT NULL,
+  `cuenta_debito` INT NOT NULL,
+  `cuenta_credito` INT NOT NULL,
   `monto` DOUBLE NOT NULL,
   `tipo_movimiento` VARCHAR(45) NULL,
   `fecha_movimiento` DATE NULL,
@@ -2725,8 +2725,8 @@ CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
   `descripcion` VARCHAR(400) NULL,
   `movimiento_conciliado` TINYINT NULL,
   `movimiento_trasladado_contabilidad` TINYINT NULL,
-  `KidCuenta_Contable_debito` INT NULL,
-  `KidCuenta_Contable_Credito` INT NULL,
+  `KidCuenta_Contable_debito`  VARCHAR(10) NULL,
+  `KidCuenta_Contable_Credito` VARCHAR(10) NULL,
   `KiDTipo_movimiento` INT NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidMovimientoBancario`),
@@ -2734,10 +2734,10 @@ CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
     FOREIGN KEY (`KiDTipo_movimiento`)
     REFERENCES `tbl_tipo_movimiento` (`KidTipoMovimiento`),
     CONSTRAINT `FK_cuentaContable_cuentaDebito`
-    FOREIGN KEY (`cuenta_debito`)
+    FOREIGN KEY (`KidCuenta_Contable_debito`)
     REFERENCES `tbl_cuentas` (`KidCuenta`),
     CONSTRAINT `FK_cuentaContable_cuentaCredito`
-    FOREIGN KEY (`cuenta_credito`)
+    FOREIGN KEY (`KidCuenta_Contable_Credito`)
     REFERENCES `tbl_cuentas` (`KidCuenta`)
     )
 ENGINE = InnoDB;
