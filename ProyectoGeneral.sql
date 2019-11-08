@@ -1746,8 +1746,6 @@ CREATE TABLE IF NOT EXISTS Tbl_tipoMovimiento(
 )ENGINE = InnoDB;
 
 
-
-  
 -- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
 
  -- -----------------------------------------------------
@@ -1882,13 +1880,18 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_libroMayor_Detalle` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_BalanceGeneral_Encabezado`
+-- Table `proyectogeneral`.`tbl_BalanceGeneral`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Encabezado` (
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral` (
   `KidBalanceGeneral` INT NOT NULL AUTO_INCREMENT,
-  `capital` FLOAT NULL,
+  `KidCuenta` VARCHAR(10) NOT NULL,
+  `debe` DOUBLE DEFAULT 0.0,
+  `haber` DOUBLE DEFAULT 0.0,
   `estado` TINYINT NULL,
-  PRIMARY KEY (`KidBalanceGeneral`))
+  PRIMARY KEY (`KidBalanceGeneral`),
+  CONSTRAINT `fk_tbl_BalanceGeneral_tbl_cuentas_contables1`
+    FOREIGN KEY (`KidCuenta`)
+    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`))
 ENGINE = InnoDB; 
 
 -- -----------------------------------------------------
@@ -1899,26 +1902,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_estado_perdidas_ganancias_Enca
   `gananciaEnOperacion` FLOAT NULL,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidPerdidasGanancias`))
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_BalanceGeneral_Detalle`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_BalanceGeneral_Detalle` (
-  `KidBalanceGeneral` INT NOT NULL,
-  `KidCuentaContable` VARCHAR(10) NOT NULL,
-  `valor` FLOAT NULL,
-  PRIMARY KEY (`KidBalanceGeneral`, `KidCuentaContable`),
-  CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_BalanceGeneral_Encabezado1`
-    FOREIGN KEY (`KidBalanceGeneral`)
-    REFERENCES `proyectogeneral`.`tbl_BalanceGeneral_Encabezado` (`KidBalanceGeneral`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tbl_BalanceGeneral_Detalle_tbl_cuentas_contables1`
-    FOREIGN KEY (`KidCuentaContable`)
-    REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -2925,10 +2908,6 @@ ALTER TABLE tbl_tipoproducto ADD estado TINYINT;
 ALTER TABLE tbl_bodega ADD CONSTRAINT	 FK_Sucursal_Bodega	FOREIGN KEY(KidSucursal) REFERENCES tbl_sucursal(KidSucursal);
 ALTER TABLE `proyectogeneral`.`tbl_resultados` 
 CHANGE COLUMN `Resultado` `Resultado` INT NULL DEFAULT NULL;
-
-ALTER TABLE tbl_cuentas ADD debe DOUBLE;
-ALTER TABLE tbl_cuentas ADD haber DOUBLE;
-
 
 ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
 DROP FOREIGN KEY `FK_Puesto_ReporteVacante`;
