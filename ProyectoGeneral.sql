@@ -2677,6 +2677,7 @@ CREATE TABLE `Tbl_propiedad_Rpt` (
 	`PK_id_usuario` varchar(25) NOT NULL,
 	`PK_id_aplicacion` int(11) NOT NULL,
 	`PK_id_Modulo` int(11) NOT NULL,
+	`imprimir` tinyint default NULL,
     `estado` tinyint default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2845,6 +2846,8 @@ ADD COLUMN `KidMedioComunicacion` INT NOT NULL AFTER `tipoDeContratacion`,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`KidReporteVacante`, `KidPerfil`, `KidMedioComunicacion`),
 DROP INDEX `FK_Puesto_ReporteVacante` ;
+
+ALTER TABLE `tbl_propiedad_rpt` ADD `imprimir` TINYINT NULL DEFAULT NULL AFTER `PK_id_Modulo`;
 
 --
 -- Dumping routines for database 'proyectogeneral'
