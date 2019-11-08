@@ -2052,6 +2052,13 @@ ENGINE = InnoDB;
 
 -- --------------------------------------------------------
 
+CREATE TABLE `proyectogeneral`.`tbl_tipocuentabancaria` (
+ `KidTipoCuentaBancaria` INT(2) NOT NULL AUTO_INCREMENT , 
+`Nombre` VARCHAR(20) NOT NULL , 
+`Descripción` VARCHAR(100) NOT NULL , 
+`estado` TINYINT(1) NOT NULL , 
+PRIMARY KEY (`KidTipoCuentaBancaria`)) ENGINE = InnoDB;
+
 --
 -- Estructura de tabla para la tabla `tbl_cuentabancaria`
 --
@@ -2065,7 +2072,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cuentabancaria` (
 `Firmas_Individuales` varchar(45) DEFAULT NULL,
 `Firmas_Conjuntas` varchar(45) DEFAULT NULL,
 `Saldo` varchar(20) DEFAULT NULL,
-`Cuenta_Primaria` tinyint(4) NOT NULL,
+`KidTipoCuentaBancaria` INT(2),
 `estado` tinyint(1) NOT NULL,
 PRIMARY KEY(KidCuentaBancaria),
  CONSTRAINT `FK_Bancos_CuentaBancaria`
@@ -2073,7 +2080,10 @@ PRIMARY KEY(KidCuentaBancaria),
     REFERENCES `proyectogeneral`.`tbl_bancos` (`KidBanco`),
      CONSTRAINT `FK_Moneda_CuentaBancaria`
     FOREIGN KEY (`KidMoneda`)
-    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`)
+    REFERENCES `proyectogeneral`.`tbl_divisa` (`KidDivisa`),
+    CONSTRAINT `FK_tipocuenta_CuetabancariaAL` 
+    FOREIGN KEY (`KidTipoCuentaBancaria`) 
+    REFERENCES `tbl_tipocuentabancaria`(`KidTipoCuentaBancaria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2906,8 +2916,6 @@ REFERENCES `proyectogeneral`.`Tbl_Transporte` (`KidTransporte`)
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION) 
 ENGINE = InnoDB; 
-
-
 
 
 
