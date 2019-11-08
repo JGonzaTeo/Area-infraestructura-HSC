@@ -2921,6 +2921,31 @@ DROP INDEX `FK_Puesto_ReporteVacante` ;
 
 ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
 CHANGE COLUMN `KidReporteVacante` `KidReporteVacante` INT(11) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `tbl_balancegeneral` ADD `fecha_balance` DATE NOT NULL AFTER `KidCuenta`;
+
+ALTER TABLE `proyectogeneral`.`tbl_detallereportevacante` 
+DROP COLUMN `razon`,
+ADD COLUMN `Primaria` TINYINT(1) NULL AFTER `KidReporteVacante`,
+ADD COLUMN `Secundaria` TINYINT(1) NULL AFTER `Primaria`,
+ADD COLUMN `Bachillerato` TINYINT(1) NULL AFTER `Secundaria`,
+ADD COLUMN `Estudiante_Universitario` TINYINT(1) NULL AFTER `Bachillerato`,
+ADD COLUMN `GraduadoU` TINYINT(1) NULL AFTER `Estudiante_Universitario`,
+ADD COLUMN `CursoExtra` TINYINT(1) NULL AFTER `GraduadoU`,
+ADD COLUMN `Sueldo_Base` DOUBLE NULL AFTER `DescripcionCursos`,
+CHANGE COLUMN `DescripcionCualidades` `DescripcionCursos` VARCHAR(200) NULL DEFAULT NULL ;
+
+ALTER TABLE `proyectogeneral`.`tbl_curriculums` 
+DROP COLUMN `Conocimientos`,
+ADD COLUMN `Primaria` TINYINT(1) NULL AFTER `Correo_Electronico`,
+ADD COLUMN `Secundaria` TINYINT(1) NULL AFTER `Primaria`,
+ADD COLUMN `Bachillerato` TINYINT(1) NULL AFTER `Secundaria`,
+ADD COLUMN `Estudiante_Universitario` TINYINT(1) NULL AFTER `Bachillerato`,
+ADD COLUMN `GraduadoU` TINYINT(1) NULL AFTER `Estudiante_Universitario`,
+ADD COLUMN `CursoExtra` TINYINT(1) NULL AFTER `GraduadoU`,
+ADD COLUMN `DescripcionCursos` VARCHAR(100) NULL AFTER `CursoExtra`,
+ADD COLUMN `SueldoEsperado` DOUBLE NULL AFTER `Experiencia_Previa`;
+
+
 
 --
 -- Dumping routines for database 'proyectogeneral'
