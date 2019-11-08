@@ -1725,35 +1725,27 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Historia_Inventario` (
   );
 
 
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto_Tbl_Bodega` ( 
-`KidProducto` INT NOT NULL, 
-`KidBodega` INT NOT NULL, 
-`stockmin_producto_bodega` VARCHAR(45) NULL, 
-`stockmax_producto_bodega` VARCHAR(45) NULL, 
-`stock_producto_bodega` VARCHAR(45) NULL, 
-`KidSucursal` INT NOT NULL, `KidTransporte` INT NOT NULL, 
-`estado` TINYINT NULL, PRIMARY KEY (`KidProducto`, `KidBodega`), 
-CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Producto` 
-FOREIGN KEY (`KidProducto`) 
-REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`) 
-ON DELETE NO ACTION 
-ON UPDATE NO ACTION, 
-CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Bodega1`
-FOREIGN KEY (`KidBodega`) 
-REFERENCES `proyectogeneral`.`Tbl_Bodega` (`KidBodega`) 
-ON DELETE NO ACTION 
-ON UPDATE NO ACTION, 
-CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Sucursal1` 
-FOREIGN KEY (`KidSucursal`) 
-REFERENCES `proyectogeneral`.`Tbl_Sucursal` (`KidSucursal`) 
-ON DELETE NO ACTION 
-ON UPDATE NO ACTION, 
-CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Transporte1` 
-FOREIGN KEY (`KidTransporte`) 
-REFERENCES `proyectogeneral`.`Tbl_Transporte` (`KidTransporte`) 
-ON DELETE NO ACTION 
-ON UPDATE NO ACTION) 
-ENGINE = InnoDB; 
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_Transporte`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Transporte` (
+ `KidTransporte` INT NOT NULL,
+ `placa_transporte` VARCHAR(45) NULL,
+ `chasis_transporte` VARCHAR(45) NULL,
+ `nummotor_transporte` VARCHAR(45) NULL,
+ `capacidad_transporte` INT NULL,
+ `estado` TINYINT NULL,
+ PRIMARY KEY (`KidTransporte`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS Tbl_tipoMovimiento(
+	KidTipoMovimiento INT,
+    nombre_tipomovimiento VARCHAR(45),
+    estado TINYINT,
+    PRIMARY KEY(KidTipoMovimiento)
+)ENGINE = InnoDB;
+
+
 
   
 -- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
@@ -1835,6 +1827,9 @@ CREATE TABLE IF NOT EXISTS tbl_poliza_detalle(
     FOREIGN KEY (`KidCuenta`)
     REFERENCES `proyectogeneral`.`tbl_cuentas` (`KidCuenta`)
 )ENGINE = InnoDB;
+
+
+
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_libroDiario_Encabezado`
@@ -2823,6 +2818,96 @@ CREATE TABLE `proyectogeneral`.`tbl_curriculums` (
     ON UPDATE NO ACTION);
 
 
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_MovimientoEncabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` (
+ `KidMovimientoEncabezado` INT NOT NULL,
+ `destino_movimientoencabezado` VARCHAR(45) NULL,
+ `origen_movimientoencabezado` VARCHAR(45) NULL,
+ `fecha_movimientoencabezado` DATE NULL,
+ `KidProveedor` INT NOT NULL,
+ `KidTipoMovimiento` INT NOT NULL,
+ `KidPolizas` INT NOT NULL,
+ `KidClientes` INT NOT NULL,
+ `estado` TINYINT NULL,
+ PRIMARY KEY (`KidMovimientoEncabezado`),
+ CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Proveedor1`
+ FOREIGN KEY (`KidProveedor`)
+ REFERENCES `proyectogeneral`.`Tbl_Proveedor` (`KidProveedor`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION,
+ CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento1`
+ FOREIGN KEY (`KidTipoMovimiento`)
+ REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidTipoMovimiento`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION,
+ CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Polizas1`
+ FOREIGN KEY (`KidPolizas`)
+ REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION,
+ CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Clientes1`
+ FOREIGN KEY (`KidClientes`)
+ REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- Table `proyectogeneral`.`Tbl_MovimientoDetalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoDetalle` (
+ `KidMovimientoDetalle` INT NOT NULL,
+ `cantidad_movimientodetalle` INT NULL,
+ `KidProducto` INT NOT NULL,
+ `KidMovimientoEncabezado` INT NOT NULL,
+ `estado` TINYINT NULL,
+ PRIMARY KEY (`KidMovimientoDetalle`),
+ CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_MovimientoEncabezado1`
+ FOREIGN KEY (`KidMovimientoEncabezado`)
+ REFERENCES `proyectogeneral`.`Tbl_MovimientoEncabezado` (`KidMovimientoEncabezado`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION,
+ CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_Producto1`
+ FOREIGN KEY (`KidProducto`)
+ REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto_Tbl_Bodega` ( 
+`KidProducto` INT NOT NULL, 
+`KidBodega` INT NOT NULL, 
+`stockmin_producto_bodega` VARCHAR(45) NULL, 
+`stockmax_producto_bodega` VARCHAR(45) NULL, 
+`stock_producto_bodega` VARCHAR(45) NULL, 
+`KidSucursal` INT NOT NULL, `KidTransporte` INT NOT NULL, 
+`estado` TINYINT NULL, PRIMARY KEY (`KidProducto`, `KidBodega`), 
+CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Producto` 
+FOREIGN KEY (`KidProducto`) 
+REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_has_Tbl_Bodega_Tbl_Bodega1`
+FOREIGN KEY (`KidBodega`) 
+REFERENCES `proyectogeneral`.`Tbl_Bodega` (`KidBodega`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Sucursal1` 
+FOREIGN KEY (`KidSucursal`) 
+REFERENCES `proyectogeneral`.`Tbl_Sucursal` (`KidSucursal`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_Producto_Tbl_Bodega_Tbl_Transporte1` 
+FOREIGN KEY (`KidTransporte`) 
+REFERENCES `proyectogeneral`.`Tbl_Transporte` (`KidTransporte`) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION) 
+ENGINE = InnoDB; 
+
+
 
 
 
@@ -2847,7 +2932,8 @@ DROP PRIMARY KEY,
 ADD PRIMARY KEY (`KidReporteVacante`, `KidPerfil`, `KidMedioComunicacion`),
 DROP INDEX `FK_Puesto_ReporteVacante` ;
 
-ALTER TABLE `tbl_propiedad_rpt` ADD `imprimir` TINYINT NULL DEFAULT NULL AFTER `PK_id_Modulo`;
+ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
+CHANGE COLUMN `KidReporteVacante` `KidReporteVacante` INT(11) NOT NULL AUTO_INCREMENT ;
 
 --
 -- Dumping routines for database 'proyectogeneral'
