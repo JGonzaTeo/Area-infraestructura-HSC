@@ -2688,6 +2688,33 @@ ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_Modulo_Tbl_propiedad_Rpt`
 
 -- --------------------------- CAMBIOS ---------------------------------------------------------
 
+-- ---------------- PROCEDIMIENTOS -----------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `procedimientoInsertarDetallePoliza`(IN idPoliza INT, IN idCuenta VARCHAR(15), IN debe DOUBLE, IN haber DOUBLE)
+BEGIN
+   INSERT INTO tbl_poliza_detalle VALUES(idPoliza, idCuenta, debe, haber);
+END
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `procedimientoInsertarEncabezadoPoliza`(IN idTipoPoliza VARCHAR(15), IN idDocAsociado VARCHAR(15), IN descripcion VARCHAR(100), 
+ IN total DOUBLE)
+BEGIN
+	DECLARE idPoliza INT;
+    SELECT idPoliza = MAX(KidPoliza) FROM tbl_poliza_encabezado;
+    
+    IF idPoliza = NULL
+    THEN
+		SET idPoliza = 0;
+	ELSE 
+		SET idPoliza = idPoliza+1;
+    END IF;
+    
+    INSERT INTO tbl_poliza_encabezado VALUES(idPoliza,idTipoPoliza,idDocAsociado,descripcion,CURDATE(), total, '1');
+END
+DELIMITER ;
+
+
 -- -----------------------------------------------------
 -- Table `tbl_tipo_movimiento`
 -- -----------------------------------------------------
