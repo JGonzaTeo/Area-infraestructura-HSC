@@ -2945,7 +2945,8 @@ ADD COLUMN `CursoExtra` TINYINT(1) NULL AFTER `GraduadoU`,
 ADD COLUMN `DescripcionCursos` VARCHAR(100) NULL AFTER `CursoExtra`,
 ADD COLUMN `SueldoEsperado` DOUBLE NULL AFTER `Experiencia_Previa`;
 
-
+ALTER TABLE `proyectogeneral`.`tbl_nominasencabezado` 
+ADD COLUMN `estado` INT NULL COMMENT '' AFTER `periodo_nomina`;
 
 --
 -- Dumping routines for database 'proyectogeneral'
