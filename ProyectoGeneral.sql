@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Habitaciones` (
   `KidCategoria` VARCHAR(45) NULL,
   `precio` INT NULL,
   `estado` TINYINT(1) NULL,
+  `disponibilidad` INT,
   PRIMARY KEY (`KidNumeroHabitacion`),
   CONSTRAINT `tipoHabitacion`
     FOREIGN KEY (`KidTipoHabitacion`)
@@ -836,10 +837,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_tiposcomprobantes`
+-- Table `proyectogeneral`.`tbl_tipomovimiento`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_tiposcomprobantes`(
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_tipomovimiento`(
   KidtiposComprobantes INT NOT NULL,
   NombreComprobante VARCHAR(45),
   detalle VARCHAR(255),
@@ -1070,6 +1071,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
   Centro VARCHAR(45),
   fechaVencimiento DATE,
   Periodo INT,
+  accion VARCHAR(45),
   estado TINYINT(1),
   PRIMARY KEY(KidEncabezadoComprobante),
   CONSTRAINT `FK_cliente_encabezadoComprobante`
@@ -1080,7 +1082,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
   REFERENCES `proyectogeneral`.`tbl_empleado`(`KidEmpleado`),
   CONSTRAINT `FK_tipoComprobante_encabezadoComprobante`
   FOREIGN KEY(`KidtiposComprobantes`)
-  REFERENCES `proyectogeneral`.`tbl_tiposcomprobantes`(`KidtiposComprobantes`),
+  REFERENCES `proyectogeneral`.`tbl_tipomovimiento`(`KidtiposComprobantes`),
   CONSTRAINT `FK_FacturaEncabezado_EncabezadoComprobante`
     FOREIGN KEY (`KidFacturaEncabezado`)
     REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`)
@@ -2857,9 +2859,9 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` (
  REFERENCES `proyectogeneral`.`Tbl_Proveedor` (`KidProveedor`)
  ON DELETE NO ACTION
  ON UPDATE NO ACTION,
- CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento1`
+ CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento12`
  FOREIGN KEY (`KidTipoMovimiento`)
- REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidTipoMovimiento`)
+ REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidtiposComprobantes`)
  ON DELETE NO ACTION
  ON UPDATE NO ACTION,
  CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Polizas1`
