@@ -568,7 +568,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Mesas` (
   `KidNumeroMesa` INT NOT NULL,
   `KidArea` INT NOT NULL,
   `capacidad` INT NULL,
-  `estadoMesa` INT NULL,
   `estado` TINYINT(1) NULL,
   PRIMARY KEY (`KidNumeroMesa`),
   CONSTRAINT `fk_Tbl_Mesas_Tbl_Areas1`
@@ -2357,7 +2356,8 @@ CREATE TABLE `proyectogeneral`.`tbl_plandecarrera` (
 CREATE TABLE `ayuda` (
   `Id_ayuda` int(11) NOT NULL,
   `Ruta` text COLLATE utf8_unicode_ci NOT NULL,
-  `indice` text COLLATE utf8_unicode_ci NOT NULL
+  `indice` text COLLATE utf8_unicode_ci NOT NULL,
+  `estado` TINYINT(1)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`) VALUES
@@ -2375,7 +2375,26 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `procedimientoLogin` (IN `usuario` VARCHAR(25), IN `clave` VARCHAR(25))  NO SQL
 Select tbl_usuario.PK_id_Usuario FROM tbl_usuario where tbl_usuario.PK_id_Usuario = usuario and tbl_usuario.password_usuario = MD5(clave) AND tbl_usuario.estado_usuario=1$$
 
+CREATE PROCEDURE procedimientoInsertarDetallePoliza(IN idPoliza INT, IN idCuenta VARCHAR(15), IN debe DOUBLE, IN haber DOUBLE)
+BEGIN
+  INSERT INTO tbl_poliza_detalle VALUES(idPoliza, idCuenta, debe, haber);
+END$$
+
+CREATE PROCEDURE procedimientoInsertarEncabezadoPoliza(IN idTipoPoliza VARCHAR(15), IN idDocAsociado VARCHAR(15), IN descripcion VARCHAR(100), IN total DOUBLE) 
+BEGIN
+  DECLARE idPoliza INT;
+    SELECT idPoliza = MAX(KidPoliza) FROM tbl_poliza_encabezado;
+    IF idPoliza = NULL
+    THEN
+		SET idPoliza = 0;
+	ELSE 
+		SET idPoliza = idPoliza+1;
+    END IF;
+    INSERT INTO tbl_poliza_encabezado VALUES(idPoliza,idTipoPoliza,idDocAsociado,descripcion,CURDATE(), total, '1');
+END$$
+
 DELIMITER ;
+
 
 -- --------------------------------------------------------
 
@@ -2699,31 +2718,6 @@ ALTER TABLE `Tbl_propiedad_Rpt` ADD CONSTRAINT `FK_Tbl_Modulo_Tbl_propiedad_Rpt`
 
 -- --------------------------- CAMBIOS ---------------------------------------------------------
 
--- ---------------- PROCEDIMIENTOS -----------------------
-use proyectogeneral;
-DELIMITER //
-CREATE PROCEDURE procedimientoInsertarDetallePoliza(IN idPoliza INT, IN idCuenta VARCHAR(15), IN debe DOUBLE, IN haber DOUBLE)
-BEGIN
-  INSERT INTO tbl_poliza_detalle VALUES(idPoliza, idCuenta, debe, haber);
-END
-//
-
-DELIMITER // 
-CREATE PROCEDURE procedimientoInsertarEncabezadoPoliza(IN idTipoPoliza VARCHAR(15), IN idDocAsociado VARCHAR(15), IN descripcion VARCHAR(100), IN total DOUBLE) 
-BEGIN
-  DECLARE idPoliza INT;
-    SELECT idPoliza = MAX(KidPoliza) FROM tbl_poliza_encabezado;
-    IF idPoliza = NULL
-    THEN
-		SET idPoliza = 0;
-	ELSE 
-		SET idPoliza = idPoliza+1;
-    END IF;
-    INSERT INTO tbl_poliza_encabezado VALUES(idPoliza,idTipoPoliza,idDocAsociado,descripcion,CURDATE(), total, '1');
-END
-//
-
-
 
 -- -----------------------------------------------------
 -- Table `tbl_tipo_movimiento`
@@ -2906,7 +2900,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoDetalle` (
 ENGINE = InnoDB;
 
 
-
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto_Tbl_Bodega` ( 
 `KidProducto` INT NOT NULL, 
 `KidBodega` INT NOT NULL, 
@@ -2938,6 +2931,53 @@ ON UPDATE NO ACTION)
 ENGINE = InnoDB; 
 
 
+CREATE TABLE IF NOT EXISTS tbl_bebidas(
+	KidBebida INT(11) NOT NULL,
+    KidMenu INT(11),
+    nombreBebida VARCHAR(50),
+    precio FLOAT,
+    estado TINYINT(1),
+    PRIMARY KEY(KidBebida),
+    CONSTRAINT `tbl_menus_bebidas` 
+	FOREIGN KEY (`KidMenu`) 
+	REFERENCES `proyectogeneral`.`tbl_menus` (`KidMenu`) 
+)ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS tbl_produccion_encabezado(
+	KidEncabezado INT(11) NOT NULL,
+    nombre VARCHAR(50),
+    fecha date,
+    concepto VARCHAR(50),
+    estado TINYINT(1),
+	PRIMARY KEY(KidEncabezado)
+)ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS tbl_produccion_detalle(
+	KidOrden INT(11),
+    KidPlatillo INT(11),
+    KidEncabezado INT(11),
+    KidBebida INT(11),
+    Cantidad INT(4),
+    estado TINYINT(1),
+    PRIMARY KEY(KidOrden),
+    CONSTRAINT `tbl_produccionEncabezado_Detalle` 
+	FOREIGN KEY (`KidEncabezado`) 
+	REFERENCES `proyectogeneral`.`tbl_produccion_encabezado` (`KidEncabezado`),
+    CONSTRAINT `tbl_platillos_produccionDetalle` 
+	FOREIGN KEY (`KidPlatillo`) 
+	REFERENCES `proyectogeneral`.`tbl_platillos` (`KidPlatillo`),
+     CONSTRAINT `tbl_bebidas_produccionDetalle` 
+	FOREIGN KEY (`KidBebida`) 
+	REFERENCES `proyectogeneral`.`tbl_bebidas` (`KidBebida`)
+)ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS reportes(
+	Id_reporte INT(11),
+    ruta VARCHAR(100),
+    estado TINYINT(1),
+    PRIMARY KEY(Id_reporte)
+)ENGINE = InnoDB;
 
 -- ---------------- ALTER TABLE --------------------------
 ALTER TABLE tbl_producto_marca ADD estado TINYINT;
@@ -2999,6 +3039,8 @@ DROP INDEX `FK_encabezadoReporteVacante_BancoTalento` ;
 
 ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
 CHANGE COLUMN `KidBancoTalento` `KidBancoTalento` INT(11) NOT NULL AUTO_INCREMENT ;
+
+-- ---------------- PROCEDIMIENTOS -----------------------
 
 
 --
