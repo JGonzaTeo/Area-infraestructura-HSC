@@ -183,9 +183,9 @@ DROP TABLE IF EXISTS `tbl_conceptos`;
 CREATE TABLE `tbl_conceptos` (
   `KidConcepto` int(11) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
-  `Debe-Haber` TINYINT(1) DEFAULT NULL,
+  `debe_haber` tinyint(2) DEFAULT NULL,
   `valor` float DEFAULT NULL,
-  `estado` tinyint DEFAULT NULL,
+  `estado` tinyint(2) DEFAULT NULL,
   PRIMARY KEY (`KidConcepto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -519,7 +519,7 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`Tbl_Check_In`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Check_In` (
-  `KidCheckIn` INT NOT NULL,
+  `KidCheckIn` INT NOT NULL AUTO_INCREMENT,
   `KidCliente` INT NOT NULL,
   `KidEmpleado` INT NOT NULL,
   `fecha` DATE NULL,
@@ -2166,27 +2166,20 @@ CREATE TABLE IF NOT EXISTS Tbl_Resultados(
 );
 
 
-CREATE TABLE IF NOT EXISTS tbl_empcontable(
-	Linea INT AUTO_INCREMENT,
-    KidEmpleado_Contable INT,
-    KidEmpleado INT,
-    Nombre_Concepto VARCHAR(45),
-    PRIMARY KEY(Linea, KidEmpleado_Contable)
-)ENGINE = InnoDB;
 
-
-CREATE TABLE IF NOT EXISTS `tbl_nominasencabezado` (
+CREATE TABLE `tbl_nominasencabezado` (
   `KidNomina` int(11) NOT NULL,
-  `KidEmpleado_Contable` int NOT NULL,
-  `dias_laburado` int(11) DEFAULT NULL,
-  `fecha_de_emision` date DEFAULT NULL,
-  `sueldo_liquido` double DEFAULT NULL,
-  `sueldo_bruto` DOUBLE DEFAULT NULL,
-  `sueldo_extra` DOUBLE DEFAULT NULL,
-  `sueldo_base` DOUBLE DEFAULT NULL,
-  `periodo_nomina` VARCHAR(45) DEFAULT NULL,
-  PRIMARY KEY (`KidNomina`,`KidEmpleado_Contable`)
-) ENGINE=InnoDB;
+  `KidEmpleado` int(11) NOT NULL,
+  `observaciones` varchar(45) DEFAULT NULL,
+  `totalnominal` float DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  `periodo_inicial`  date DEFAULT NULL,
+  `periodo_final`  date DEFAULT NULL,
+  `estado` tinyint(2) DEFAULT NULL,
+  PRIMARY KEY (`KidNomina`),
+  KEY `fk_Tbl_nominasEncabezado_Tbl_empleado1_idx` (`KidEmpleado`),
+  CONSTRAINT `fk_Tbl_nominasEncabezado_Tbl_empleado1` FOREIGN KEY (`KidEmpleado`) REFERENCES `tbl_empleado` (`KidEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tbl_nominasdetalle`
@@ -2196,12 +2189,12 @@ DROP TABLE IF EXISTS `tbl_nominasdetalle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_nominasdetalle` (
-  `KidLinea` int(11) NOT NULL,
+  `KidLinea` int(11)  NOT NULL AUTO_INCREMENT,
   `KidNomina` int(11) NOT NULL,
-  `KidConcepto` int(11) DEFAULT NULL,
-  `Subtotal` DOUBLE,
+  `sueldo_bruto` float DEFAULT NULL,
+  `sueldo_liquido` float DEFAULT NULL,
   PRIMARY KEY (`KidLinea`,`KidNomina`),
-  CONSTRAINT `fk_Tbl_nominasDetalle_Tbl_conceptos1` FOREIGN KEY (`KidConcepto`) REFERENCES `tbl_conceptos` (`KidConcepto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_Tbl_nominasDetalle_Tbl_nominasEncabezado1_idx` (`KidNomina`),
   CONSTRAINT `fk_Tbl_nominasDetalle_Tbl_nominasEncabezado1` FOREIGN KEY (`KidNomina`) REFERENCES `tbl_nominasencabezado` (`KidNomina`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2213,6 +2206,22 @@ LOCK TABLES `tbl_nominasdetalle` WRITE;
 /*!40000 ALTER TABLE `tbl_nominasdetalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+CREATE TABLE `tbl_empcontable` (
+  `KidEmpContable` int(11)  NOT NULL AUTO_INCREMENT,
+  `KidEmpleado` int(11) NOT NULL,
+  `dias` int(11) DEFAULT NULL,
+  `salariobase` float DEFAULT NULL,
+  `KidConcepto` int(11) NOT NULL,
+  `total` float DEFAULT NULL,
+  `suma_resta` tinyint(2) DEFAULT NULL,
+  `sueldo_bruto` float DEFAULT NULL,
+  `sueldo_liquido` float DEFAULT NULL,
+  PRIMARY KEY (`KidEmpContable`,`KidEmpleado`),
+  KEY `fk_tbl_empcontable_Tbl_empleados_idx` (`KidEmpleado`),
+  CONSTRAINT `fk_tbl_empcontable_Tbl_empleados` FOREIGN KEY (`KidEmpleado`) REFERENCES `tbl_empleado` (`KidEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tbl_empcontable_Tbl_conceptos` FOREIGN KEY (`KidConcepto`) REFERENCES `tbl_conceptos` (`KidConcepto`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -2973,9 +2982,6 @@ ADD COLUMN `GraduadoU` TINYINT(1) NULL AFTER `Estudiante_Universitario`,
 ADD COLUMN `CursoExtra` TINYINT(1) NULL AFTER `GraduadoU`,
 ADD COLUMN `DescripcionCursos` VARCHAR(100) NULL AFTER `CursoExtra`,
 ADD COLUMN `SueldoEsperado` DOUBLE NULL AFTER `Experiencia_Previa`;
-
-ALTER TABLE `proyectogeneral`.`tbl_nominasencabezado` 
-ADD COLUMN `estado` INT NULL COMMENT '' AFTER `periodo_nomina`;
 
 ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
 DROP FOREIGN KEY `FK_encabezadoReporteVacante_BancoTalento`;
