@@ -2977,6 +2977,25 @@ ADD COLUMN `SueldoEsperado` DOUBLE NULL AFTER `Experiencia_Previa`;
 ALTER TABLE `proyectogeneral`.`tbl_nominasencabezado` 
 ADD COLUMN `estado` INT NULL COMMENT '' AFTER `periodo_nomina`;
 
+ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
+DROP FOREIGN KEY `FK_encabezadoReporteVacante_BancoTalento`;
+ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
+DROP COLUMN `KidReporteVacante`,
+DROP COLUMN `correoelectronico`,
+DROP COLUMN `direccion`,
+DROP COLUMN `numero`,
+DROP COLUMN `apellido_candidato`,
+DROP COLUMN `nombre_candidato`,
+ADD COLUMN `KidCurriculum` INT NOT NULL AFTER `KidBancoTalento`,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`KidBancoTalento`, `KidCurriculum`),
+DROP INDEX `FK_encabezadoReporteVacante_BancoTalento` ;
+;
+
+ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
+CHANGE COLUMN `KidBancoTalento` `KidBancoTalento` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
 --
 -- Dumping routines for database 'proyectogeneral'
 --
