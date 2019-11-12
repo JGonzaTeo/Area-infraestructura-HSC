@@ -873,16 +873,12 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_GestionMovimientoCliente`(
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Serie` (
   `KidSerie` INT NOT NULL,
-  `KidFolio` INT NOT NULL,
   `serie_serie` VARCHAR(45) NULL,
   `certificado_serie` VARCHAR(45) NULL,
   `regimen_fiscal_serie` VARCHAR(45) NULL,
   `formato_serie` VARCHAR(45) NULL,
   `estado` TINYINT(1),
-  PRIMARY KEY (`KidSerie`),
-  CONSTRAINT `FK_Folio_Serie`
-  FOREIGN KEY (`KidFolio`)
-  REFERENCES `proyectogeneral`.`Tbl_Folios` (`KidFolio`)
+  PRIMARY KEY (`KidSerie`)
   )
 ENGINE = InnoDB;
 
@@ -933,15 +929,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Lista_Precios`(
     REFERENCES `proyectogeneral`.`tbl_tipo_lista_precios` (`Kidtipo_lista_precios`)
 )ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`Tbl_TipoFactura`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_TipoFactura` (
-  `KidTipoFactura` INT NOT NULL,
-  `tipo_tipofactura` VARCHAR(45) NULL,
-  `estado` TINYINT(1),
-  PRIMARY KEY (`KidTipoFactura`))
-ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_Impuesto`
@@ -989,11 +976,12 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cotizacionEncabezado`(
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cotizacionDetalle`(
 	KidCotizacionDetalle INT,
     KidProducto INT,
+    KidCotizacionEncabezado INT,
     cantidad_cotizacionDetalle INT,
     monto_cotizacionDetalle DOUBLE,
     PRIMARY KEY(KidCotizacionDetalle),
     CONSTRAINT `FK_cotizacionEncabezado_CotizacionDetalle`
-    FOREIGN KEY (`KidCotizacionDetalle`)
+    FOREIGN KEY (`KidCotizacionEncabezado`)
     REFERENCES `proyectogeneral`.`tbl_cotizacionEncabezado` (`KidCotizacionEncabezado`),
     CONSTRAINT `FK_Productos_cotizacionDetalle`
     FOREIGN KEY (`KidProducto`)
@@ -1006,15 +994,16 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_cotizacionDetalle`(
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaEncabezado` (
   `KidFacturaEncabezado` INT NOT NULL,
-  `KidEncabezadoListaPrecios` INT NOT NULL,
-  `KidCotizacionEncabezado` INT,
+  `KidEncabezadoListaPrecios` INT NULL,
+  `KidEncabezadoPedido` INT NULL,
+  `KidCotizacionEncabezado` INT NULL,
   `fecha_facturaencabezado` DATE NULL,
   `descripcion_facturaencabezado` VARCHAR(45) NULL,
   `KidSerie` INT NOT NULL,
   `KidCliente` INT NOT NULL,
   `KidImpuesto` INT NOT NULL,
   `KidMoneda` INT NOT NULL,
-  `KidDescuentos` INT NOT NULL,
+  `KidDescuentos` INT NULL,
   `impuesto_facturaencabezado` DOUBLE NULL,
   `monto_facturaencabezado` DOUBLE NULL,
   `estado` TINYINT NULL,
@@ -1024,6 +1013,9 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaEncabezado` (
     REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+    CONSTRAINT `FK_EncabezadoPedido_FacturaEncabezado`
+    FOREIGN KEY (`KidEncabezadoPedido`)
+    REFERENCES `proyectogeneral`.`tbl_EncabezadoPedido` (`KidEncabezadoPedido`),
   CONSTRAINT `fk_FacturaEncabezado_Serie1`
     FOREIGN KEY (`KidSerie`)
     REFERENCES `proyectogeneral`.`Tbl_Serie` (`KidSerie`)
@@ -1114,11 +1106,14 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_DetalleComprobante`(
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoPedido`(
 	KidEncabezadoPedido INT NOT NULL,
-    KidFacturaEncabezado INT,
+    KidFacturaEncabezado INT NULL,
     KidCliente INT,
     fecha_encabezadopedido DATE,
     vencimiento_encabezadopedido DATE,
     PRIMARY KEY(KidEncabezadoPedido),
+    CONSTRAINT `FK_CotizacionEncabezado_EncabezadoPedido`
+    FOREIGN KEY (`KidEncabezadoPedido`)
+    REFERENCES `proyectogeneral`.`tbl_cotizacionencabezado` (`KidCotizacionEncabezado`),
      CONSTRAINT `FK_FacturaEncabezado_EncabezadoPedido`
     FOREIGN KEY (`KidFacturaEncabezado`)
     REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`),
@@ -1133,12 +1128,13 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoPedido`(
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_DetallePedido`(
 	KidDetallePedido INT NOT NULL,
+    KidEncabezadoPedido INT,
     KidProducto INT,
     cantidad_Detallepedido INT,
     monto_Detallepedido DOUBLE,
     PRIMARY KEY(KidDetallePedido),
     CONSTRAINT `FK_EncabezadoPedido_DetallePedido1`
-    FOREIGN KEY (`KidDetallePedido`)
+    FOREIGN KEY (`KidEncabezadoPedido`)
     REFERENCES `proyectogeneral`.`tbl_EncabezadoPedido` (`KidEncabezadoPedido`),
     CONSTRAINT `FK_Productos_DetallePedido1`
     FOREIGN KEY (`KidProducto`)
@@ -1172,13 +1168,17 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Devoluciones` (
   `motivo_devoluciones` VARCHAR(45) NULL,
   `fecha_devoluciones` DATE NULL,
   `KidFacturaEncabezado` INT NOT NULL,
-  `estado` TINYINT NULL,
+  `KidSerie` INT NOT NULL,
+   `estado` TINYINT,
   PRIMARY KEY (`kidDevoluciones`),
   CONSTRAINT `fk_Devoluciones_FacturaEncabezado1`
     FOREIGN KEY (`KidFacturaEncabezado`)
     REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_Devoluciones_Serie1`
+    FOREIGN KEY (`KidSerie`)
+    REFERENCES `proyectogeneral`.`Tbl_Serie` (`KidSerie`))
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -1190,6 +1190,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaDetalle` (
   `monto_facturadetalle` DOUBLE NULL,
   `KidProducto` INT NOT NULL,
   `KidFacturaEncabezado` INT NOT NULL,
+  `KidSerie` INT NOT NULL,
   PRIMARY KEY (`KidFacturaDetalle`),
   CONSTRAINT `fk_FacturaDetalle_Producto1`
     FOREIGN KEY (`KidProducto`)
@@ -1200,7 +1201,10 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaDetalle` (
     FOREIGN KEY (`KidFacturaEncabezado`)
     REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+    CONSTRAINT `fk_FacturaDetalle_Serie1`
+    FOREIGN KEY (`KidSerie`)
+    REFERENCES `proyectogeneral`.`Tbl_Serie` (`KidSerie`))
 ENGINE = InnoDB;
 
 
