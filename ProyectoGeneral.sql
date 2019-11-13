@@ -565,7 +565,7 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`Tbl_Mesas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Mesas` (
-  `KidNumeroMesa` INT NOT NULL,
+  `KidNumeroMesa` INT NOT NULL AUTO_INCREMENT,
   `KidArea` INT NOT NULL,
   `capacidad` INT NULL,
   `estado` TINYINT(1) NULL,
@@ -2936,7 +2936,7 @@ ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS tbl_bebidas(
-	KidBebida INT(11) NOT NULL,
+	KidBebida INT(11) NOT NULL AUTO_INCREMENT,
     KidMenu INT(11),
     nombreBebida VARCHAR(50),
     precio FLOAT,
@@ -2948,7 +2948,7 @@ CREATE TABLE IF NOT EXISTS tbl_bebidas(
 )ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS tbl_produccion_encabezado(
-	KidEncabezado INT(11) NOT NULL,
+	KidEncabezado INT(11) NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(50),
     fecha date,
     concepto VARCHAR(50),
@@ -2958,7 +2958,7 @@ CREATE TABLE IF NOT EXISTS tbl_produccion_encabezado(
 
 
 CREATE TABLE IF NOT EXISTS tbl_produccion_detalle(
-	KidOrden INT(11),
+	KidOrden INT(11) NOT NULL AUTO_INCREMENT,
     KidPlatillo INT(11),
     KidEncabezado INT(11),
     KidBebida INT(11),
