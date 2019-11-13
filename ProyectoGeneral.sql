@@ -840,14 +840,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_tipomovimiento`(
-  KidtiposComprobantes INT NOT NULL,
-  NombreComprobante VARCHAR(45),
+  KidtipoMovimiento INT NOT NULL,
+  NombreMovimiento VARCHAR(45),
   detalle VARCHAR(255),
+  naturaleza VARCHAR(25),
   estado TINYINT(1),
-  PRIMARY KEY(KidtiposComprobantes)
+  PRIMARY KEY(KidtipoMovimiento)
 )ENGINE = InnoDB;
-
-
 
 
 -- -------------------------------------------------------
@@ -1045,6 +1044,13 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_FacturaEncabezado` (
 ENGINE = InnoDB;
 
 
+CREATE TABLE IF NOT EXISTS tbl_periodo(
+	KidPeriodo INT NOT NULL,
+    Periodo INT,
+	estado TINYINT,
+    PRIMARY KEY(KidPeriodo)
+)ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_EncabezadoComprobante`
 -- -----------------------------------------------------
@@ -1055,7 +1061,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
   KidCliente INT NOT NULL,
   KidEmpleado INT NOT NULL,
   KidtiposComprobantes INT NOT NULL,
-  Serie VARCHAR(45),
   fecha DATE,
   Moneda VARCHAR(45),
   Cotizacion DOUBLE,
@@ -1073,10 +1078,13 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
   REFERENCES `proyectogeneral`.`tbl_empleado`(`KidEmpleado`),
   CONSTRAINT `FK_tipoComprobante_encabezadoComprobante`
   FOREIGN KEY(`KidtiposComprobantes`)
-  REFERENCES `proyectogeneral`.`tbl_tipomovimiento`(`KidtiposComprobantes`),
+  REFERENCES `proyectogeneral`.`tbl_tipomovimiento`(`Kidtipomovimiento`),
   CONSTRAINT `FK_FacturaEncabezado_EncabezadoComprobante`
     FOREIGN KEY (`KidFacturaEncabezado`)
-    REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`)
+    REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`),
+     CONSTRAINT `FK_Periodo_EncabezadoComprobante`
+    FOREIGN KEY (`Periodo`)
+    REFERENCES `proyectogeneral`.`tbl_periodo` (`KidPeriodo`)
 )ENGINE = InnoDB;
 
 
@@ -1086,13 +1094,10 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_DetalleComprobante`(
   KidDetalleComprobante INT NOT NULL,
-  articulo_servicio VARCHAR(45),
-  Precio DOUBLE,
-  Cantidad INT,
+  ValorComprobante DOUBLE,
+  Descripcion VARCHAR(255),
   Descuento DOUBLE,
-  Ivaincluido TINYINT(1),
-  Concepto VARCHAR(45),
-  Total DOUBLE,
+  Naturaleza VARCHAR(25),
   PRIMARY KEY(KidDetalleComprobante),
   CONSTRAINT `FK_encabezado_detalleComprobante`
   FOREIGN KEY (`KidDetalleComprobante`)
@@ -1742,13 +1747,6 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Transporte` (
  `estado` TINYINT NULL,
  PRIMARY KEY (`KidTransporte`))
 ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS Tbl_tipoMovimiento(
-	KidTipoMovimiento INT,
-    nombre_tipomovimiento VARCHAR(45),
-    estado TINYINT,
-    PRIMARY KEY(KidTipoMovimiento)
-)ENGINE = InnoDB;
 
 
 -- --------------------------------------------------------------------------SCRIPT DE FINANZAS -----------------------------------------------------------------
@@ -2867,7 +2865,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` (
  ON UPDATE NO ACTION,
  CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento12`
  FOREIGN KEY (`KidTipoMovimiento`)
- REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidtiposComprobantes`)
+ REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidtipoMovimiento`)
  ON DELETE NO ACTION
  ON UPDATE NO ACTION,
  CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Polizas1`
