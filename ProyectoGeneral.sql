@@ -1108,17 +1108,14 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_DetalleComprobante`(
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoPedido`(
 	KidEncabezadoPedido INT NOT NULL,
-    KidFacturaEncabezado INT NULL,
+    KidCotizacionEncabezado INT NULL,
     KidCliente INT,
-    fecha_encabezadopedido DATE,
-    vencimiento_encabezadopedido DATE,
+    fecha_encabezado DATE,
+    vencimiento_encabezado DATE,
     PRIMARY KEY(KidEncabezadoPedido),
     CONSTRAINT `FK_CotizacionEncabezado_EncabezadoPedido`
-    FOREIGN KEY (`KidEncabezadoPedido`)
+    FOREIGN KEY (`KidCotizacionEncabezado`)
     REFERENCES `proyectogeneral`.`tbl_cotizacionencabezado` (`KidCotizacionEncabezado`),
-     CONSTRAINT `FK_FacturaEncabezado_EncabezadoPedido`
-    FOREIGN KEY (`KidFacturaEncabezado`)
-    REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`),
     CONSTRAINT `FK_clientes_EncabezadoPedido`
     FOREIGN KEY (`KidCliente`)
     REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
@@ -3079,7 +3076,240 @@ ADD CONSTRAINT `FK_Curriculum_BancoT`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
--- ---------------- PROCEDIMIENTOS -----------------------
+-- ---------------- INSERTS DE PRUEBA -----------------------
+
+-- MANTENIMIENTOS
+INSERT INTO tbl_modulo(PK_id_Modulo, nombre_modulo, descripcion_modulo, estado_modulo)
+VALUES (1,'Contabilidad', 'Contabilidad', 1);
+
+INSERT INTO tbl_aplicacion(PK_id_aplicacion, PK_id_modulo, nombre_aplicacion, descripcion_aplicacion, estado_aplicacion)
+VALUES(1, 1, 'Tipo Cuenta Contable', 'Tipo Cuenta Contable', 1);
+
+INSERT INTO tbl_aplicacion(PK_id_aplicacion, PK_id_modulo, nombre_aplicacion, descripcion_aplicacion, estado_aplicacion)
+VALUES(2, 1, 'Cuentas Contables', 'Cuentas Contables', 1);
+
+INSERT INTO tbl_aplicacion(PK_id_aplicacion, PK_id_modulo, nombre_aplicacion, descripcion_aplicacion, estado_aplicacion)
+VALUES(3, 1, 'Tipo Poliza', 'Tipo Poliza', 1);
+
+INSERT INTO tbl_usuario_aplicacion(PK_id_usuario, PK_id_aplicacion, ingresar, consultar, modificar, eliminar, imprimir)
+VALUES('MiUsuario',1,1,1,1,1,1);
+
+INSERT INTO tbl_usuario_aplicacion(PK_id_usuario, PK_id_aplicacion, ingresar, consultar, modificar, eliminar, imprimir)
+VALUES('MiUsuario',2,1,1,1,1,1);
+
+INSERT INTO tbl_usuario_aplicacion(PK_id_usuario, PK_id_aplicacion, ingresar, consultar, modificar, eliminar, imprimir)
+VALUES('MiUsuario',3,1,1,1,1,1);
+
+-- AYUDAS FINANZAS
+INSERT INTO ayuda(Id_ayuda, Ruta, indice, estado) VALUES(500, 'Ayudas/Man-TipoPoliza.chm', 'Mantenimiento-TipoPoliza.html',1);
+INSERT INTO ayuda(Id_ayuda, Ruta, indice, estado) VALUES(501, 'Ayudas/Man-TipoCC.chm', 'Mantenimiento-TipoCuentaContable.html',1);
+INSERT INTO ayuda(Id_ayuda, Ruta, indice, estado) VALUES(503, 'Ayudas/Man-CuentaContable.chm', 'Mantenimiento-CuentaContable.html',1);
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('504', 'Man-CuentasBancarias-Bancos.chm', 'Man-CuentasBancarias-Bancos.html', '1'), ('505', 'Man-Chequeras-Bancos.chm', 'Man-Chequeras-Bancos.html', '1'), ('506', 'Man-Bancos-Bancos.chm', 'Man-Bancos-Bancos.html', '1'), ('507', 'Man-ClasMovs-Bancos.chm', 'Man-ClasMovs-Bancos.html', '1');
+
+-- AYUDAS RECURSOS HUMANOS
+
+INSERT INTO ayuda values(401,"Página web ayuda/Ayuda-Rhhh.chm","Area.html",1);
+INSERT INTO ayuda values(402,"Página web ayuda/Ayuda-Rhhh.chm","Conceptos.html",1);
+INSERT INTO ayuda values(403,"Página web ayuda/Ayuda-Rhhh.chm","Departamentos.html",1);
+INSERT INTO ayuda values(404,"Página web ayuda/Ayuda-Rhhh.chm","Empleados.html",1);
+INSERT INTO ayuda values(405,"Página web ayuda/Ayuda-Rhhh.chm","Prueba.html",1);
+INSERT INTO ayuda values(406,"Página web ayuda/Ayuda-Rhhh.chm","Puestos.html",1);
+INSERT INTO ayuda values(407,"Página web ayuda/Ayuda-Rhhh.chm","Roles de pago.html",1);
+INSERT INTO ayuda values(408,"Página web ayuda/Ayuda-Rhhh.chm","Curriculum.html",1);
+INSERT INTO ayuda values(409,"Página web ayuda/Ayuda-Rhhh.chm","MediosComunicacion.html",1);
+INSERT INTO ayuda values(410,"Página web ayuda/Ayuda-Rhhh.chm","Perfil_Profesional.html",1);
+
+
+-- CUENTAS CONTABLES
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('1', 'ACTIVO', 'ACTIVO', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('1.1', 'ACTIVO CORRIENTE', 'ACTIVO CORRIENTE', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('1.2', 'ACTIVO NO CORRIENTE', 'ACTIVO NO CORRIENTE', 1);
+
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('2', 'PASIVO', 'PASIVO', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('2.1', 'PASIVO CORRIENTE', 'PASIVO CORRIENTE', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('2.2', 'PASIVO NO CORRIENTE', 'PASIVO NO CORRIENTE', 1);
+
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('3.1', 'CAPITAL', 'CAPITAL', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('4.1', 'INGRESOS', 'INGRESOS', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('5.1', 'COMPRAS', 'COMPRAS', 1);
+INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('6.1', 'GASTOS', 'GASTOS', 1);
+
+
+INSERT INTO `tbl_cuentas` (`KidCuenta`, `KidTipoCuenta`, `Kidentificador`, `nombre`, `descripcion`, `estado`) VALUES
+('1.1.1', '1.1', 1, 'Caja', 'Caja', 1),
+('1.1.2', '1.1', 2, 'Bancos', 'Bancos', 1),
+('1.1.3', '1.1', 3, 'Clientes', 'Clientes', 1),
+('1.1.4', '1.1', 4, 'IVA por Cobrar', 'IVA por Cobrar', 1),
+('1.1.5', '1.1', 5, 'Cuentas Por Cobrar', 'Cuentas Por Cobrar', 1),
+('1.1.6', '1.1', 6, 'Inventarios Neto', 'Inventarios Neto', 1),
+('1.1.7', '1.1', 7, 'Mercaderia', 'Mercaderia', 1),
+('1.2.1', '1.2', 1, 'Equipo De Computo', 'Equipo De Computo', 1),
+('1.2.2', '1.2', 2, 'Mobiliario y Equipo', 'Mobiliario y Equipo', 1),
+('1.2.3', '1.2', 3, 'Inmueble', 'Inmueble', 1),
+('1.2.4', '1.2', 4, 'Licencias y programas', 'Licencias y programas', 1),
+('1.2.5', '1.2', 5, 'Vehiculos', 'Vehiculos', 1),
+('1.2.6', '1.2', 6, 'Patente de comercio', 'Patente de comercio', 1),
+('2.1.1', '2.1', 1, 'IVA por Pagar', 'IVA Por Pagar', 1),
+('2.1.2', '2.1', 2, 'Cuentas Por Pagar', 'Cuentas Por Pagar', 1),
+('2.1.3', '2.1', 3, 'Proveedores', 'Proveedores', 1),
+('2.1.4', '2.1', 4, 'Retencion IGSS Laboral', 'Retencion IGSS Laboral', 1),
+('2.1.5', '2.1', 5, 'Prestaciones Laborales', 'Prestaciones Laborales Por pagar', 1),
+('2.2.1', '2.2', 1, 'Hipoteca', 'Hipoteca', 1),
+('2.2.2', '2.2', 2, 'Documentos Por Pagar', 'Documentos Por Pagar', 1),
+('2.2.3', '2.2', 300, 'Prestamos Bancarios', 'Prestamos Bancarios', 1),
+('3.1.1', '3.1', 1, 'Capital', 'Capital', 1),
+('3.1.2', '3.1', 20, 'Ganancia En Operacion', 'Ganancia En Operacion', 1),
+('4.1.1', '4.1', 1, 'Ventas', 'Ventas', 1),
+('4.1.2', '4.1', 2, 'Descuentos Sobre Comrpas', 'Descuentos Sobre Compras', 1),
+('4.1.3', '4.1', 3, 'Intereses Cobrados', 'Intereses Cobrados', 1),
+('4.1.4', '4.1', 40, 'Seguros Pagados Anticipad', 'Seguros Pagados Por Anticipado', 1),
+('5.1.1', '5.1', 1, 'Compras', 'Compras', 1),
+('6.1.1', '6.1', 1, 'Publicidad', 'Publicidad', 1),
+('6.1.2', '6.1', 2, 'Combustibles', 'Combustibles', 1),
+('6.1.3', '6.1', 3, 'Cuota Patronal', 'Cuota Patronal', 1),
+('6.1.4', '6.1', 4, 'Seguros Vencidos', 'Seguros Vencidos', 1),
+('6.1.5', '6.1', 50, 'Depreciaciones', 'Depreciaciones', 1);
+
+
+-- TIPOS DE POLIZA
+INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('V','Ventas', 1);
+INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('C','Compras', 1);
+INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('B','Bancos', 1);
+INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('H','Hoteleria', 1);
+INSERT INTO `proyectogeneral`.`tbl_tipo_poliza` (`KidTipoDePoliza`, `descripcion`, `estado`) VALUES ('R', 'Recursos Humanos', '1');
+
+-- POLIZAS
+INSERT INTO tbl_poliza_encabezado (`KidPoliza`, `KidTipoDePoliza`, `KidDocumentoAsociado`, `descripcion`, `fecha_poliza`, `total_poliza`, `estado`) VALUES ('2', 'V', '1', 'Ventas', '2019-10-31', '2000', '1');
+
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '1.1.1', '1000', '0');
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '1.1.2', '1000', '0');
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '2.1.1', '0', '1750');
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '2.1.2', '0', '250');
+
+INSERT INTO tbl_poliza_encabezado (`KidPoliza`, `KidTipoDePoliza`, `KidDocumentoAsociado`, `descripcion`, `fecha_poliza`, `total_poliza`, `estado`) VALUES ('3', 'H', '1', 'Hoteleria', '2019-10-25', '500', '1');
+
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('3', '1.1.1', '500', '0');
+INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('3', '2.1.1', '0', '500');
+
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`,`estado`) VALUES (512, 'Ayudas/CreacionPresupuesto.chm', 'Creacion-Presupueto.html',1);
+
+INSERT INTO `tbl_moneda` (`KidMoneda`, `nombre_moneda`, `tasa_moneda`, `estado`) VALUES ('1', 'USD', '', '1');
+INSERT INTO `tbl_moneda` (`KidMoneda`, `nombre_moneda`, `tasa_moneda`, `estado`) VALUES ('2', 'GTQ', '', '1');
+INSERT INTO `tbl_moneda` (`KidMoneda`, `nombre_moneda`, `tasa_moneda`, `estado`) VALUES ('3', 'EUR', '', '1');
+
+INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('1', 'Ventas', '1');
+INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('2', 'Compras', '1');
+INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('3', 'Hoteleria', '1');
+INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('4', 'Area4', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('5', 'Area5', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('6', 'Area6', '1');
+
+
+INSERT INTO `tbl_presupuesto` (`Kidpresupuesto`, `KidMoneda`, `KidArea`, `KidCuenta`, `nombre`, `fecha`, `descripcion`, `monto`, `anotacion`, `estado`) VALUES ('1', '1', '2', '1.1.1', 'Ventas', '2019-11-04', 'Preuba Presupuesto', '3500', 'Ninguna', '2');
+INSERT INTO `tbl_presupuesto` (`Kidpresupuesto`, `KidMoneda`, `KidArea`, `KidCuenta`, `nombre`, `fecha`, `descripcion`, `monto`, `anotacion`, `estado`) VALUES ('2', '2', '2', '1.1.2', 'Hoteleria', '2019-11-10', 'Prueba Prespuesto', '2500', 'Ninguna', '1');
+INSERT INTO `tbl_presupuesto` (`Kidpresupuesto`, `KidMoneda`, `KidArea`, `KidCuenta`, `nombre`, `fecha`, `descripcion`, `monto`, `anotacion`, `estado`) VALUES ('3', '2', '2', '2.1.2', 'Compras', '2019-11-10', 'Prueba Prespuesto', '5550', 'Ningunsa', '0');
+
+INSERT INTO `tbl_tipocuentabancaria` (`KidTipoCuentaBancaria`, `Nombre`, `Descripción`, `estado`) VALUES
+(1, 'Corriente', 'Cuenta Corriente', 1),
+(2, 'Ahorro', 'Cuenta ahorro', 1);
+
+
+INSERT INTO `tbl_tipo_movimiento` (`KidTipoMovimiento`, `nombre`, `descripcion`, `estado`) VALUES
+(2, 'Salarios', 'Pago empleados', 1),
+(3, 'Proveedores', 'pago a proveedores', 1),
+(4, 'Papelería y Útiles', 'Gastos de Oficina', 1),
+(5, 'Cuentas por Pagar a Largo Plazo', 'Cuentas por pagar', 1),
+(6, 'Depósito', 'Ingreso a Cuenta Bancaria', 1),
+(7, 'Transferencias Propias', 'flujo entre cuentas bancarias', 1);
+
+INSERT INTO `tbl_bancos` (`KidBanco`, `nombre`, `descripcion`, `estado`) VALUES
+(2, 'Industrial', 'Siempre de tu lado.', 1),
+(3, 'Banrural', 'El amigo que te ayuda a crecer', 1),
+(4, 'G&T Continental', 'El banco de tu vida', 1),
+(5, 'Bantrab', 'El banco de los trabajadores', 1);
+
+INSERT INTO `tbl_divisa` (`KidDivisa`, `Nombre`, `estado`) VALUES
+('GTQ', 'Quetzal', 1),
+('EUR', 'Euro', 1),
+('USD', 'Dolar Estadounidense', 1);
+
+INSERT INTO `tbl_cuentabancaria` (`KidCuentaBancaria`, `NumeroCuenta`, `Descripcion`, `KidBanco`, `KidMoneda`, `Firmas_Individuales`, `Firmas_Conjuntas`, `Saldo`, `KidTipoCuentaBancaria`, `estado`) VALUES
+(2, '2899049300', 'Cuenta Hotel San Carlos', 4, 'GTQ', 'Francisco Pérez', 'Hotel San Carlos S.A.', '9554', 1, 1),
+(3, '8475639128', 'Cuenta Banrural Hotel San Carlos', 3, 'GTQ', 'Charlie Brown', 'Hote San Carlos S.A.', '50600', 1, 1),
+(4, '3892761726', 'Cuenta de Bantrab', 5, 'GTQ', 'Eduardo Colón', 'Hotel San Carlos S.A.', '4768', 1, 1);
+
+
+INSERT INTO `tbl_chequera` (`KidChequera`, `KidCuentaBancaria`, `No_cheques`, `estado`) VALUES
+(2, 2, -1, 1),
+(3, 4, -1, 1),
+(4, 3, 29, 1);
+
+INSERT INTO `tbl_libro_bancos` (`KidMovimientoBancario`, `cuenta_debito`, `cuenta_credito`, `monto`, `tipo_movimiento`, `fecha_movimiento`, `beneficiario`, `descripcion`, `movimiento_conciliado`, `movimiento_trasladado_contabilidad`, `KidCuenta_Contable_debito`, `KidCuenta_Contable_Credito`, `KiDTipo_movimiento`, `estado`) VALUES
+(6, 8475639128, 3892761726, 200, 'Cheques', '2019-11-12', 'Eduardo Colon', 'Pago a proveedores', 0, 0, '1.1.2', '1.1.1', 3, 1),
+(7, 2899049300, 2899049300, 200, 'Transacciones entre Cuentas propias', '2019-11-12', 'Eduardo Colon', 'transferencia propia', 0, 0, '1.1.1', '1.1.2', 7, 1),
+(8, 0, 8475639128, 150, 'Depositos', '2019-11-12', 'Rodolfo', 'Pago por servicios', 0, 0, '1.1.3', '1.1.2', 6, 1),
+(9, 0, 8475639128, 150, 'Depositos', '2019-11-12', 'Rodolfo', 'Pago por servicios', 0, 0, '1.1.3', '1.1.2', 6, 1),
+(10, 2899049300, 2323222, 300, 'ACH (Pagos por transferencia)', '2019-11-12', 'Arnoldo', 'Compra de materiales', 0, 0, '1.1.2', '1.1.1', 4, 1),
+(11, 3892761726, 2899049300, 232, 'Transacciones entre Cuentas propias', '2019-11-12', 'Eduardo', 'Pago entre cuentas propias', 0, 0, '1.1.1', '1.1.2', 7, 1),
+(12, 0, 8475639128, 200, 'Depositos', '2019-11-12', 'Eduardo', 'Deposito a cuenta', 0, 0, '1.1.1', '1.1.2', 6, 1),
+(13, 0, 8475639128, 300, 'Depositos', '2019-11-12', 'Rodolfo', 'Pago por salarios', 0, 0, '1.1.3', '1.1.2', 6, 1),
+(14, 8475639128, 0, 400, 'Cheques', '2019-11-12', 'Eduardo', 'Para pago de salarios', 0, 0, '1.1.2', '1.1.3', 2, 1);
+
+
+-- PUESTOS
+
+INSERT INTO `proyectogeneral`.`tbl_puestos` (`KidPuesto`, `KidArea`, `nombre`, `descripcion`, `sueldofijo`, `estado`) VALUES ('1', '1', 'Puesto1', 'Desc', '1000', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_puestos` (`KidPuesto`, `KidArea`, `nombre`, `descripcion`, `sueldofijo`, `estado`) VALUES ('2', '2', 'Puesto2', 'Desc', '2000', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_puestos` (`KidPuesto`, `KidArea`, `nombre`, `descripcion`, `sueldofijo`, `estado`) VALUES ('3', '3', 'Puesto3', 'Desc', '3000', '1');
+
+
+/*DEPARTAMENTOS*/
+INSERT INTO `proyectogeneral`.`tbl_departamentos` (`KidDepartamento`, `nombre`, `numdepartamento`, `direccion`, `telefono`, `KidArea`, `estado`) VALUES ('1', 'Depa1', '10', 'Dir1', '24345234', '1', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_departamentos` (`KidDepartamento`, `nombre`, `numdepartamento`, `direccion`, `telefono`, `KidArea`, `estado`) VALUES ('2', 'Depa2', '20', 'Dir2', '54234234', '2', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_departamentos` (`KidDepartamento`, `nombre`, `numdepartamento`, `direccion`, `telefono`, `KidArea`, `estado`) VALUES ('3', 'Depa3', '30', 'Dir3', '34455632', '3', '1');
+
+/*EMPLEADOS*/
+INSERT INTO `proyectogeneral`.`tbl_empleado` (`KidEmpleado`, `nombres`, `apellidos`, `dpi`, `nit`, `direccion`, `telefono`, `telefonoalternativo`, `correo`, `correoalternativo`, `fechanacimiento`, `estadoCivil`, `KidPuesto`, `KidDepartamento`, `estado`) VALUES ('1', 'Emp1', 'afaf', '2342', '32432', 'werew', '23324', '52352', 'weerw', 'dsf', '2019-10-10', '1', '1', '1', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_empleado` (`KidEmpleado`, `nombres`, `apellidos`, `dpi`, `nit`, `direccion`, `telefono`, `telefonoalternativo`, `correo`, `correoalternativo`, `fechanacimiento`, `estadoCivil`, `KidPuesto`, `KidDepartamento`, `estado`) VALUES ('2', 'Emp2', 'asdf', '234', '5325', 'ewrew', '345', '6436', 'wert', 'rete', '2019-11-11', '1', '2', '2', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_empleado` (`KidEmpleado`, `nombres`, `apellidos`, `dpi`, `nit`, `direccion`, `telefono`, `telefonoalternativo`, `correo`, `correoalternativo`, `fechanacimiento`, `estadoCivil`, `KidPuesto`, `KidDepartamento`, `estado`) VALUES ('3', 'Emp3', 'agsda', '234', '264', 'rwer', '6426', '754', 'ter', 'eter', '2018-10-10', '1', '3', '3', '1');
+
+/*EMP CONTABLE*/
+insert into proyectogeneral.tbl_empcontable value (7,1,30,0,1,120,1,0,0);
+    
+insert into proyectogeneral.tbl_empcontable value (8,2,30,0,1,240,1,0,0);
+    
+insert into proyectogeneral.tbl_empcontable value (9,3,30,0,1,360,1,0,0);
+
+/*NOMINAS*/
+INSERT INTO `proyectogeneral`.`tbl_nominasencabezado` (`KidNomina`, `KidEmpleado`, `observaciones`, `totalnominal`, `fecha`, `periodo_inicial`, `periodo_final`, `estado`) VALUES ('1', '1', 'Observacion1', '10000', '2019-11-11', '2019-10-10', '2019-11-11', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_nominasencabezado` (`KidNomina`, `KidEmpleado`, `observaciones`, `totalnominal`, `fecha`, `periodo_inicial`, `periodo_final`, `estado`) VALUES ('2', '2', 'Observacion2', '20000', '2019-10-10', '2019-09-10', '2019-10-10', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_nominasencabezado` (`KidNomina`, `KidEmpleado`, `observaciones`, `totalnominal`, `fecha`, `periodo_inicial`, `periodo_final`, `estado`) VALUES ('3', '3', 'Observacion3', '30000', '2019-05-05', '2019-01-01', '2019-07-07', '1');
+
+/*INTEGRACION*/
+INSERT INTO `tbl_curriculums` VALUES (1,'ivan','ivan','123','15 calle','ivan',1,1,1,1,1,1,'asiiiii','qweqwe',100,7,1),(2,'fabio','fabio','456','78 avenida','fabio',1,1,0,1,1,1,'assssssssss','qweqwewqe',500,7,1),(3,'iker','iker','098','71 calle','iker',1,0,0,0,0,0,'qwe','asdass',50,7,1);
+INSERT INTO `tbl_bancotalento` VALUES (1,1,1),(2,2,1),(3,3,1);
+
+
+INSERT INTO `tbl_perfil_profesional` VALUES (1,'conta','2','asfad','conta','asdfghj',1),(2,'pogra','3','qwertyu','progra','asdfghjf',1);
+INSERT INTO `tbl_medios_comunicacion` VALUES (1,'internet','internet','123',1),(2,'periodico','periodico','321',1);
+INSERT INTO `tbl_encabezadoreportevacante` VALUES (1,1,1,'2019-08-11','Planilla',1,1),(1,2,2,'2019-11-16','Contrato Temporal',2,1),(2,2,2,'2019-11-09','Contrato Indefinido',2,1),(3,1,1,'2019-11-09','Contrato Indefinido',1,1),(4,1,1,'2019-11-09','Planilla',1,1),(5,1,1,'2019-11-09','Contrato Indefinido',1,1),(6,1,1,'2019-11-08','Contrato Indefinido',1,1),(7,1,1,'2019-11-09','Contrato Indefinido',1,1),(8,1,1,'2019-11-11','Planilla',1,1);
+INSERT INTO `tbl_detallereportevacante` VALUES (1,1,1,1,1,1,0,'No tiene',1000,1),(2,1,1,0,0,0,1,'adios',10.5,1),(3,1,0,0,0,0,1,'asd',11,1),(4,1,0,0,0,0,1,'we',100,1),(5,1,0,0,0,0,1,'qweewqweq',12,1),(6,1,0,0,0,0,0,'',1050.3,1),(7,1,0,0,0,0,0,'',50,1),(8,1,0,0,0,0,1,'Curso de tecnico.',5000,1);
+INSERT INTO `tbl_pruebas` VALUES (1,'d','d','1:10','1',1),(2,'As','as','2:50','1',1);
+
+INSERT INTO `tbl_resultados` VALUES (1,1,1,'12',1),(2,1,2,'50',1);
+INSERT INTO `tbl_desempeñoempleado` VALUES (1,1,1,80,1),(2,1,2,90,1);
+
+
 
 
 --
