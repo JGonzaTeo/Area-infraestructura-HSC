@@ -900,7 +900,7 @@ CREATE TABLE IF NOT EXISTS tbl_tipo_lista_precios(
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Encabezado_Lista_Precios`(
-	KidEncabezadoListaPrecios INT,
+	KidEncabezadoListaPrecios INT NOT NULL,
     Fecha_inicio_listaprecios DATE,
     fecha_modificacion_listaprecios DATE,
     PRIMARY KEY(KidEncabezadoListaPrecios)
@@ -911,8 +911,8 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Encabezado_Lista_Precios`(
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Detalle_Lista_Precios`(
-	KidEncabezadoListaPrecios INT,
-    KidDetalleListaPrecios INT,
+	KidEncabezadoListaPrecios INT NOT NULL,
+    KidDetalleListaPrecios INT NOT NULL,
     KidProducto INT,
     Kidtipo_lista_precios INT,
     nombre_listaprecios VARCHAR(50),
@@ -3043,6 +3043,26 @@ DROP INDEX `FK_encabezadoReporteVacante_BancoTalento` ;
 
 ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
 CHANGE COLUMN `KidBancoTalento` `KidBancoTalento` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
+ALTER TABLE `proyectogeneral`.`tbl_encabezadoreportevacante` 
+ADD CONSTRAINT `FK_Perfil_ReporteVacante`
+  FOREIGN KEY (`KidPerfil`)
+  REFERENCES `proyectogeneral`.`tbl_perfil_profesional` (`KidPerfil`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `FK_Medio_ReporteVacante`
+  FOREIGN KEY (`KidMedioComunicacion`)
+  REFERENCES `proyectogeneral`.`tbl_medios_comunicacion` (`KidMediosComunicacion`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `proyectogeneral`.`tbl_bancotalento` 
+ADD CONSTRAINT `FK_Curriculum_BancoT`
+  FOREIGN KEY (`KidCurriculum`)
+  REFERENCES `proyectogeneral`.`tbl_curriculums` (`KidCurriculum`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
 
 -- ---------------- PROCEDIMIENTOS -----------------------
 
