@@ -542,7 +542,7 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`Tbl_Check_Out`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Check_Out` (
-  `KidCheckOut` INT NOT NULL,
+  `KidCheckOut` INT NOT NULL AUTO_INCREMENT,
   `KidCliente` INT NOT NULL,
   `KidEmpleado` INT NOT NULL,
   `fecha` DATE NULL,
@@ -2847,58 +2847,78 @@ CREATE TABLE `proyectogeneral`.`tbl_curriculums` (
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_MovimientoEncabezado`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` (
- `KidMovimientoEncabezado` INT NOT NULL,
- `destino_movimientoencabezado` VARCHAR(45) NULL,
- `origen_movimientoencabezado` VARCHAR(45) NULL,
- `fecha_movimientoencabezado` DATE NULL,
- `KidProveedor` INT NOT NULL,
- `KidTipoMovimiento` INT NOT NULL,
- `KidPolizas` INT NOT NULL,
- `KidClientes` INT NOT NULL,
- `estado` TINYINT NULL,
- PRIMARY KEY (`KidMovimientoEncabezado`),
- CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Proveedor1`
- FOREIGN KEY (`KidProveedor`)
- REFERENCES `proyectogeneral`.`Tbl_Proveedor` (`KidProveedor`)
- ON DELETE NO ACTION
- ON UPDATE NO ACTION,
- CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento12`
- FOREIGN KEY (`KidTipoMovimiento`)
- REFERENCES `proyectogeneral`.`Tbl_TipoMovimiento` (`KidtipoMovimiento`)
- ON DELETE NO ACTION
- ON UPDATE NO ACTION,
- CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Polizas1`
- FOREIGN KEY (`KidPolizas`)
- REFERENCES `proyectogeneral`.`tbl_poliza_encabezado` (`KidPoliza`)
- ON DELETE NO ACTION
- ON UPDATE NO ACTION,
- CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Clientes1`
- FOREIGN KEY (`KidClientes`)
- REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
- ON DELETE NO ACTION
- ON UPDATE NO ACTION)
+
+CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` ( 
+`KidMovimientoEncabezado` INT NOT NULL,
+`fecha_movimientoencabezado` DATE NULL,
+`concepto_movimientoencabezado` VARCHAR(45) NULL,
+`KidTipoMovimiento` INT NOT NULL,
+`KidBodega_destino` INT(16)  NULL,
+`KidBodega_origen` INT(16)  NULL,
+`KidProveedor` INT NULL,
+`KidClientes` INT NOT NULL,
+`KidOrdenCompraEncabezado` INT(16)  NULL,
+`KidFacturaEncabezado` INT  NULL,
+`estado` TINYINT NULL,
+PRIMARY KEY (`KidMovimientoEncabezado`),
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Proveedor1`
+FOREIGN KEY (`KidProveedor`)
+REFERENCES `proyectogeneral`.`Tbl_Proveedor` (`KidProveedor`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_TipoMovimiento1`
+FOREIGN KEY (`KidTipoMovimiento`)
+REFERENCES `proyectogeneral`.`tbl_tipo_movimiento` (`KidTipoMovimiento`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Bodega1`
+FOREIGN KEY (`KidBodega_destino`)
+REFERENCES `proyectogeneral`.`tbl_bodega` (`KidBodega`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Bodega2`
+FOREIGN KEY (`KidBodega_origen`)
+REFERENCES `proyectogeneral`.`tbl_bodega` (`KidBodega`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_FacturaEnca`
+FOREIGN KEY (`KidFacturaEncabezado`)
+REFERENCES `proyectogeneral`.`Tbl_FacturaEncabezado` (`KidFacturaEncabezado`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION, 
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_OrdenCompra`
+FOREIGN KEY (`KidOrdenCompraEncabezado`)
+REFERENCES `proyectogeneral`.`Tbl_orden_compra_encabezado` (`KidOrdenCompraEncabezado`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT `fk_Tbl_MovimientoEncabezado_Tbl_Clientes1`
+FOREIGN KEY (`KidClientes`)
+REFERENCES `proyectogeneral`.`Tbl_Clientes` (`KidCliente`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION) 
 ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`Tbl_MovimientoDetalle`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoDetalle` (
  `KidMovimientoDetalle` INT NOT NULL,
- `cantidad_movimientodetalle` INT NULL,
- `KidProducto` INT NOT NULL,
- `KidMovimientoEncabezado` INT NOT NULL,
- `estado` TINYINT NULL,
- PRIMARY KEY (`KidMovimientoDetalle`),
- CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_MovimientoEncabezado1`
+  `cantidad_movimientodetalle` INT NULL,
+  `KidProducto` INT NOT NULL,
+  `KidMovimientoEncabezado` INT NOT NULL,
+  `estado` TINYINT NULL,
+  PRIMARY KEY (`KidMovimientoDetalle`,`KidMovimientoEncabezado`),
+  CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_MovimientoEncabezado1`
  FOREIGN KEY (`KidMovimientoEncabezado`)
- REFERENCES `proyectogeneral`.`Tbl_MovimientoEncabezado` (`KidMovimientoEncabezado`)
- ON DELETE NO ACTION
- ON UPDATE NO ACTION,
- CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_Producto1`
- FOREIGN KEY (`KidProducto`)
+  REFERENCES `proyectogeneral`.`Tbl_MovimientoEncabezado` (`KidMovimientoEncabezado`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Tbl_MovimientoDetalle_Tbl_Producto1`
+  FOREIGN KEY (`KidProducto`)
  REFERENCES `proyectogeneral`.`Tbl_Producto` (`KidProducto`)
  ON DELETE NO ACTION
- ON UPDATE NO ACTION)
+ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
