@@ -565,10 +565,11 @@ ENGINE = InnoDB;
 -- Table `proyectogeneral`.`Tbl_Mesas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Mesas` (
-  `KidNumeroMesa` INT NOT NULL AUTO_INCREMENT,
-  `KidArea` INT NOT NULL,
-  `capacidad` INT NULL,
-  `estado` TINYINT(1) NULL,
+  `KidNumeroMesa` INT(11) NOT NULL AUTO_INCREMENT,
+  `KidArea` INT(11) NOT NULL,
+  `capacidad` INT(11) NULL,
+  `estadoMesa` INT(11) NULL,
+  `estado` TINYINT(1) NULL DEFAULT 1,
   PRIMARY KEY (`KidNumeroMesa`),
   CONSTRAINT `fk_Tbl_Mesas_Tbl_Areas1`
     FOREIGN KEY (`KidArea`)
@@ -1088,22 +1089,18 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_EncabezadoComprobante`(
 )ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `proyectogeneral`.`tbl_DetalleComprobante`
--- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `proyectogeneral`.`tbl_DetalleComprobante`(
   KidDetalleComprobante INT NOT NULL,
   ValorComprobante DOUBLE,
   Descripcion VARCHAR(255),
   Descuento DOUBLE,
   Naturaleza VARCHAR(25),
+  kidCodigoEncabezado INT NOT NULL,
   PRIMARY KEY(KidDetalleComprobante),
-  CONSTRAINT `FK_encabezado_detalleComprobante`
-  FOREIGN KEY (`KidDetalleComprobante`)
-  REFERENCES `proyectogeneral`.`tbl_EncabezadoComprobante`(`KidEncabezadoComprobante`)
+  CONSTRAINT `fk_encabezado_detalleMov`
+  FOREIGN KEY  (`kidCodigoEncabezado`)
+  REFERENCES `proyectogeneral`.`tbl_EncabezadoComprobante` (`KidEncabezadoComprobante`)
 )ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `proyectogeneral`.`tbl_EncabezadoPedido`
@@ -2738,8 +2735,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_libro_bancos` (
   `KidMovimientoBancario` INT NOT NULL AUTO_INCREMENT,
-  `cuenta_debito` INT NOT NULL,
-  `cuenta_credito` INT NOT NULL,
+  `cuenta_debito` BIGINT(20) NOT NULL,
+  `cuenta_credito` BIGINT(20) NOT NULL,
   `monto` DOUBLE NOT NULL,
   `tipo_movimiento` VARCHAR(45) NULL,
   `fecha_movimiento` DATE NULL,
@@ -2958,7 +2955,7 @@ CREATE TABLE IF NOT EXISTS tbl_bebidas(
     KidMenu INT(11),
     nombreBebida VARCHAR(50),
     precio FLOAT,
-    estado TINYINT(1),
+    estado TINYINT(1) DEFAULT 1,
     PRIMARY KEY(KidBebida),
     CONSTRAINT `tbl_menus_bebidas` 
 	FOREIGN KEY (`KidMenu`) 
@@ -2970,7 +2967,7 @@ CREATE TABLE IF NOT EXISTS tbl_produccion_encabezado(
     nombre VARCHAR(50),
     fecha date,
     concepto VARCHAR(50),
-    estado TINYINT(1),
+    estado TINYINT(1) DEFAULT 1,
 	PRIMARY KEY(KidEncabezado)
 )ENGINE = InnoDB;
 
@@ -2981,7 +2978,7 @@ CREATE TABLE IF NOT EXISTS tbl_produccion_detalle(
     KidEncabezado INT(11),
     KidBebida INT(11),
     Cantidad INT(4),
-    estado TINYINT(1),
+    estado TINYINT(1) DEFAULT 1,
     PRIMARY KEY(KidOrden),
     CONSTRAINT `tbl_produccionEncabezado_Detalle` 
 	FOREIGN KEY (`KidEncabezado`) 
