@@ -2850,7 +2850,7 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_MovimientoEncabezado` (
 `KidBodega_destino` INT(16)  NULL,
 `KidBodega_origen` INT(16)  NULL,
 `KidProveedor` INT NULL,
-`KidClientes` INT NOT NULL,
+`KidClientes` INT NULL,
 `KidOrdenCompraEncabezado` INT(16)  NULL,
 `KidFacturaEncabezado` INT  NULL,
 `estado` TINYINT NULL,
