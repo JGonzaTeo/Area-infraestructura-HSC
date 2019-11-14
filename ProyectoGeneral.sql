@@ -3119,6 +3119,23 @@ INSERT INTO ayuda values(408,"Página web ayuda/Ayuda-Rhhh.chm","Curriculum.html
 INSERT INTO ayuda values(409,"Página web ayuda/Ayuda-Rhhh.chm","MediosComunicacion.html",1);
 INSERT INTO ayuda values(410,"Página web ayuda/Ayuda-Rhhh.chm","Perfil_Profesional.html",1);
 
+-- AYUDAS HOTELERIA
+
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('301', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'DMI.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('302', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Habitaciones.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('303', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Tipodehabitaciones.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('304', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'CategoriaHabitaciones.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('305', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Salones.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('306', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Mesa.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('307', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Tienda.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('308', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Menu.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('309', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Area.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('310', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Servicios.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('311', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Comanda.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('312', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Recetas.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('313', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Platillos.html', '1');
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('314', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'ObjetosP.html', '1');
+
 
 -- CUENTAS CONTABLES
 INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('1', 'ACTIVO', 'ACTIVO', 1);
@@ -3201,10 +3218,12 @@ INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('1', 'Ventas
 INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('2', 'Compras', '1');
 INSERT INTO `tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('3', 'Hoteleria', '1');
 INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('4', 'Area4', '1');
+INSERT INTO `tbl_areas`(`KidArea`, `nombreArea`, `estado`) VALUES ('5','Gimnasio',1), ('6','Tecnologia',1), ('7','Restaurante',1), ('8','Piscina',1);
 
-INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('5', 'Area5', '1');
 
-INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('6', 'Area6', '1');
+INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('9', 'Area5', '1');
+
+INSERT INTO `proyectogeneral`.`tbl_areas` (`KidArea`, `nombreArea`, `estado`) VALUES ('10', 'Area6', '1');
 
 
 INSERT INTO `tbl_presupuesto` (`Kidpresupuesto`, `KidMoneda`, `KidArea`, `KidCuenta`, `nombre`, `fecha`, `descripcion`, `monto`, `anotacion`, `estado`) VALUES ('1', '1', '2', '1.1.1', 'Ventas', '2019-11-04', 'Preuba Presupuesto', '3500', 'Ninguna', '2');
@@ -3309,8 +3328,107 @@ INSERT INTO `tbl_pruebas` VALUES (1,'d','d','1:10','1',1),(2,'As','as','2:50','1
 INSERT INTO `tbl_resultados` VALUES (1,1,1,'12',1),(2,1,2,'50',1);
 INSERT INTO `tbl_desempeñoempleado` VALUES (1,1,1,80,1),(2,1,2,90,1);
 
+-- REPORTES HOTELERIA
+
+INSERT INTO `reportes` (`Id_reporte`, `ruta`, `estado`) VALUES
+ 
+(308, 'C:/Users/Randy/Desktop/Reportes/reporteMENUS.rpt', 1),
+
+(309, 'C:/Users/Randy/Desktop/Reportes/reporteAREAS.rpt', 1),
+
+(310, 'C:/Users/Randy/Desktop/Reportes/reporteSERVICIOS.rpt', 1),
+
+(311, 'C:/Users/Randy/Desktop/Reportes/reporteCOMANDAS.rpt', 1);
+
+/* PRODUCCIÓN ENCABEZADO */
+INSERT INTO `tbl_produccion_encabezado` (`KidEncabezado`, `nombre`, `fecha`, `concepto`, `estado`) VALUES 
+('1', 'Juan', '2019-11-08', 'evento 15 años', '1');
+
+/* MENUS */
+INSERT INTO `tbl_menus` (`KidMenu`, `nombreMenu`, `estado`) VALUES
+ (1, 'Desayunos', 1), 
+(2, 'Almuerzos', 1), (3, 'Postres', 1),
+
+(4, 'Bebidas Naturales', 1),
+(5, 'Bebidas Alcoholicas', 1);
 
 
+/* BEBIDAS */
+INSERT INTO `tbl_bebidas`(`KidBebida`, `KidMenu`, `nombreBebida`, `precio`, `estado`) VALUES ('1','5','Corona','15','1');
+INSERT INTO `tbl_bebidas`(`KidBebida`, `KidMenu`, `nombreBebida`, `precio`, `estado`) VALUES ('2','4','Horchata','10','1');
+INSERT INTO `tbl_bebidas`(`KidBebida`, `KidMenu`, `nombreBebida`, `precio`, `estado`) VALUES ('3','4','jamaica','10','1');
+
+/* PRODUCCIÓN DETALLE */
+INSERT INTO `tbl_produccion_detalle` (`KidOrden`, `KidPlatillo`, `KidEncabezado`, `KidBebida`, `cantidad`, `estado`) VALUES 
+(1, '1', '1', '1', '10', '1');
+
+
+/* SERVICIOS */
+INSERT INTO `tbl_servicios` (`KidServicio`, `KidArea`, `nombreServicio`, `estado`) VALUES ('1', '3', 'Restaurante', '1');
+
+
+/* COMANDAS */
+INSERT INTO `tbl_comandas` (`KidNumeroComanda`, `KidServicio`, `estado`) VALUES ('1', '1', '1');
+
+
+/* PLATILLOS */
+INSERT INTO `tbl_platillos` (`KidPlatillo`, `KidMenu`, `nombrePlatillo`, `precio`, `estado`) VALUES
+(1, 1, 'Palitos de Pan', 35, 1),
+(2, 1, 'Quesitos Dobles', 25, 1),
+(3, 1, 'Bocaditos de Carne', 40, 0),
+(4, 1, 'Pan de Ajo', 35, 1),
+(5, 1, 'Nachos Supremos', 25, 1);
+
+
+/* RECETAS */
+INSERT INTO `tbl_recetas` (`KidRecetas`, `receta`, `estado`) VALUES
+(1, 'Camarones', 1),
+(2, 'Filete bulebu', 0),
+(3, 'Arroz BLanco', 1),
+(4, 'Ensalada Cesear', 1),
+(5, 'Pollo con Champiñones', 1);
+
+/* TIPO HABITACIÓN */
+INSERT INTO `tbl_tipo_habitacion` (`KidTipoHabitacion`, `numeroCamas`, `numeroAmbientes`, `numeroPersonas`, `estado`) VALUES ('Especial', '5', '8', '2', '1');
+INSERT INTO `tbl_tipo_habitacion` (`KidTipoHabitacion`, `numeroCamas`, `numeroAmbientes`, `numeroPersonas`, `estado`) VALUES ('Normal', 5, 6, '6', 1);
+
+
+/* CATEGORIA HABITACIÓN */
+INSERT INTO `tbl_categorias_habitacion` (`KidCategoria`, `estado`) VALUES ('Familiar', 1),('Individual', 1), ('VIP', 1);
+
+/* HABITACIONES */
+INSERT INTO `tbl_habitaciones` (`KidNumeroHabitacion`, `KidTipoHabitacion`, `KidCategoria`, `precio`, `estado`, `disponibilidad`) VALUES 
+(1, 'Especial', 'Familiar', 3500, 1, 1),
+(2, 'Especial', 'Individual', 3450, 1, 1),
+(3, 'Especial', 'Familiar', 1775, 1, 1); 
+
+
+/* OBJETOS PERDIDOS */
+INSERT INTO `tbl_objetos_perdidos` (`KidObjeto`, `KidNumeroHabitacion`, `fecha`, `descripcion`, `estado`) VALUES
+(1, 1, '2019-11-13', 'Zapato Rojo', 1),
+(2, 1, '2019-11-13', 'Camisa Colo Azul', 0),
+(3, 1, '2019-11-13', 'Reloj Casio', 1),
+(4, 1, '2019-11-13', 'Corbata Negra', 0),
+(5, 1, '2019-11-13', 'Gorra Blanca', 1);
+
+/* SALONES */
+INSERT INTO `tbl_salones` (`KidNumeroSalon`, `capacidad`, `precio`, `estado`) VALUES ('1', '20', '1200', '1');
+INSERT INTO `tbl_salones` (`KidNumeroSalon`, `capacidad`, `precio`, `estado`) VALUES ('2', '20', '3000', '1');
+
+/* TIENDAS */
+INSERT INTO `tbl_tiendas`(`KidTienda`, `KidArea`, `descripcion`, `estado`) VALUES 
+('1','2','Deportes','1'), ('2','3','Comedor','1'), ('3','3','Dulceria','1'), ('4','1','Cosmeticos','1'); 
+
+
+/* MESAS */
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (1, '3', '4','1', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (2, '3', '8','3', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (3, '3', '4','3', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (4, '3', '2','1', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (5, '1', '4','2', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (6, '1', '4','3', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (7, '1', '4','2', '1');
+INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (8, '1', '4','2', '1');
 
 --
 -- Dumping routines for database 'proyectogeneral'
