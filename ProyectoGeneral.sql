@@ -3476,6 +3476,62 @@ INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, 
 INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (7, '1', '4','2', '1');
 INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (8, '1', '4','2', '1');
 
+use proyectogeneral;
+
+-- ------------------------------------------------------------TITPO PRODUCTO ------------------------------------------------------------------------------
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (1,'Pintura de Hule Cubeta','Pintura de Hule ');
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (2,'Pintura de Aceite Cubeta','Pintura de Aceite');
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (3,'Brochas','Brochas');
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (4,'Solvente','Solvente');
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (5,'Pintura de Hule Galon','Pintura de Hule ');
+INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (6,'Pintura de Aceite Galon','Pintura de Aceite');
+
+-- ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- ------------------------------------------------------------MARCA----------------------------------------------------------------------------------------
+INSERT INTO `tbl_producto_marca`(`Kidproducto`, `Kidmarca`) VALUES ('1','Sherwin Williams');
+INSERT INTO `tbl_producto_marca`(`Kidproducto`, `Kidmarca`) VALUES ('2','Protecto');
+INSERT INTO `tbl_producto_marca`(`Kidproducto`, `Kidmarca`) VALUES ('3','Corona');
+
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- -----------------------------------------------------------PRODUCTO---------------------------------------------------------------------------------------
+-- ----Cubetas---
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('1','1','Pintura de Hule ','Color azul Sherwin Williams','1','10','2777.6');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('2','1','Pintura de Hule ','Color rojo Sherwin Williams','1','12','3333.12');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('3','1','Pintura de Hule ','Color amarillo Sherwin Williams','1','13','3610.88');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('4','1','Pintura de Hule ','Color verde Sherwin Williams','1','14','3888.64');
+-- -----Galones
+
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('5','5','Pintura de Hule ','Color amarillo Sherwin Williams','1','50','2777.5');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('6','5','Pintura de Hule ','Color verde Sherwin Williams','1','55','3055.25');
+
+-- -----Protecto---------
+
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('7','1','Pintura de Hule ','Color naranja Protecto','1','8','1366.4');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('8','1','Pintura de Hule ','Color melon Protecto','1','10','1708');
+
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('9','5','Pintura de Hule ','Color Zapote Protecto','1','30','1024.8');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('10','5','Pintura de Hule ','Color VioletaProtecto','1','32','1093.12');
+
+-- --------Corona-----------
+
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('11','6','Pintura de Aceite ','Color gris Corona','1','25','4323.25');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('12','6','Pintura de Aceite ','Color negro Corona','1','35','6052.55');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('13','6','Pintura de Aceite ','Color cafe Corona','1','38','6571.4');
+
+-- ---Brochas
+
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('14','3','Brochas ','Tamaño 5 pulgadas','1','40','461.6');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('15','3','Brochas ','Tamaño 4 pulgadas','1','40','367.2');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('16','3','Brochas ','Tamaño 3 pulgadas','1','40','260');
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('17','3','Brochas ','Tamaño 2 pulgadas','1','40','161.2');
+
+-- ---solventes
+INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('18','4','Solvente ','Botellas','1','50','106.5');
+
+
 --
 -- Dumping routines for database 'proyectogeneral'
 --
