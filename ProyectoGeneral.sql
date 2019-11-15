@@ -615,6 +615,8 @@ CREATE TABLE IF NOT EXISTS `proyectogeneral`.`Tbl_Producto` (
   `KidTipoProducto` INT NOT NULL,
   `nombre_producto` VARCHAR(45) NULL,
   `descripcion_producto` VARCHAR(45) NULL,
+  `cantidad_producto` INT,
+  `precio_producto` DOUBLE,
   `estado` TINYINT NULL,
   PRIMARY KEY (`KidProducto`),
   CONSTRAINT `fk_Producto_TipoProducto1`
@@ -3136,6 +3138,26 @@ INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('312', 'Ayu
 INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('313', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'Platillos.html', '1');
 INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`, `estado`) VALUES ('314', 'Ayuda-Hoteleria/Ayuda-Hotel.chm', 'ObjetosP.html', '1');
 
+
+-- AYUDAS VENTAS
+
+INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`,`estado`) VALUES
+(100, 'AyudasVentas\\Ayudas_Ventas.chm', 'index1.html','1'),
+(101, 'AyudasVentas\\Ayudas_Ventas.chm', 'index2.html','1'),
+(102, 'AyudasVentas\\Ayudas_Ventas.chm', 'index3.html','1'),
+(103, 'AyudasVentas\\Ayudas_Ventas.chm', 'index4.html','1'),
+(104, 'AyudasVentas\\Ayudas_Ventas.chm', 'index5.html','1'),
+(105, 'AyudasVentas\\Ayudas_Ventas.chm', 'index6.html','1'),
+(106, 'AyudasVentas\\Ayudas_Ventas.chm', 'index7.html','1'),
+(107, 'AyudasVentas\\Ayudas_Ventas.chm', 'index8.html','1'),
+(108, 'AyudasVentas\\Ayudas_Ventas.chm', 'index9.html','1'),
+(109, 'AyudasVentas\\Ayudas_Ventas.chm', 'index10.html','1'),
+(110, 'Ayudas_CtasporCobrar\\Ayudas_CuentasPorCobrar.chm', 'index.html','1'),
+(111, 'Ayudas_CtasporCobrar\\Ayudas_CuentasPorCobrar.chm', 'index11a.html','1'),
+(112, 'Ayudas_CtasporCobrar\\Ayudas_CuentasPorCobrar.chm', 'indexab.html','1'),
+(113, 'Ayudas_CtasporCobrar\\Ayudas_CuentasPorCobrar.chm', 'index61.html','1'),
+(114, 'AyudasVentas\\Ayudas_Ventas.chm', 'indexaaaa.html','1'),
+(115, 'Ayudas_CtasporCobrar\\Ayudas_CuentasPorCobrar.chm', 'index879.html','1');
 
 -- CUENTAS CONTABLES
 INSERT INTO tbl_tipocuenta(KidTipoCuenta, nombre_tipoCuenta, descripcion_tipoCuenta, estado) VALUES('1', 'ACTIVO', 'ACTIVO', 1);
