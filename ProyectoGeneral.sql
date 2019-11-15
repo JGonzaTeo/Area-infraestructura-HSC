@@ -3531,7 +3531,9 @@ INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, 
 -- ---solventes
 INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, `descripcion_producto`, `estado`,`Cantidad_Producto`,`Precio_Producto`) VALUES ('18','4','Solvente ','Botellas','1','50','106.5');
 
-
+INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('1','1','31-01-2019','Vendedora Morena Quijada otuvo comision','200 ','1');
+INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('2','1','31-01-2019','Vendedora Simeona Gallina del Monte recibe comsion','200 ','1');
+	
 --
 -- Dumping routines for database 'proyectogeneral'
 --
