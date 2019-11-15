@@ -3520,6 +3520,16 @@ INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, 
 INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('1','1','31-01-2019','Vendedora Morena Quijada otuvo comision','200 ','1');
 INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('2','1','31-01-2019','Vendedora Simeona Gallina del Monte recibe comsion','200 ','1');
 
+/* Tabla TBL_TIPOCLIENTE */
+INSERT INTO `tbl_tipocliente` (`KidTipoCliente`, `tipo_tipocliente`, `descripcion_tipocliente`, `estado`) VALUES 
+('1', 'VIP', 'VIP', '1'), ('2', 'PREMIUM', 'PREMIUM', '1');
+
+/* Tabla TBL_CLIENTES */
+INSERT INTO `tbl_clientes` (`KidCliente`, `nombres_cliente`, `apellidos_cliente`, `telefono_cliente`, `direccion_cliente`, `dpi_cliente`, 
+`nit_cliente`, `contacto_cliente`, `telefono_contacto`, `KidTipoCliente`, `estado`) VALUES 
+('1', 'Juan José', 'Gámez Blanco', '48392365', 'Zona 10', '48392365', '48392365', 'Juan Gámez', '48392365', '2', '1'), 
+('2', 'Edgar ', 'Casasola', '90348721', 'Zona 6', '90348721', '90348721', 'Edgar', '90348721', '1', '1');
+
 --
 -- Dumping routines for database 'proyectogeneral'
 --
