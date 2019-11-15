@@ -3241,18 +3241,6 @@ INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('B','Ba
 INSERT INTO tbl_tipo_poliza(KidTipoDePoliza, descripcion, estado) VALUES('H','Hoteleria', 1);
 INSERT INTO `proyectogeneral`.`tbl_tipo_poliza` (`KidTipoDePoliza`, `descripcion`, `estado`) VALUES ('R', 'Recursos Humanos', '1');
 
--- POLIZAS
-INSERT INTO tbl_poliza_encabezado (`KidPoliza`, `KidTipoDePoliza`, `KidDocumentoAsociado`, `descripcion`, `fecha_poliza`, `total_poliza`, `estado`) VALUES ('2', 'V', '1', 'Ventas', '2019-10-31', '2000', '1');
-
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '1.1.1', '1000', '0');
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '1.1.2', '1000', '0');
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '2.1.1', '0', '1750');
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('2', '2.1.2', '0', '250');
-
-INSERT INTO tbl_poliza_encabezado (`KidPoliza`, `KidTipoDePoliza`, `KidDocumentoAsociado`, `descripcion`, `fecha_poliza`, `total_poliza`, `estado`) VALUES ('3', 'H', '1', 'Hoteleria', '2019-10-25', '500', '1');
-
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('3', '1.1.1', '500', '0');
-INSERT INTO tbl_poliza_detalle (`KidPoliza`, `KidCuenta`, `debe`, `haber`) VALUES ('3', '2.1.1', '0', '500');
 
 INSERT INTO `ayuda` (`Id_ayuda`, `Ruta`, `indice`,`estado`) VALUES (512, 'Ayudas/CreacionPresupuesto.chm', 'Creacion-Presupueto.html',1);
 
@@ -3476,8 +3464,6 @@ INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, 
 INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (7, '1', '4','2', '1');
 INSERT INTO `tbl_mesas` (`KidNumeroMesa`, `KidArea`, `capacidad`, `estadoMesa`, `estado`) VALUES (8, '1', '4','2', '1');
 
-use proyectogeneral;
-
 -- ------------------------------------------------------------TITPO PRODUCTO ------------------------------------------------------------------------------
 INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (1,'Pintura de Hule Cubeta','Pintura de Hule ');
 INSERT INTO `tbl_tipoproducto`(`KidTipoProducto`, `tipo_tipoproducto`, `descripcion_tipoproducto`) VALUES (2,'Pintura de Aceite Cubeta','Pintura de Aceite');
@@ -3533,12 +3519,11 @@ INSERT INTO `tbl_producto`(`KidProducto`, `KidTipoProducto`, `nombre_producto`, 
 
 INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('1','1','31-01-2019','Vendedora Morena Quijada otuvo comision','200 ','1');
 INSERT INTO `tbl_comisiones`(`KidComisiones`, `KidProducto`, `fecha_comisiones`, `descripcion_comisiones`, `monto_comisiones`, `estado`) VALUES ('2','1','31-01-2019','Vendedora Simeona Gallina del Monte recibe comsion','200 ','1');
-	
+
 --
 -- Dumping routines for database 'proyectogeneral'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
